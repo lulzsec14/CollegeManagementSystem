@@ -1,12 +1,16 @@
 // Imports
 const express = require('express');
-const router = express.Router();
+const adminRouter = express.Router();
 // ------------------------------------
 
 // Constants
 const { register } = require('../../controllers/Admin/adminController');
 // ------------------------------------
 
-router.route('/register').post(register);
+// Api Route
+adminRouter.route('/register').post(register);
+// ------------------------------------
 
-module.exports = router;
+// Exports 
+module.exports = adminRouter;
+// ------------------------------------
