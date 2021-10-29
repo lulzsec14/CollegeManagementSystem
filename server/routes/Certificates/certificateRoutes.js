@@ -2,10 +2,10 @@ const { Router } = require("express");
 const router = Router();
 
 //Controller methods
-const coreMemberController = require("../../controllers/Core Members/coreMemberController");
+const certificateController = require("../../controllers/Certificates/certificateController");
 
-//Api Route
-router.post("/api/coremember", coreMemberController.coreMember_post);
+//Api Routes
+router.post("/api/certificates", certificateController.certificate_post);
 
 //Export router
 module.exports = router;

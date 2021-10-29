@@ -1,5 +1,5 @@
 // Imports
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 const URI = process.env.MONGO_URI;
 // ------------------------------------
 

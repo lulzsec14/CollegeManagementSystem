@@ -1,10 +1,10 @@
-require('dotenv').config({ path: './config.env' });
+require("dotenv").config({ path: "./config.env" });
 // Imports
-const express = require('express');
-const cors = require('cors');
-const path = require('path');
-const colors = require('colors');
-const connectDb = require('./config/db');
+const express = require("express");
+const cors = require("cors");
+const path = require("path");
+const colors = require("colors");
+const connectDb = require("./config/db");
 // ------------------------------------
 
 // Connecting to database
@@ -28,7 +28,7 @@ const server = app.listen(PORT, () => {
 // ------------------------------------
 
 // Stopping server in case of any error
-process.on('unhandledRejection', (err, promise) => {
+process.on("unhandledRejection", (err, promise) => {
   console.log(`Server stopped due to: ${err}`);
   server.close(() => process.exit(1));
 });
