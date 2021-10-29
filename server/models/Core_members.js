@@ -23,7 +23,7 @@ const coreMemberSchema = new Schema({
 });
 
 //generatig model for new core member
-const CoreMember = moongose.model("coremember", coreMemberSchema);
+const Core_members = moongose.model("Core_members", coreMemberSchema);
 
 //exporting core member model
-module.exports = CoreMember;
+module.exports = Core_members;

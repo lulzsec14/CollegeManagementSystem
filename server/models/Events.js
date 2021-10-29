@@ -74,7 +74,7 @@ const eventSchema = new Schema({
 });
 
 //generatig model for new Event
-const Event = moongose.model("certificate", eventSchema);
+const Events = moongose.model("Events", eventSchema);
 
 //exporting Event model
-module.exports = Event;
+module.exports = Events;

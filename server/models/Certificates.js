@@ -29,7 +29,7 @@ const certificateSchema = new Schema({
 });
 
 //generatig model for new certificate
-const Certificate = moongose.model("certificate", certificateSchema);
+const Certificate = moongose.model("Certificate", certificateSchema);
 
 //exporting certificate model
 module.exports = Certificate;
