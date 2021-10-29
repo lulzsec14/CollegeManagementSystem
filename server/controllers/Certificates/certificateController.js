@@ -2,7 +2,7 @@ const certificateDB = require("../../models/Certificates");
 
 //controller for the /api/certificate 'post' request
 module.exports.certificate_post = async (req, res) => {
-  //create and insert data in schema
+  //create and insert data in schema 
   try {
     //initializing variables
     const { studentId } = req.body;
