@@ -21,6 +21,9 @@ app.use(cors());
 app.use(express.json());
 // ------------------------------------
 
+// Routes
+app.use('/api/admin', require('./routes/Admin/adminRoutes'));
+
 // Server
 const server = app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`.yellow.bold);
