@@ -1,7 +1,10 @@
+// Imports
 const AdminSchema = require('../../models/Admin');
 const textToHash = require('../../utilities/textToHashed');
 const validateCreateAdmin = require('../../Validators/CreateAdminValidator');
+// ------------------------------------
 
+// Register Admin
 exports.register = async (req, res, next) => {
   const { adminId, email, name, password, phoneNo } = req.body;
   const error = validateCreateAdmin(req.body);
@@ -37,3 +40,4 @@ exports.register = async (req, res, next) => {
     res.status(500).json({ error: 'An error occured while creating a user' });
   }
 };
+// ------------------------------------

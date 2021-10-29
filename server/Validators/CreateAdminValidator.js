@@ -1,5 +1,8 @@
+// Imports
 const joi = require('joi');
+// ------------------------------------
 
+// Validator function
 module.exports = (data) => {
   const schema = joi.object({
     adminId: joi.string().required().min(4),
@@ -9,7 +12,8 @@ module.exports = (data) => {
     phoneNo: joi.string().required(),
   });
 
-  const {error} = schema.validate(data);
+  const { error } = schema.validate(data);
 
   return error;
 };
+// ------------------------------------
