@@ -18,7 +18,8 @@
     "express": "^4.17.1",
     "express-session": "^1.17.2",
     "joi": "^17.4.2",
-    "mongoose": "^6.0.10"
+    "mongoose": "^6.0.10",
+    "validator": "^13.6.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.13"
