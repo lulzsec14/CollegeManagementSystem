@@ -21,4 +21,4 @@ const IdeaBoxSchema = new mongoose.Schema({
 })
 // -----------------------------
 
-module.exports = mongoose.model('IdeaBoxSchema', IdeaBoxSchema);
+module.exports = mongoose.model('Ideabox', IdeaBoxSchema);

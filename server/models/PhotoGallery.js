@@ -21,4 +21,4 @@ const PhotoGallerySchema = new mongoose.Schema({
 })
 // -----------------------------
 
-module.exports = mongoose.model('PhotoGallerySchema', PhotoGallerySchema);
+module.exports = mongoose.model('PhotoGallery', PhotoGallerySchema);
