@@ -3,20 +3,20 @@ const mongoose = require('mongoose')
 , Schema = mongoose.Schema
 
 /// schema
-const task_list = mongoose.Schema({
-    task_title:{
+const taskListSchema = mongoose.Schema({
+    taskTitle:{
         type:String,
         required:[true,"Title can't be empty"],
         minlength:[1,"Title can't be empty"],
         maxlength:[40,"Character limit exceeded: 40"]
     },
-    task_description:{
+    taskDescription:{
         type:String,
         required:[true,"Please enter task description"],
         minlength:[1,"Task can't be empty"],
         maxlength:[700,"Character limit exceeded: 700"]
     },
-    task_status:{
+    taskStatus:{
         type:String,
         required:[true,"Please enter task status"],
         validate: {
@@ -26,18 +26,18 @@ const task_list = mongoose.Schema({
             message:"Please enter a valid status"
           }
     },
-    assigned_by: { 
+    assignedBy: { 
         type: Schema.Types.ObjectId, 
         ref: 'Students',
         required:[true,"Please enter student ID which assigned the task"]
     },
     
-    assigned_to: { 
+    assignedTo: { 
         type: Schema.Types.ObjectId, 
         ref: 'Students',
         required:[true,"Please enter student ID to which task is assigned"]
     },
-    club_id: { 
+    clubID: { 
         type: Schema.Types.ObjectId, 
         ref: 'Clubs',
         required:[true,"Please enter club ID"]
@@ -45,5 +45,5 @@ const task_list = mongoose.Schema({
 
 
 })
-const Task_List = mongoose.model('Task_List', task_list)
+const Task_List = mongoose.model('Task_List', taskListSchema)
 module.exports = Task_List
