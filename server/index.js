@@ -4,6 +4,7 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const colors = require('colors');
+const compression = require('compression');
 const connectDb = require('./config/db');
 // ------------------------------------
 
@@ -18,6 +19,7 @@ const { adminRouter } = require('./routes/main');
 // ------------------------------------
 
 // Middlewares
+app.use(compression());
 app.use(cors());
 app.use(express.json());
 // ------------------------------------

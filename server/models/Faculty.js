@@ -3,8 +3,8 @@ const mongoose = require('mongoose')
 , Schema = mongoose.Schema
 import validator from 'validator'
 /// schema
-const faculty_schema = mongoose.Schema({
-    faculty_name:{
+const facultySchema = mongoose.Schema({
+    facultyName:{
         type:String,
         required:[true,"Name can't be empty"],
         minlength:[1,"Name can't be empty"],
@@ -37,14 +37,13 @@ const faculty_schema = mongoose.Schema({
             message:"Please enter a valid phone number"
           }
     },
-    club_managed: { 
+    clubManaged: { 
         type: Schema.Types.ObjectId, 
         ref: 'Clubs',
-        unique:true,
-        required:[true,"Please enter club ID"]
+        unique:true
     }
 
 
 })
-const Faculty = mongoose.model('Faculty', faculty_schema)
+const Faculty = mongoose.model('Faculty', facultySchema)
 module.exports = Faculty

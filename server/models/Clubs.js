@@ -3,8 +3,8 @@ const mongoose = require('mongoose')
 , Schema = mongoose.Schema
 
 /// schema
-const clubs_schema = mongoose.Schema({
-    club_name:{
+const clubsSchema = mongoose.Schema({
+    clubName:{
         type:String,
         index:true,
         unique:true,
@@ -12,16 +12,16 @@ const clubs_schema = mongoose.Schema({
         minlength:[1,"Club name can't be empty"],
         maxlength:[50,"Character length limit exceeded: 50"]
     },
-    club_description:{
+    clubDescription:{
         type:String,
         minlength:[1,"Club desciption can't be empty"],
         maxlength:[3000,"Character limit exceeded: 3000"]
     },
-    core_members: [{ 
+    coreMembers: [{ 
         type: Schema.Types.ObjectId, 
         ref: 'Students'
     }],
-    club_members: [{ 
+    clubMembers: [{ 
         type: Schema.Types.ObjectId, 
         ref: 'Students'
     }],
@@ -29,7 +29,7 @@ const clubs_schema = mongoose.Schema({
         type: Schema.Types.ObjectId, 
         ref: 'Events'
     }],
-    task_list: [{ 
+    taskList: [{ 
         type: Schema.Types.ObjectId, 
         ref: 'Task_List'
     }],
@@ -49,12 +49,12 @@ const clubs_schema = mongoose.Schema({
         type: Schema.Types.ObjectId, 
         ref: 'Requests'
     }],
-    managed_by: { 
+    managedBy: { 
         type: Schema.Types.ObjectId, 
         ref: 'Faculty'
     }
 
 
 })
-const Clubs = mongoose.model('Clubs', clubs_schema)
+const Clubs = mongoose.model('Clubs', clubsSchema)
 module.exports = Clubs
