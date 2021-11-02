@@ -1,14 +1,14 @@
-const Task_List = require('../../models/Task_List');
+const { getTask,getTaskByClubID,insertTask,updateTask,deleteTask } = require('../DAO/taskListDAO')
+const { getClubByID } = require('../DAO/clubsDAO')
 exports.addTask = async (req, res, next) => {
     try {
-        const { task_title, task_title, task_description, assigned_by, assigned_to, club_id } = req.body
-        const task = new Task_List({
-            
-        })
-        await club.save()
-       // to insert in array
-       // const updateClub = await Clubs.findOneAndUpdate({club_name},{ $push: { core_members: core_member_id  } })
-        res.status(201).json({ success: true });
+        
+        var data = req.body.data
+        const result = await insertTask(data)
+        //const result = await getTask(data)
+        
+        const ans=await getClubByID({clubID:result.taskData.clubID})
+        res.status(201).json(ans)
 
     }
     catch(err) {
