@@ -25,6 +25,58 @@ exports.getClub = async (data) => {
     }
 
 }
+exports.getClubByID = async (data) => {
+    try {
+        
+        const { clubID } = data
+        const findClub = await Clubs.findById(clubID)
+        if(!findClub)
+        {
+            return {
+                success: false,
+                error: 'Club does not exist!',
+              }
+        }
+        return {
+            success: true,
+            clubData: findClub,
+          }
+
+    }
+    catch (error) {
+        console.log(error)
+        return {
+            success:false,
+            error
+        }
+    }
+
+}
+exports.getAllClubs = async (data) => {
+    try {
+        
+        const findClubs = await Clubs.find({ })
+        if(!findClubs)
+        {
+            return {
+                success: false,
+                error: 'There are no clubs!',
+              }
+        }
+        return {
+            success: true,
+            clubData: findClubs,
+          }
+
+    }
+    catch (error) {
+        return {
+            success:false,
+            error
+        }
+    }
+
+}
 exports.insertClub = async (data) => {
     try
     {
@@ -90,6 +142,43 @@ exports.updateClub = async (data) => {
     }
     
 }
+exports.updateClubByID = async (data) => {
+    try
+    {
+        const dataToUpdate = {}
+        for(key in data)
+        {
+            if(key!=="clubID"||key==="clubName")
+            {
+                dataToUpdate[key] = data[key]
+            }
+        }
+        const {clubID} = data
+        const findClub = await Clubs.findById( clubID )
+        if(!findClub)
+        {
+            return {
+                success: false,
+                error: 'Club does not exist!',
+              }
+        }
+        if(dataToUpdate.clubNameNew)
+        {
+            dataToUpdate.clubName=dataToUpdate.clubNameNew
+        }
+        const clubUpdated = await Clubs.findByIdAndUpdate(clubID,dataToUpdate,{new:true})
+        return {success:true,clubData:clubUpdated}
+       
+    }
+    catch (error) {
+        return {
+            success: false,
+            error
+          }
+
+    }
+    
+}
 
 exports.updateClubArray = async (data) => {
     try
@@ -123,6 +212,38 @@ exports.updateClubArray = async (data) => {
     }
     
 }
+exports.updateClubArrayByID = async (data) => {
+    try
+    {
+        const dataToUpdate = {}
+        for(key in data)
+        {
+            if(key==="clubName"||key!=="clubID")
+            {
+                dataToUpdate[key] = data[key]
+            }
+        }
+        const {clubID} = data
+        const findClub = await Clubs.findById( clubID )
+        if(!findClub)
+        {
+            return {
+                success: false,
+                error: 'Club does not exist!',
+              }
+        }
+        const clubUpdated = await Clubs.findByIdAndUpdate(clubID,{ $addToSet: dataToUpdate },{new:true})
+        return {success:true,clubData:clubUpdated}
+       
+    }
+    catch (error) {
+        return {
+            success: false,
+            error
+          }
+    }
+    
+}
 exports.deleteClub = async (data) => {
     try
     {
@@ -136,6 +257,30 @@ exports.deleteClub = async (data) => {
               }
         }
         const clubDeleted = await Clubs.findOneAndDelete({clubName})
+        return {success:true,clubData:clubDeleted}       
+    }
+    catch (error) {
+        return {
+            success: false,
+            error
+          }
+    }
+    
+}
+
+exports.deleteClubByID = async (data) => {
+    try
+    {
+        const { clubID } = data
+        const findClub = await Clubs.findByIdAndDelete( clubID )
+        if(!findClub)
+        {
+            return {
+                success: false,
+                error: 'Club does not exist!',
+              }
+        }
+        const clubDeleted = await Clubs.findByIdAndDelete(clubID)
         return {success:true,clubData:clubDeleted}       
     }
     catch (error) {

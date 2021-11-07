@@ -15,7 +15,7 @@ connectDb();
 // Constants
 const app = express();
 const PORT = process.env.PORT || 5000;
-const { adminRouter } = require('./routes/main');
+const { adminRouter, coreMemberRouter } = require('./routes/main');
 // ------------------------------------
 
 // Middlewares
@@ -26,6 +26,8 @@ app.use(express.json());
 
 // Routes
 app.use('/api/admin', adminRouter);
+
+app.use('/api/coreMember', coreMemberRouter);
 // ------------------------------------
 
 // Server
