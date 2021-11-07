@@ -1,7 +1,7 @@
 /// imports
+const validator = require('validator')
 const mongoose = require('mongoose')
 , Schema = mongoose.Schema
-import validator from 'validator'
 /// schema
 const facultySchema = mongoose.Schema({
     facultyName:{
@@ -28,16 +28,16 @@ const facultySchema = mongoose.Schema({
         required:[true,"Please enter password"]
     },
     phone:{
-        type:Number,
+        type:String,
         required:[true,"Please enter phone number"],
         validate: {
             validator: (value) => {
-              return validator.isMobilePhone(value)
+              return value.length === 10 
             },
             message:"Please enter a valid phone number"
           }
     },
-    clubManaged: { 
+    clubID: { 
         type: Schema.Types.ObjectId, 
         ref: 'Clubs',
         unique:true
