@@ -1,8 +1,8 @@
-const { getClub,getAllClubs,insertClub,updateClub,updateClubArray,deleteClub } = require('../DAO/clubsDAO')
+const { getClub,getClubByID,getAllClubs,insertClub,updateClub,updateClubByID,updateClubArray,updateClubArrayByID,deleteFromClubArray,deleteFromClubArrayByID,deleteClub,deleteClubByID } = require('../DAO/clubsDAO')
 exports.addClub = async (req, res, next) => {
     try {
         const data = req.body.data
-        const result = await insertClub(data)
+        const result = await deleteFromClubArrayByID(data)
         res.status(201).json(result)
 
     }

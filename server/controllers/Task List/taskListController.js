@@ -1,14 +1,10 @@
-const { getTask,getTaskByClubID,insertTask,updateTask,deleteTask } = require('../DAO/taskListDAO')
-const { getClubByID } = require('../DAO/clubsDAO')
+const { getTask,getTaskByClubID,insertTask,updateTask,deleteTask,deleteTaskByClubID } = require('../DAO/taskListDAO')
 exports.addTask = async (req, res, next) => {
     try {
         
-        var data = req.body.data
-        const result = await insertTask(data)
-        //const result = await getTask(data)
-        
-        const ans=await getClubByID({clubID:result.taskData.clubID})
-        res.status(201).json(ans)
+        let data = req.body.data
+        const result = await deleteTaskByClubID(data)
+        res.status(201).json(result)
 
     }
     catch(err) {

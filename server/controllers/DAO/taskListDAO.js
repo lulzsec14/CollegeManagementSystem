@@ -68,7 +68,6 @@ exports.insertTask = async (data) => {
        
     }
     catch (error) {
-        console.log(error)
         return {
             success: false,
             error
@@ -88,6 +87,14 @@ exports.updateTask = async (data) => {
             }
         }
         const {taskID} = data
+        const findTask = await Task_List.findById( taskID )
+        if(!findTask)
+        {
+            return {
+                success: false,
+                error: 'Task does not exist!',
+              }
+        }
         const taskUpdated = await Task_List.findByIdAndUpdate(taskID,dataToUpdate,{new:true})
         return {success:true,taskData:taskUpdated}
        
@@ -103,12 +110,36 @@ exports.updateTask = async (data) => {
 }
 
 
+
 exports.deleteTask = async (data) => {
     try
     {
         const { taskID } = data
+        const findTask = await Task_List.findById( taskID )
+        if(!findTask)
+        {
+            return {
+                success: false,
+                error: 'Task does not exist!',
+              }
+        }
         const taskDeleted = await Task_List.findByIdAndDelete(taskID)
         return {success:true,taskData:taskDeleted}       
+    }
+    catch (error) {
+        return {
+            success: false,
+            error
+          }
+    }
+    
+}
+exports.deleteTaskByClubID = async (data) => {
+    try
+    {
+        const { clubID } = data
+        const tasksDeleted = await Task_List.deleteMany({clubID})
+        return {success:true,taskData:tasksDeleted}       
     }
     catch (error) {
         return {

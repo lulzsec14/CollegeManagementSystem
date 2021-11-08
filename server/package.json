@@ -22,6 +22,6 @@
     "validator": "^13.6.0"
   },
   "devDependencies": {
-    "nodemon": "^2.0.13"
+    "nodemon": "^2.0.14"
   }
 }
