@@ -26,7 +26,6 @@ app.use(express.json());
 
 // Routes
 app.use('/api/admin', adminRouter);
-
 app.use('/api/coreMember', coreMemberRouter);
 // ------------------------------------
 
