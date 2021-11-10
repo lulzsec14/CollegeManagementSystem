@@ -5,7 +5,6 @@ const joi = require('joi');
 // Validator function
 module.exports = (data) => {
   const schema = joi.object({
-    adminId: joi.string().required().min(4),
     email: joi.string().required().email(),
     name: joi.string(),
     password: joi.string().required().min(6),

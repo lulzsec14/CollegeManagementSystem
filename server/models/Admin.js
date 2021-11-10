@@ -4,10 +4,6 @@ const mongoose = require('mongoose');
 
 // Schema
 const AdminSchema = new mongoose.Schema({
-  adminId: {
-    type: String,
-    required: [true, 'Please provide Admin Id!'],
-  },
   email: {
     type: String,
     require: [true, 'Please provide an email!'],
