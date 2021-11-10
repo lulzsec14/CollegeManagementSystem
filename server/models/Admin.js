@@ -3,7 +3,11 @@ const mongoose = require('mongoose');
 // ------------------------------------
 
 // Schema
-const AdminSchema = new mongoose.Schema({
+<<<<<<< HEAD
+const adminSchema = new mongoose.Schema({
+=======
+const adminSchema = new mongoose.Schema({
+>>>>>>> f34dc7825d1117f8fbdabe040e23a6c91feac8f0
   email: {
     type: String,
     require: [true, 'Please provide an email!'],
@@ -16,6 +20,8 @@ const AdminSchema = new mongoose.Schema({
   name: {
     type: String,
     required: [true, 'Please provide a name!'],
+    minLength: 3,
+    maxLength: [20, "Name can not be longer than 20 characters!"],
   },
   password: {
     type: String,
@@ -30,4 +36,7 @@ const AdminSchema = new mongoose.Schema({
 });
 // ------------------------------------
 
-module.exports = mongoose.model('AdminSchema', AdminSchema);
+// Exports
+const Admin = mongoose.model('Admin', adminSchema);
+module.exports = Admin;
+// ------------------------------------
