@@ -41,7 +41,7 @@ exports.getTaskByClubID = async (data) => {
     };
   }
 };
-exports.insertTask = async (data) => {
+exports.insertTask = async (data,session) => {
   try {
     const {
       taskTitle,
@@ -59,13 +59,11 @@ exports.insertTask = async (data) => {
       assignedTo,
       clubID,
     });
-    const taskInserted = await task.save();
+    const taskInserted = await task.save({session});
     return { success: true, taskData: taskInserted };
-  } catch (error) {
-    return {
-      success: false,
-      error,
-    };
+  } 
+  catch (error) {
+    throw new Error(error)
   }
 };
 exports.updateTask = async (data) => {

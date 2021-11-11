@@ -19,7 +19,7 @@ const clubsSchema = mongoose.Schema({
     },
     coreMembers: [{ 
         type: Schema.Types.ObjectId, 
-        ref: 'Students'
+        ref: 'Core_members'
     }],
     clubMembers: [{ 
         type: Schema.Types.ObjectId, 

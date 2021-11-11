@@ -1,4 +1,4 @@
-const { getFaculty, getFacultyByID, getAllFaculty,getFacultyByClubID, insertFaculty, updateFaculty, updateFacultyByID, deleteFaculty, deleteFacultyByID } = require('../DAO/facultyDAO')
+const { getFaculty, getFacultyByID, getAllFaculty,getFacultyByClubID, insertFaculty, updateFaculty, updateFacultyByID, deleteFaculty, deleteFacultyByID } = require('../DBFunctions/facultyDAO')
 exports.addFaculty = async (req, res, next) => {
     try {
         

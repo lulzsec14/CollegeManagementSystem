@@ -211,7 +211,7 @@ exports.updateClubArray = async (data) => {
     }
     
 }
-exports.updateClubArrayByID = async (data) => {
+exports.updateClubArrayByID = async (data,session) => {
     try
     {
         const dataToUpdate = {}
@@ -220,6 +220,7 @@ exports.updateClubArrayByID = async (data) => {
             if(key!=="clubName"&&key!=="clubID"&&key!=="clubDescription")
             {
                 dataToUpdate[key] = data[key]
+                throw new Error("error")
             }
         }
         const {clubID} = data
@@ -231,15 +232,12 @@ exports.updateClubArrayByID = async (data) => {
                 error: 'Club does not exist!',
               }
         }
-        const clubUpdated = await Clubs.findByIdAndUpdate(clubID,{ $addToSet: dataToUpdate },{new:true})
+        const clubUpdated = await Clubs.findByIdAndUpdate(clubID,{ $addToSet: dataToUpdate },{new:true}).session(session)
         return {success:true,clubData:clubUpdated}
        
     }
     catch (error) {
-        return {
-            success: false,
-            error
-          }
+        throw new Error("error")
     }
     
 }
