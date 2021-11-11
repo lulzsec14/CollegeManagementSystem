@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 // ------------------------------------
 
 // Schema
-const AdminSchema = new mongoose.Schema({
+const adminSchema = new mongoose.Schema({
   email: {
     type: String,
     require: [true, 'Please provide an email!'],
