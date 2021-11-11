@@ -1,5 +1,8 @@
 // Imports
-const { registerAdmin, retrieveAllAdmins } = require('../DBFunctions/adminDBFunction');
+const {
+  registerAdmin,
+  retrieveAllAdmins,
+} = require('../DBFunctions/adminDBFunction');
 // ------------------------------------
 
 // Register Admin
@@ -35,14 +38,12 @@ exports.getAllAdmins = async (req, res, next) => {
         .status(result.code)
         .json({ success: result.success, error: result.error });
     } else {
-      console.log("Here")
-      res
-        .status(result.code)
-        .json({
-          success: result.success,
-          message: result.message,
-          data: result.data,
-        });
+      console.log('Here');
+      res.status(result.code).json({
+        success: result.success,
+        message: result.message,
+        data: result.data,
+      });
     }
   } catch (err) {
     res.status(500).json({
