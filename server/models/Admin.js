@@ -16,6 +16,8 @@ const adminSchema = new mongoose.Schema({
   name: {
     type: String,
     required: [true, 'Please provide a name!'],
+    minLength: 3,
+    maxLength: [20, "Name can not be longer than 20 characters!"],
   },
   password: {
     type: String,
@@ -30,4 +32,7 @@ const adminSchema = new mongoose.Schema({
 });
 // ------------------------------------
 
-module.exports = mongoose.model('AdminSchema', AdminSchema);
+// Exports
+const Admin = mongoose.model('Admin', adminSchema);
+module.exports = Admin;
+// ------------------------------------

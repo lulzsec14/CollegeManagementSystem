@@ -1,43 +1,60 @@
 // Imports
-const AdminSchema = require('../../models/Admin');
-const textToHash = require('../../utilities/textToHashed');
-const validateCreateAdmin = require('../../Validators/CreateAdminValidator');
+const { registerAdmin, retrieveAllAdmins } = require('../DBFunctions/adminDBFunction');
 // ------------------------------------
 
 // Register Admin
 exports.register = async (req, res, next) => {
-  const { adminId, email, name, password, phoneNo } = req.body;
-  const error = validateCreateAdmin(req.body);
-  if (error) {
-    const { details } = error;
-    return res.status(400).json({ success: false, error: details[0].message });
-  }
-
   try {
-    const findAdmin = await AdminSchema.findOne({
-      email: req.body.email,
-    });
-    if (findAdmin)
-      return res.status(400).json({
-        success: false,
-        error: 'Account with this email already exists!',
-      });
-    else {
-      const hashedPassword = textToHash(password);
-
-      const admin = await AdminSchema.create({
-        adminId,
-        email,
-        name,
-        password: hashedPassword,
-        phoneNo,
-      });
-      await admin.save();
-      res.status(201).json({ success: true });
+    const data = req.body;
+    const result = await registerAdmin(data);
+    if (result.success == false) {
+      res
+        .status(result.code)
+        .json({ success: result.success, error: result.error });
+    } else {
+      res
+        .status(result.code)
+        .json({ success: result.success, message: result.message });
     }
+    // const resReturn = {success: result.success, resresult.}
+    // res.status(201).json(data);
   } catch (err) {
     console.log(err);
-    res.status(500).json({ error: 'An error occured while creating a user' });
+    res.status(500).json({ error: err });
   }
+};
+// ------------------------------------
+
+// Getting all admins
+exports.getAllAdmins = async (req, res, next) => {
+  try {
+    const data = req.body;
+    const result = await retrieveAllAdmins(data);
+    if (result.success == false) {
+      res
+        .status(result.code)
+        .json({ success: result.success, error: result.error });
+    } else {
+      console.log("Here")
+      res
+        .status(result.code)
+        .json({
+          success: result.success,
+          message: result.message,
+          data: result.data,
+        });
+    }
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      error: 'An error occured while getting all admins!',
+    });
+  }
+};
+// ------------------------------------
+
+// Delete an Admin
+exports.deleteAdmin = async (req, res, next) => {
+  const { email } = req.body;
 };
 // ------------------------------------
