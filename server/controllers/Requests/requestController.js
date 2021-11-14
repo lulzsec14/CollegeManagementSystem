@@ -1,5 +1,5 @@
 const Requests = require('../../models/Requests');
-const factory = require('../DAO/dao');
+const factory = require('../DBFunctions/requestDBFunction');
 
 exports.getRequest = factory.getOne(Requests);
 exports.updateRequest = factory.updateOne(Requests);

@@ -1,5 +1,5 @@
 const PhotoGallery = require('../../models/PhotoGallery');
-const factory = require('../DAO/dao');
+const factory = require('../DBFunctions/photoGalleryDBFunction');
 
 exports.getPhoto = factory.getOne(PhotoGallery);
 exports.updatePhoto = factory.updateOne(PhotoGallery);
