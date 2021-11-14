@@ -220,7 +220,7 @@ exports.updateClubArrayByID = async (data,session) => {
             if(key!=="clubName"&&key!=="clubID"&&key!=="clubDescription")
             {
                 dataToUpdate[key] = data[key]
-                throw new Error("error")
+                //throw new Error("error")
             }
         }
         const {clubID} = data
