@@ -5,12 +5,12 @@ const cors = require('cors');
 const path = require('path');
 const colors = require('colors');
 const compression = require('compression');
-const connectDb = require('./config/db');
-require('./config/dbSession')
+const {connectDb} = require('./config/db');
+//require('./config/dbSession')
 // ------------------------------------
 
 // Connecting to database
-//connectDb();
+connectDb();
 // ------------------------------------
 
 // Constants
