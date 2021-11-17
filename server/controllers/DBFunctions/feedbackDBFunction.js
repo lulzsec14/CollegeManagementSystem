@@ -138,27 +138,27 @@ exports.deleteFeedback = async(data) => {
 	}
 }
 
-exports.searchFeedback = async(data) => {
-	try {
-		const {feedbackBody, clubId} = data;
-		const findFeedbacks = await Feedback.find({"feedbackBody": {$regex: feedbackBody, $options: 'i'}, clubId});
-		if(findFeedbacks.length === 0) {
-			return {
-				success: false,
-				code: 204,
-				error: "No Feedbacks found!"
-			}
-		}
-		return {
-			success: true,
-			code: 201,
-			feedbackData: findFeedbacks
-		}
-	} catch(error) {
-		return {
-			success: false,
-			code: 500,
-			error
-		}
-	}
-}
+// exports.searchFeedback = async(data) => {
+// 	try {
+// 		const {feedbackBody, clubId} = data;
+// 		const findFeedbacks = await Feedback.find({"feedbackBody": {$regex: feedbackBody, $options: 'i'}, clubId});
+// 		if(findFeedbacks.length === 0) {
+// 			return {
+// 				success: false,
+// 				code: 204,
+// 				error: "No Feedbacks found!"
+// 			}
+// 		}
+// 		return {
+// 			success: true,
+// 			code: 201,
+// 			feedbackData: findFeedbacks
+// 		}
+// 	} catch(error) {
+// 		return {
+// 			success: false,
+// 			code: 500,
+// 			error
+// 		}
+// 	}
+// }

@@ -138,27 +138,27 @@ exports.deleteIdea = async(data) => {
 	}
 }
 
-exports.searchIdea = async(data) => {
-	try {
-		const {ideaDescription, clubId} = data;
-		const findIdeas = await Ideabox.find({"ideaDescription": {$regex: ideaDescription, $options: 'i'}, clubId});
-		if(findIdeas.length === 0) {
-			return {
-				success: false,
-				code: 204,
-				error: "No Ideas found!"
-			}
-		}
-		return {
-			success: true,
-			code: 201,
-			ideaData: findIdeas
-		}
-	} catch(error) {
-		return {
-			success: false,
-			code: 500,
-			error
-		}
-	}
-}
+// exports.searchIdea = async(data) => {
+// 	try {
+// 		const {ideaDescription, clubId} = data;
+// 		const findIdeas = await Ideabox.find({"ideaDescription": {$regex: ideaDescription, $options: 'i'}, clubId});
+// 		if(findIdeas.length === 0) {
+// 			return {
+// 				success: false,
+// 				code: 204,
+// 				error: "No Ideas found!"
+// 			}
+// 		}
+// 		return {
+// 			success: true,
+// 			code: 201,
+// 			ideaData: findIdeas
+// 		}
+// 	} catch(error) {
+// 		return {
+// 			success: false,
+// 			code: 500,
+// 			error
+// 		}
+// 	}
+// }
