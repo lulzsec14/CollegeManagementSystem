@@ -1,6 +1,6 @@
 // Imports
 const {
-  getFaculty,
+  getFacultyByEmail,
   getFacultyByID,
   getAllFaculty,
   getFacultyByClubID,

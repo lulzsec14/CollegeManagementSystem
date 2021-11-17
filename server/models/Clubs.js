@@ -4,22 +4,33 @@ const mongoose = require('mongoose')
 
 /// schema
 const clubsSchema = mongoose.Schema({
+    clubIndex:{
+        type:String,
+        unique:true,
+        index:true,
+        required:[true,"Club index can't be empty"],
+        minlength:[1,"Club index can't be empty"],
+        maxlength:[25,"Character length limit exceeded: 25"]
+
+    },
     clubName:{
         type:String,
-        index:true,
-        unique:true,
         required:[true,"Club name can't be empty"],
         minlength:[1,"Club name can't be empty"],
-        maxlength:[50,"Character length limit exceeded: 50"]
+        maxlength:[60,"Character length limit exceeded: 60"]
     },
     clubDescription:{
         type:String,
         minlength:[1,"Club desciption can't be empty"],
-        maxlength:[3000,"Character limit exceeded: 3000"]
+        maxlength:[3500,"Character limit exceeded: 3000"]
     },
+    clubManagers:[{ 
+        type: Schema.Types.ObjectId, 
+        ref: 'ClubManagers'
+    }],
     coreMembers: [{ 
         type: Schema.Types.ObjectId, 
-        ref: 'Students'
+        ref: 'CoreMembers'
     }],
     clubMembers: [{ 
         type: Schema.Types.ObjectId, 
