@@ -1,5 +1,5 @@
 // imports
-const mongoose = require('mongoose')
+const mongoose = require('mongoose'), Schema = mongoose.Schema;
 // -----------------------------
 
 // Schema
@@ -9,16 +9,17 @@ const FeedbackSchema = new mongoose.Schema({
 		required: [true, 'Please enter feedback!'],
 	},
 	feedbackBy: {
-		type: mongoose.Schema.Types.ObjectId,
+		type: Schema.Types.ObjectId,
 		ref: 'Students',
 		required: [true, 'Please enter student ID of the reviewer.'],
 	},
 	clubId: {
-		type: mongoose.Schema.Types.ObjectId,
+		type: Schema.Types.ObjectId,
 		ref: 'Clubs',
 		required: [true, 'Please enter club ID.'],
 	},
 })
 // -----------------------------
 
-module.exports = mongoose.model('Feedback', FeedbackSchema);
+const Feedback = mongoose.model('Feedback', FeedbackSchema);
+module.exports = Feedback;
