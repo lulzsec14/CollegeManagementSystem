@@ -1,23 +1,23 @@
-const CoreMembers = require('../../models/CoreMembers');
+const ClubManagers = require('../../models/ClubManagers');
 const textToHash = require('../../utilities/textToHashed')
-exports.getCoreMemberByID = async (data) => {
+exports.getClubManagerByID = async (data) => {
     try {
         
-        const { coreMemberID } = data
-        const findCoreMember = await CoreMembers.findById( coreMemberID )
-        if(!findCoreMember)
+        const { clubManagerID } = data
+        const findClubManager = await ClubManagers.findById( clubManagerID )
+        if(!findClubManager)
         {
             return {
                 success: false,
-                error: 'Core Member does not exist!',
+                error: 'Club Manager does not exist!',
                 code: 404
               }
         }
         return {
             success: true,
-            coreMemberData: findCoreMember,
+            clubManagerData: findClubManager,
             code: 200, 
-            message:"Core Member found and data returned"
+            message:"Club Manager found and data returned"
           }
 
     }
@@ -31,24 +31,24 @@ exports.getCoreMemberByID = async (data) => {
       }
 
 }
-exports.getCoreMemberByRollNo = async (data) => {
+exports.getClubManagerByRollNo = async (data) => {
     try {
         
         const { studentRollNo } = data
-        const findCoreMember = await CoreMembers.findOne({studentRollNo})
-        if(!findCoreMember)
+        const findClubManager = await ClubManagers.findOne({studentRollNo})
+        if(!findClubManager)
         {
             return {
                 success: false,
-                error: 'Core Member does not exist!',
+                error: 'Club Manager does not exist!',
                 code: 404
               }
         }
         return {
             success: true,
-            coreMemberData: findCoreMember,
+            clubManagerData: findClubManager,
             code: 200, 
-            message:"Core Member found and data returned"
+            message:"Club Manager found and data returned"
           }
 
     }
@@ -62,24 +62,24 @@ exports.getCoreMemberByRollNo = async (data) => {
       }
 
 }
-exports.getCoreMembersByClubID = async (data) => {
+exports.getClubManagersByClubID = async (data) => {
     try {
         
         const { clubID } = data;
-        const findCoreMembers = await CoreMembers.find({ clubID })
-        if(!findCoreMembers)
+        const findClubManagers = await ClubManagers.find({ clubID })
+        if(!findClubManagers)
         {
             return {
                 success: false,
-                error: 'There are no Core Members!',
+                error: 'There are no Club Managers!',
                 code: 404
               }
         }
         return {
             success: true,
-            coreMemberData: findCoreMembers,
+            clubManagerData: findClubManagers,
             code: 200, 
-            message:"Core Members found and data returned"
+            message:"Club Managers found and data returned"
           }
 
     }
@@ -93,28 +93,28 @@ exports.getCoreMembersByClubID = async (data) => {
       }
 
 }
-exports.insertCoreMember = async (data) => {
+exports.insertClubManager = async (data) => {
     try
     {
         const { studentRollNo, clubID, password, role } = data
-        const findCoreMember = await CoreMembers.findOne({ studentRollNo })
-        if(findCoreMember)
+        const findClubManager = await ClubManagers.findOne({ studentRollNo })
+        if(findClubManager)
         {
             return {
                 success: false,
-                error: 'Core Member of this roll number already exists!',
+                error: 'Club Manager of this roll number already exists!',
                 code:400
               }
         }
         const hashedPassword = textToHash(password)
-        const coreMember = new CoreMembers({
+        const ClubManager = new ClubManagers({
             studentRollNo, 
             clubID, 
             password: hashedPassword, 
             role
         })
-        const coreMemberInserted = await coreMember.save()
-        return { success:true, coreMemberData:coreMemberInserted, code:201, message:"Core Member created successfully"}
+        const clubManagerInserted = await ClubManager.save()
+        return { success:true, clubManagerData:clubManagerInserted, code:201, message:"Club Manager created successfully"}
        
     }
     catch (error) {
@@ -127,13 +127,13 @@ exports.insertCoreMember = async (data) => {
   }
     
 }
-exports.updateCoreMemberByRollNo = async (data) => {
+exports.updateClubManagerByRollNo = async (data) => {
     try
     {
         const dataToUpdate = {}
         for(key in data)
         {
-            if(key!=="coreMemberID"&&key!=="studentRollNo")
+            if(key!=="clubManagerID"&&key!=="studentRollNo")
             {
                 dataToUpdate[key] = data[key]
             }
@@ -145,17 +145,17 @@ exports.updateCoreMemberByRollNo = async (data) => {
           dataToUpdate.password = hashedPassword
 
         }
-        const findCoreMember = await CoreMembers.findOne({ studentRollNo })
-        if(!findCoreMember)
+        const findClubManager = await ClubManagers.findOne({ studentRollNo })
+        if(!findClubManager)
         {
             return {
                 success: false,
-                error: 'Core Member with this roll number does not exist!',
+                error: 'Club Manager with this roll number does not exist!',
                 code:400
               }
         }
-        const coreMemberUpdated = await CoreMembers.findOneAndUpdate({ studentRollNo },dataToUpdate,{new:true})
-        return {success:true, coreMemberData:coreMemberUpdated, code:200, message:"Core Member data updated successfully"}
+        const clubManagerUpdated = await ClubManagers.findOneAndUpdate({ studentRollNo },dataToUpdate,{new:true})
+        return {success:true, clubManagerData:clubManagerUpdated, code:200, message:"Club Manager data updated successfully"}
        
     }
     catch (error) {
@@ -169,30 +169,30 @@ exports.updateCoreMemberByRollNo = async (data) => {
     }
     
 }
-exports.updateCoreMemberByID = async (data) => {
+exports.updateClubManagerByID = async (data) => {
     try
     {
         const dataToUpdate = {}
         for(key in data)
         {
-            if(key!=="coreMemberID"&&key!=="studentRollNo")
+            if(key!=="clubManagerID"&&key!=="studentRollNo")
             {
                 dataToUpdate[key] = data[key]
             }
         }
-        const {coreMemberID} = data
-        const findCoreMember = await CoreMembers.findById( coreMemberID )
-        if(!findCoreMember)
+        const {clubManagerID} = data
+        const findClubManager = await ClubManagers.findById( clubManagerID )
+        if(!findClubManager)
         {
             return {
                 success: false,
-                error: 'Core Member does not exist!',
+                error: 'Club Manager does not exist!',
                 code:404
               }
         }
         
-        const coreMemberUpdated = await CoreMembers.findByIdAndUpdate(coreMemberID,dataToUpdate,{new:true})
-        return {success:true,coreMemberData:coreMemberUpdated,code:200, message:"Core Member updated successfully"}
+        const clubManagerUpdated = await ClubManagers.findByIdAndUpdate(clubManagerID,dataToUpdate,{new:true})
+        return {success:true,clubManagerData:clubManagerUpdated,code:200, message:"Club Manager updated successfully"}
        
     }
     catch (error) {
@@ -206,7 +206,7 @@ exports.updateCoreMemberByID = async (data) => {
     
 }
 
-exports.updateCoreMemberArrayByRollNo = async (data) => {
+exports.updateClubManagerArrayByRollNo = async (data) => {
     try
     {
         const dataToUpdate = {}
@@ -218,17 +218,17 @@ exports.updateCoreMemberArrayByRollNo = async (data) => {
             }
         }
         const {studentRollNo} = data
-        const findCoreMember = await CoreMembers.findOne({ studentRollNo })
-        if(!findCoreMember)
+        const findClubManager = await ClubManagers.findOne({ studentRollNo })
+        if(!findClubManager)
         {
             return {
                 success: false,
-                error: 'Core Member does not exist!',
+                error: 'Club Manager does not exist!',
                 code: 404
               }
         }
-        const coreMemberUpdated = await CoreMembers.findOneAndUpdate({ studentRollNo },{ $addToSet: dataToUpdate },{new:true})
-        return {success:true,coreMemberData:coreMemberUpdated,code:201,message:"Data inserted successfully in Core Member array"}
+        const clubManagerUpdated = await ClubManagers.findOneAndUpdate({ studentRollNo },{ $addToSet: dataToUpdate },{new:true})
+        return {success:true,clubManagerData:clubManagerUpdated,code:201,message:"Data inserted successfully in Club Manager array"}
        
     }
     catch (error) {
@@ -241,7 +241,7 @@ exports.updateCoreMemberArrayByRollNo = async (data) => {
   }
     
 }
-exports.updateCoreMemberArrayByID = async (data,session) => {
+exports.updateClubManagerArrayByID = async (data,session) => {
     try
     {
         const dataToUpdate = {}
@@ -252,18 +252,18 @@ exports.updateCoreMemberArrayByID = async (data,session) => {
                 dataToUpdate[key] = data[key]
             }
         }
-        const {coreMemberID} = data
-        const findCoreMember = await CoreMembers.findById( coreMemberID )
-        if(!findCoreMember)
+        const {clubManagerID} = data
+        const findClubManager = await ClubManagers.findById( clubManagerID )
+        if(!findClubManager)
         {
             return {
                 success: false,
-                error: 'Core Member does not exist!',
+                error: 'Club Manager does not exist!',
                 code:404
               }
         }
-        const coreMemberUpdated = await CoreMembers.findByIdAndUpdate(coreMemberID,{ $addToSet: dataToUpdate },{new:true}).session(session)
-        return {success:true,coreMemberData:coreMemberUpdated,code:201,message:"Data inserted successfully in Core Member array"}
+        const clubManagerUpdated = await clubManagers.findByIdAndUpdate(clubManagerID,{ $addToSet: dataToUpdate },{new:true}).session(session)
+        return {success:true,clubManagerData:clubManagerUpdated,code:201,message:"Data inserted successfully in Club Manager array"}
        
     }
     catch (error) {
@@ -277,7 +277,7 @@ exports.updateCoreMemberArrayByID = async (data,session) => {
     
 }
 
-exports.deleteFromCoreMemberArrayByID = async (data) => {
+exports.deleteFromClubManagerArrayByID = async (data) => {
     try
     {
         const dataToUpdate = {}
@@ -288,22 +288,22 @@ exports.deleteFromCoreMemberArrayByID = async (data) => {
                 dataToUpdate[key] = data[key]
             }
         }
-        const {coreMemberID} = data
-        const findCoreMember = await CoreMembers.findById(coreMemberID)
-        if(!findCoreMember)
+        const {clubManagerID} = data
+        const findClubManager = await ClubManagers.findById(clubManagerID)
+        if(!findClubManager)
         {
             return {
                 success: false,
-                error: 'Core Member does not exist!',
+                error: 'Club Manager does not exist!',
                 code: 404
               }
         }
-        const coreMemberUpdated = await CoreMembers.findByIdAndUpdate(
-            coreMemberID, 
+        const clubManagerUpdated = await ClubManagers.findByIdAndUpdate(
+            clubManagerID, 
             { $pull: dataToUpdate },
             { safe: true, multi: true,new:true }
           );
-        return {success:true,coreMemberData:coreMemberUpdated,code:200,message:"Data deleted successfully from Core Member array"}
+        return {success:true,clubManagerData:clubManagerUpdated,code:200,message:"Data deleted successfully from Club Manager array"}
        
     }
     catch (error) {
@@ -316,7 +316,7 @@ exports.deleteFromCoreMemberArrayByID = async (data) => {
   }
     
 }
-exports.deleteFromCoreMemberArrayByRollNo = async (data) => {
+exports.deleteFromClubManagerArrayByRollNo = async (data) => {
     try
     {
         const dataToUpdate = {}
@@ -328,21 +328,21 @@ exports.deleteFromCoreMemberArrayByRollNo = async (data) => {
             }
         }
         const {studentRollNo} = data
-        const findCoreMember = await CoreMembers.findOne({ studentRollNo })
-        if(!findCoreMember)
+        const findClubManager = await ClubManagers.findOne({ studentRollNo })
+        if(!findClubManager)
         {
             return {
                 success: false,
-                error: 'Core Member does not exist!',
+                error: 'Club Manager does not exist!',
                 code: 404
               }
         }
-        const coreMemberUpdated = await CoreMembers.findOneAndUpdate(
+        const clubManagerUpdated = await ClubManagers.findOneAndUpdate(
             { studentRollNo },
             { $pull: dataToUpdate },
             { safe: true, multi: true,new:true }
           );
-        return {success:true,coreMemberData:coreMemberUpdated,code:200,message:"Data deleted successfully from Core Member array"}
+        return {success:true,clubManagerData:clubManagerUpdated,code:200,message:"Data deleted successfully from Club Manager array"}
        
     }
     catch (error) {
@@ -356,21 +356,21 @@ exports.deleteFromCoreMemberArrayByRollNo = async (data) => {
     
 }
 
-exports.deleteCoreMemberByRollNo = async (data) => {
+exports.deleteClubManagerByRollNo = async (data) => {
     try
     {
         const { studentRollNo } = data
-        const findCoreMember = await CoreMembers.findOne({ studentRollNo })
-        if(!findCoreMember)
+        const findClubManager = await ClubManagers.findOne({ studentRollNo })
+        if(!findClubManager)
         {
             return {
                 success: false,
-                error: 'Core Member does not exist!',
+                error: 'Club Manager does not exist!',
                 code: 404
               }
         }
-        const coreMemberDeleted = await CoreMembers.findOneAndDelete({studentRollNo})
-        return {success:true,coreMemberData:coreMemberDeleted,code:200,message:"Core Member deleted successfully"}       
+        const clubManagerDeleted = await ClubManagers.findOneAndDelete({studentRollNo})
+        return {success:true,clubManagerData:clubManagerDeleted,code:200,message:"Club Manager deleted successfully"}       
     }
     catch (error) {
     console.log(error)
@@ -382,21 +382,21 @@ exports.deleteCoreMemberByRollNo = async (data) => {
   }
     
 }
-exports.deleteCoreMemberByID = async (data) => {
+exports.deleteClubManagerByID = async (data) => {
     try
     {
-        const { coreMemberID } = data
-        const findCoreMember = await CoreMembers.findById( coreMemberID )
-        if(!findCoreMember)
+        const { clubManagerID } = data
+        const findClubManager = await ClubManagers.findById( clubManagerID )
+        if(!findClubManager)
         {
             return {
                 success: false,
-                error: 'Core Member does not exist!',
+                error: 'Club Manager does not exist!',
                 code: 404,
               }
         }
-        const coreMemberDeleted = await CoreMembers.findByIdAndDelete(CoreMemberID)
-        return {success:true,coreMemberData:coreMemberDeleted,code:200,message:"Core Member deleted successfully"}       
+        const clubManagerDeleted = await ClubManagers.findByIdAndDelete(clubManagerID)
+        return {success:true,clubManagerData:clubManagerDeleted,code:200,message:"Club Manager deleted successfully"}       
     }
     catch (error) {
     console.log(error)
@@ -408,11 +408,11 @@ exports.deleteCoreMemberByID = async (data) => {
   }
     
 }
-exports.deleteCoreMembersByClubID = async (data) => {
+exports.deleteClubManagersByClubID = async (data) => {
     try {
       const { clubID } = data;
-      const coreMembersDeleted = await CoreMembers.deleteMany({ clubID });
-      return { success: true, coreMemberData: coreMembersDeleted, code:200, message:"Core Members deleted successfully" };
+      const clubManagersDeleted = await ClubManagers.deleteMany({ clubID });
+      return { success: true, clubManagerData: clubManagersDeleted, code:200, message:"Club Managers deleted successfully" };
     } 
     catch (error) {
       console.log(error)

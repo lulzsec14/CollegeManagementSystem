@@ -26,7 +26,7 @@ const coreMembersSchema = mongoose.Schema({
     taskList: [{ 
         type: Schema.Types.ObjectId, 
         ref: 'Task_List'
-    }]
+    }],
 
 
 })
