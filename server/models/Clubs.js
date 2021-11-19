@@ -61,8 +61,10 @@ const clubsSchema = mongoose.Schema({
         ref: 'Requests'
     }],
     managedBy: { 
-        type: Schema.Types.ObjectId, 
-        ref: 'Faculty'
+        type: String, // faculty email
+        required:[true,"Please insert faculty email"],
+        default:"",
+        unique: true
     }
 
 
