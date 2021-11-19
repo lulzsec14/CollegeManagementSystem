@@ -4,9 +4,8 @@ const mongoose = require('mongoose')
 /// schema
 const clubManagersSchema = mongoose.Schema({
     studentRollNo:{
-        
-        type: Schema.Types.ObjectId,
-        required:[true,"Student ID can't be empty"],
+        type: String,
+        required:[true,"Student Roll no can't be empty"],
     },
     clubID: { 
         type: Schema.Types.ObjectId, 

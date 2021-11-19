@@ -181,6 +181,12 @@ exports.updateCoreMemberByID = async (data) => {
             }
         }
         const {coreMemberID} = data
+        if(dataToUpdate.password)
+        {
+          const hashedPassword = textToHash(dataToUpdate.password)
+          dataToUpdate.password = hashedPassword
+
+        }
         const findCoreMember = await CoreMembers.findById( coreMemberID )
         if(!findCoreMember)
         {

@@ -181,6 +181,12 @@ exports.updateClubManagerByID = async (data) => {
             }
         }
         const {clubManagerID} = data
+        if(dataToUpdate.password)
+        {
+          const hashedPassword = textToHash(dataToUpdate.password)
+          dataToUpdate.password = hashedPassword
+
+        }
         const findClubManager = await ClubManagers.findById( clubManagerID )
         if(!findClubManager)
         {
@@ -262,7 +268,7 @@ exports.updateClubManagerArrayByID = async (data,session) => {
                 code:404
               }
         }
-        const clubManagerUpdated = await clubManagers.findByIdAndUpdate(clubManagerID,{ $addToSet: dataToUpdate },{new:true}).session(session)
+        const clubManagerUpdated = await ClubManagers.findByIdAndUpdate(clubManagerID,{ $addToSet: dataToUpdate },{new:true}).session(session)
         return {success:true,clubManagerData:clubManagerUpdated,code:201,message:"Data inserted successfully in Club Manager array"}
        
     }
