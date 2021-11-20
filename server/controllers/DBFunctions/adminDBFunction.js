@@ -1,16 +1,18 @@
+// Imports
 const Admin = require('../../models/Admin');
 const textToHash = require('../../utilities/textToHashed');
+const comparePasswords = require('../../utilities/comparePasswords');
 const validateCreateAdmin = require('../../Validators/AdminValidators');
+// ------------------------------------
 
+// Function for registering an Admin
 exports.registerAdmin = async (data) => {
   const { email, name, password, phoneNo } = data;
   const error = validateCreateAdmin(data);
   if (error) {
     const { details } = error;
     return { success: false, code: 400, error: details[0].message };
-    // res.status(400).json({ success: false, error: details[0].message });
   }
-
   try {
     const findAdmin = await Admin.findOne({
       email: data.email,
@@ -21,13 +23,8 @@ exports.registerAdmin = async (data) => {
         code: 400,
         error: 'Account with this email already exists!',
       };
-      // res.status(400).json({
-      //   success: false,
-      //   error: 'Account with this email already exists!',
-      // });
     } else {
       const hashedPassword = textToHash(password);
-
       const admin = await Admin.create({
         email,
         name,
@@ -39,23 +36,21 @@ exports.registerAdmin = async (data) => {
         success: true,
         code: 201,
         message: 'Admin account registered successfully',
+        adminData: admin,
       };
-      // res.status(201).json({ success: true });
     }
   } catch (err) {
-    console.log(err);
+    // console.log(err);
     return {
       success: false,
       code: 500,
-      error: 'An error occured while creating a user',
+      error: 'An error occured while creating an admin',
     };
-    // res.status(500).json({
-    //   success: false,
-    //   error: 'An error occured while creating a user',
-    // });
   }
 };
+// ------------------------------------
 
+// Function to retrive all the Admins
 exports.retrieveAllAdmins = async (data) => {
   try {
     const findAllAdmins = await Admin.find();
@@ -81,3 +76,117 @@ exports.retrieveAllAdmins = async (data) => {
     };
   }
 };
+// ------------------------------------
+
+exports.updateAdminDetails = async (data) => {
+  try {
+    const { email } = data;
+    const findAdmin = await Admin.findOne({ email });
+    if (!findAdmin) {
+      // res.status(400).json({
+      //   success: false,
+      //   message: 'No Admin account found with the mentioned email!',
+      // });
+      return {
+        success: false,
+        code: 400,
+        error: 'No Admin account found with the mentioned email!',
+        data: findAdmin,
+      };
+    } else {
+      const dataToUpdate = data.dataToUpdate;
+      const updatedData = await Admin.findOneAndUpdate(
+        { email },
+        { $set: dataToUpdate },
+        { new: true }
+      );
+      // res
+      //   .status(201)
+      //   .json({ success: true, message: 'Data Updated successfully!' });
+      return {
+        success: true,
+        code: 201,
+        message: 'Admin data updated successfully!',
+        data: updatedData,
+      };
+    }
+  } catch (err) {
+    return {
+      success: false,
+      code: 500,
+      error: err.message,
+    };
+  }
+};
+// ------------------------------------
+
+exports.updateAdminPassword = async (data) => {
+  try {
+    const { oldPassword, newPassword, email } = data;
+    const findAdmin = await Admin.findOne({ email });
+    if (!findAdmin) {
+      return {
+        success: false,
+        code: 404,
+        error: 'No Admin with the specified email exists!',
+      };
+    } else {
+      if (comparePasswords(oldPassword, findAdmin.password)) {
+        const hashedPassword = textToHash(newPassword);
+        const updatedPassword = await Admin.findOneAndUpdate(
+          { email },
+          { $set: { password: hashedPassword } },
+          { new: true }
+        );
+
+        return {
+          success: true,
+          code: 200,
+          message: 'Admin Password updated successfully!',
+          adminData: updatedPassword,
+        };
+      } else {
+        return {
+          success: false,
+          code: 401,
+          error: 'Not Authorized!',
+        };
+      }
+    }
+  } catch (err) {
+    return {
+      success: false,
+      code: 500,
+      error: err.message,
+    };
+  }
+};
+
+// Function to delete an Admin
+exports.deleteSingleAdmin = async (data) => {
+  try {
+    const { email } = data;
+    const findAdmin = await Admin.findOne({ email });
+    if (!findAdmin) {
+      return {
+        success: false,
+        code: 400,
+        error: 'Admin with the mentioned email not found',
+      };
+    }
+    const deletedAdmin = await Admin.findOneAndDelete({ email });
+    return {
+      sucess: true,
+      code: 201,
+      message: 'Admin account deleted successfully',
+      data: deletedAdmin,
+    };
+  } catch (err) {
+    return {
+      success: false,
+      code: 500,
+      error: err,
+    };
+  }
+};
+// ------------------------------------

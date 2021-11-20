@@ -1,4 +1,5 @@
 // Imports
+
 const adminRouter = require("./Admin/adminRoutes");
 const coreMemberRouter = require("./Core Members/coreMembersRoutes");
 const eventsRouter = require("./Events/eventsRoutes");
@@ -14,4 +15,5 @@ module.exports = {
   certificateRouter,
   studentRouter,
 };
+
 // ------------------------------------

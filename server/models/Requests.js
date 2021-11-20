@@ -10,12 +10,14 @@ const requestSchema = mongoose.Schema({
     required: [true, 'Please provide studentId'],
   },
   studentId: {
-    type: Schema.Types.ObjectId,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Students',
     unique: true,
     required: [true, 'Please provide a studentId'],
   },
   clubId: {
-    type: Schema.Types.ObjectId,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Clubs',
     unique: true,
     required: [true, 'Please provide clubId'],
   },

@@ -2,9 +2,8 @@
 const mongoose = require('mongoose')
 , Schema = mongoose.Schema
 /// schema
-const coreMembersSchema = mongoose.Schema({
+const clubManagersSchema = mongoose.Schema({
     studentRollNo:{
-        
         type: String,
         required:[true,"Student Roll no can't be empty"],
     },
@@ -21,14 +20,14 @@ const coreMembersSchema = mongoose.Schema({
     role:{
         type:String,
         required:[true,"Role can't be empty"],
-        maxlength:[70,"Character length limit exceeded: 70"]
+        maxlength:[50,"Character length limit exceeded: 50"]
     },
     taskList: [{ 
         type: Schema.Types.ObjectId, 
         ref: 'Task_List'
-    }],
+    }]
 
 
 })
-const CoreMembers = mongoose.model('CoreMembers', coreMembersSchema)
-module.exports = CoreMembers
+const ClubManagers = mongoose.model('ClubManagers', clubManagersSchema)
+module.exports = ClubManagers

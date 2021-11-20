@@ -6,11 +6,11 @@ const {
   insertClub,
   updateClub,
   updateClubByID,
-  updateClubArray,
+  updateClubByIndex,
   updateClubArrayByID,
   deleteFromClubArray,
   deleteFromClubArrayByID,
-  deleteClub,
+  deleteClubByIndex,
   deleteClubByID,
 } = require('../DBFunctions/clubsDBFunction');
 // ------------------------------------
@@ -19,7 +19,7 @@ const {
 exports.addClub = async (req, res, next) => {
   try {
     const data = req.body.data;
-    const result = await deleteFromClubArrayByID(data);
+    const result = await insertClub(data);
     res.status(201).json(result);
   } catch (err) {
     console.log(err);
