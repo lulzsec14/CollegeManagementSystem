@@ -13,6 +13,7 @@ exports.insertPhoto = async(data) => {
 		// 		error: details[0].message
 		// 	}
 		// }
+
 		const photo = await PhotoGallery.create({
 			photoURL,
 			uploadedBy,
@@ -24,14 +25,15 @@ exports.insertPhoto = async(data) => {
 		return {
 			success: true,
 			code: 201,
-			photoData: createPhoto
+			photoData: createPhoto,
+			message: "Photo inserted successfully!"
 		}
 	} catch(error) {
 		console.error(error);
 		return {
 			success: false,
 			code: 500,
-			error
+			error: "Server Error"
 		}
 	}
 }
@@ -43,20 +45,22 @@ exports.getPhoto = async(data) => {
 		if(!findPhoto) {
 			return {
 				success: false,
-				code: 204,
+				code: 404,
 				error: 'Photo does not exist!'
 			}
 		}
 		return {
 			success: true,
-			code: 201,
-			photoData: findPhoto
+			code: 200,
+			photoData: findPhoto,
+			message: "Photo found and returned"
 		}
 	} catch(error) {
+		console.log(error)
 		return {
 			success: false,
 			code: 500,
-			error
+			error: "Server Error"
 		}
 	}
 }
@@ -64,45 +68,22 @@ exports.getPhoto = async(data) => {
 exports.getPhotosByClub = async(data) => {
 	try {
 		const {clubId} = data;
-		const findPhotos = await PhotoGallery.findById(clubId);
+		const findPhotos = await PhotoGallery.find({clubId});
 		if(!findPhotos) {
 			return {
 				success: false,
-				code: 204,
+				code: 404,
 				error: 'No Photos found!'
 			}
 		}
 		return {
 			success: true,
 			code: 200,
-			photoData: findPhotos
+			photoData: findPhotos,
+			message: "Photos found and returned"
 		}
 	} catch(error) {
-		return {
-			success: false,
-			code: 500,
-			error
-		}
-	}
-}
-
-exports.getPhotosByUploader = async(data) => {
-	try {
-		const {uploadedBy} = data;
-		const findPhotos = await PhotoGallery.findById(uploadedBy);
-		if(!findPhotos) {
-			return {
-				success: false,
-				code: 204,
-				error: 'No Photos found!'
-			}
-		}
-		return {
-			success: true,
-			code: 200,
-			photoData: findPhotos
-		}
-	} catch(error) {
+		console.log(error)
 		return {
 			success: false,
 			code: 500,
@@ -118,21 +99,48 @@ exports.deletePhoto = async(data) => {
 		if(!findPhoto) {
 			return {
 				success : false,
-				code: 204,
+				code: 404,
 				error: 'Photo does not exist'
 			}
 		}
 		const deletedPhoto = await PhotoGallery.findByIdAndDelete(photoId);
 		return {
 			success: true,
-			code: 201,
-			photoData: deletedPhoto
+			code: 200,
+			photoData: deletedPhoto,
+			message: "Photo deleted successfully!"
 		}
 	} catch(error) {
+		console.log(error)
 		return {
 			success: false,
 			code: 500,
-			error
+			error: "Server Error"
 		}
 	}
 }
+
+// exports.getPhotosByUploader = async(data) => {
+// 	try {
+// 		const {uploadedBy} = data;
+// 		const findPhotos = await PhotoGallery.findById(uploadedBy);
+// 		if(!findPhotos) {
+// 			return {
+// 				success: false,
+// 				code: 204,
+// 				error: 'No Photos found!'
+// 			}
+// 		}
+// 		return {
+// 			success: true,
+// 			code: 200,
+// 			photoData: findPhotos
+// 		}
+// 	} catch(error) {
+// 		return {
+// 			success: false,
+// 			code: 500,
+// 			error
+// 		}
+// 	}
+// }
