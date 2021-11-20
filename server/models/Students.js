@@ -47,14 +47,14 @@ const studentSchema = mongoose.Schema({
   },
   clubsJoined: [
     {
-      type: Schema.Types.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
       ref: 'Clubs',
     },
   ],
   clubsRequested: [
     {
-      type: Schema.Types.ObjectId,
-      ref: 'Club',
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Clubs',
       joined: {
         type: Boolean,
         default: false,
@@ -63,19 +63,19 @@ const studentSchema = mongoose.Schema({
   ],
   certificates: [
     {
-      type: Schema.Types.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
       ref: 'Certificates',
     },
   ],
   eventsParticipated: [
     {
-      type: Schema.Types.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
       ref: 'Events',
     },
   ],
   eventsAttended: [
     {
-      type: Schema.Types.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
       ref: 'Events',
     },
   ],
