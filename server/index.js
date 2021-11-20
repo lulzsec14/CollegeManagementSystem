@@ -6,6 +6,7 @@ const path = require("path");
 const colors = require("colors");
 const compression = require("compression");
 const connectDb = require("./config/db");
+//require('./config/dbSession')
 // ------------------------------------
 
 // Connecting to database
@@ -20,6 +21,7 @@ const {
   coreMemberRouter,
   eventsRouter,
   certificateRouter,
+  studentRouter,
 } = require("./routes/main");
 // ------------------------------------
 
@@ -34,6 +36,7 @@ app.use("/api/admin", adminRouter);
 app.use("/api/coreMember", coreMemberRouter);
 app.use("/api/event", eventsRouter);
 app.use("/api/certificate", certificateRouter);
+app.use("/api/student", studentRouter);
 // ------------------------------------
 
 // Server
@@ -47,4 +50,8 @@ process.on("unhandledRejection", (err, promise) => {
   console.log(`Server stopped due to: ${err}`);
   server.close(() => process.exit(1));
 });
+// process.on('unhandledRejection', (err, promise) => {
+//   console.log(`Server stopped due to: ${err}`);
+//   server.close(() => process.exit(1));
+// });
 // ------------------------------------
