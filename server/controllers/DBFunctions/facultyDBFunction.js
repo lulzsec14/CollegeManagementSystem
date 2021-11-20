@@ -1,6 +1,6 @@
 const Faculty = require('../../models/Faculty')
 const textToHash = require('../../utilities/textToHashed')
-exports.getFaculty = async (data) => {
+exports.getFacultyByEmail = async (data) => {
     try {
         
         const { email } = data
@@ -9,20 +9,26 @@ exports.getFaculty = async (data) => {
         {
             return {
                 success: false,
-                error: 'Faculty does not exist!',
+                error: 'Faculty with this email does not exist!',
+                code: 404
               }
         }
         return {
             success: true,
-            FacultyData: findFaculty,
+            facultyData: findFaculty,
+            code: 200,
+            message: "Faculty found and data returned"
           }
 
     }
     catch (error) {
+        console.log(error)
         return {
-            success:false,
-            error
-        }
+            success: false,
+            error: 'Server Error',
+            code: 500
+          }
+    
     }
 
 }
@@ -36,19 +42,24 @@ exports.getFacultyByID = async (data) => {
             return {
                 success: false,
                 error: 'Faculty does not exist!',
+                code: 404
               }
         }
         return {
             success: true,
             facultyData: findFaculty,
+            code:200, 
+            message:"Faculty found and data returned"
           }
 
     }
     catch (error) {
+        console.log(error)
         return {
-            success:false,
-            error
-        }
+            success: false,
+            error: 'Server Error',
+            code: 500
+          }
     }
 
 }
@@ -56,24 +67,21 @@ exports.getAllFaculty = async () => {
     try {
         
         const findFaculty = await Faculty.find({ })
-        if(!findFaculty)
-        {
-            return {
-                success: false,
-                error: 'There are no Faculty!',
-              }
-        }
         return {
             success: true,
             facultyData: findFaculty,
+            code: 200, 
+            message:"All faculty found and data returned"
           }
 
     }
     catch (error) {
+        console.log(error)
         return {
-            success:false,
-            error
-        }
+            success: false,
+            error: 'Server Error',
+            code: 500
+          }
     }
 
 }
@@ -87,19 +95,24 @@ exports.getFacultyByClubID = async (data) => {
             return {
                 success: false,
                 error: 'No faculty found!',
+                code: 404
               }
         }
         return {
             success: true,
-            taskData: findFaculty,
+            facultyData: findFaculty,
+            code:200,
+            message: 'Faculty found and data returned'
           }
 
     }
     catch (error) {
+        console.log(error)
         return {
-            success:false,
-            error
-        }
+            success: false,
+            error: 'Server Error',
+            code: 500
+          }
     }
 
 }
@@ -112,7 +125,8 @@ exports.insertFaculty = async (data) => {
         {
             return {
                 success: false,
-                error: 'Faculty with same already exists!',
+                error: 'Faculty with same email already exists!',
+                code: 400
               }
         }
         
@@ -126,18 +140,20 @@ exports.insertFaculty = async (data) => {
             
         })
         const facultyInserted = await faculty.save()
-        return {success:true,facultyData:facultyInserted}
+        return {success:true, facultyData:facultyInserted, code:201, message:"Faculty created successfully"}
        
     }
     catch (error) {
+        console.log(error)
         return {
             success: false,
-            error
+            error: 'Server Error',
+            code: 500
           }
     }
     
 }
-exports.updateFaculty = async (data) => {
+exports.updateFacultyByEmail = async (data) => {
     try
     {
         const dataToUpdate = {}
@@ -160,7 +176,8 @@ exports.updateFaculty = async (data) => {
         {
             return {
                 success: false,
-                error: 'Faculty does not exist!',
+                error: 'Faculty with this email does not exist!',
+                code:400
               }
         }
         if(dataToUpdate.facultyEmailNew)
@@ -168,13 +185,15 @@ exports.updateFaculty = async (data) => {
             dataToUpdate.email=dataToUpdate.facultyEmailNew
         }
         const facultyUpdated = await Faculty.findOneAndUpdate({ email },dataToUpdate,{new:true})
-        return {success:true,facultyData:facultyUpdated}
+        return {success:true, facultyData:facultyUpdated, code:200, message:"Faculty data updated successfully"}
        
     }
     catch (error) {
+        console.log(error)
         return {
             success: false,
-            error
+            error: 'Server Error',
+            code: 500
           }
 
     }
@@ -204,6 +223,7 @@ exports.updateFacultyByID = async (data) => {
             return {
                 success: false,
                 error: 'Faculty does not exist!',
+                code:400
               }
         }
         if(dataToUpdate.facultyEmailNew)
@@ -211,13 +231,15 @@ exports.updateFacultyByID = async (data) => {
             dataToUpdate.email=dataToUpdate.facultyEmailNew
         }
         const facultyUpdated = await Faculty.findByIdAndUpdate(facultyID,dataToUpdate,{new:true})
-        return {success:true,facultyData:facultyUpdated}
+        return {success:true, facultyData:facultyUpdated, code:200, message:"Faculty data updated successfully"}
        
     }
     catch (error) {
+        console.log(error)
         return {
             success: false,
-            error
+            error: 'Server Error',
+            code: 500
           }
 
     }
@@ -225,7 +247,7 @@ exports.updateFacultyByID = async (data) => {
 }
 
 
-exports.deleteFaculty = async (data) => {
+exports.deleteFacultyByEmail = async (data) => {
     try
     {
         const { email } = data
@@ -234,16 +256,19 @@ exports.deleteFaculty = async (data) => {
         {
             return {
                 success: false,
-                error: 'Faculty does not exist!',
+                error: 'Faculty with this email does not exist!',
+                code:400
               }
         }
         const facultyDeleted = await Faculty.findOneAndDelete({email})
-        return {success:true,facultyData:facultyDeleted}       
+        return {success:true, facultyData:facultyDeleted, code:200, message:"Faculty data updated successfully"}       
     }
     catch (error) {
+        console.log(error)
         return {
             success: false,
-            error
+            error: 'Server Error',
+            code: 500
           }
     }
     
@@ -259,15 +284,18 @@ exports.deleteFacultyByID = async (data) => {
             return {
                 success: false,
                 error: 'Faculty does not exist!',
+                code: 400
               }
         }
         const facultyDeleted = await Faculty.findByIdAndDelete(facultyID)
-        return {success:true,facultyData:facultyDeleted}       
+        return {success:true, facultyData:facultyDeleted, code:200, message:"Faculty data updated successfully"}       
     }
     catch (error) {
+        console.log(error)
         return {
             success: false,
-            error
+            error: 'Server Error',
+            code: 500
           }
     }
     
