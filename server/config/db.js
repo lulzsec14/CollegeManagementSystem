@@ -13,9 +13,9 @@ const connectDb = async () => {
       useUnifiedTopology: true,
     });
 
-    console.log(`Database connected: ${conn.connection.host}`);
+    console.log(`Database connected: ${conn.connection.host}`.cyan.bold);
   } catch (err) {
-    console.log(`Error occured: ${err.message}`);
+    console.log(`Error occured: ${err.message}`.red.bold);
   }
 };
 
@@ -23,4 +23,3 @@ const connectDb = async () => {
 // Exports
 module.exports = { connectDb };
 // ------------------------------------
-
