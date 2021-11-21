@@ -25,14 +25,15 @@ exports.createFeedback = async(data) => {
 		return {
 			success: true,
 			code: 201,
-			feedbackData: createFeedback
+			feedbackData: createFeedback,
+			message: "Feedback created successfully!"
 		}
 	} catch(error) {
-		console.error(error);
+		console.log(error);
 		return {
 			success: false,
 			code: 500,
-			error
+			error: "Server Error"
 		}
 	}
 }
@@ -41,23 +42,25 @@ exports.getFeedback = async(data) => {
 	try {
 		const {feedbackId} = data;
 		const findFeedback = await Feedback.findById(feedbackId);
-		if(!findTask) {
+		if(!findFeedback) {
 			return {
 				success: false,
-				code: 204,
+				code: 404,
 				error: 'Feedback does not exist!'
 			}
 		}
 		return {
 			success: true,
-			code: 201,
-			feedbackData: findFeedback
+			code: 200,
+			feedbackData: findFeedback,
+			message: "Feedback found and returned"
 		}
 	} catch(error) {
+		console.log(error)
 		return {
 			success: false,
 			code: 500,
-			error
+			error: "Server Error"
 		}
 	}
 }
@@ -65,49 +68,26 @@ exports.getFeedback = async(data) => {
 exports.getFeedbacksByClub = async(data) => {
 	try {
 		const {clubId} = data;
-		const findFeedbacks = await Feedback.findById(clubId);
+		const findFeedbacks = await Feedback.find({clubId});
 		if(!findFeedbacks) {
 			return {
 				success: false,
-				code: 204,
+				code: 404,
 				error: 'No Feedbacks found!'
 			}
 		}
 		return {
 			success: true,
 			code: 200,
-			feedbackData: findFeedbacks
+			feedbackData: findFeedbacks,
+			message: "Feedbacks found and returned"
 		}
 	} catch(error) {
+		console.log(error)
 		return {
 			success: false,
 			code: 500,
-			error
-		}
-	}
-}
-
-exports.getFeedbacksByUploader = async(data) => {
-	try {
-		const {feedbackBy} = data;
-		const findFeedbacks = await Feedback.findById(feedbackBy);
-		if(!findFeedbacks) {
-			return {
-				success: false,
-				code: 204,
-				error: 'No Feedbacks found!'
-			}
-		}
-		return {
-			success: true,
-			code: 200,
-			feedbackData: findFeedbacks
-		}
-	} catch(error) {
-		return {
-			success: false,
-			code: 500,
-			error
+			error: "Server Error"
 		}
 	}
 }
@@ -119,24 +99,51 @@ exports.deleteFeedback = async(data) => {
 		if(!findFeedback) {
 			return {
 				success : false,
-				code: 204,
+				code: 404,
 				error: 'Feedback does not exist'
 			}
 		}
 		const deletedFeedback = await Feedback.findByIdAndDelete(feedbackId);
 		return {
 			success: true,
-			code: 201,
-			feedbackData: deletedFeedback
+			code: 200,
+			feedbackData: deletedFeedback,
+			message: "Feedback deleted successfully!"
 		}
 	} catch(error) {
+		console.log(error)
 		return {
 			success: false,
 			code: 500,
-			error
+			error: "Server Error"
 		}
 	}
 }
+
+// exports.getFeedbacksByUploader = async(data) => {
+// 	try {
+// 		const {feedbackBy} = data;
+// 		const findFeedbacks = await Feedback.findById(feedbackBy);
+// 		if(!findFeedbacks) {
+// 			return {
+// 				success: false,
+// 				code: 204,
+// 				error: 'No Feedbacks found!'
+// 			}
+// 		}
+// 		return {
+// 			success: true,
+// 			code: 200,
+// 			feedbackData: findFeedbacks
+// 		}
+// 	} catch(error) {
+// 		return {
+// 			success: false,
+// 			code: 500,
+// 			error
+// 		}
+// 	}
+// }
 
 // exports.searchFeedback = async(data) => {
 // 	try {
