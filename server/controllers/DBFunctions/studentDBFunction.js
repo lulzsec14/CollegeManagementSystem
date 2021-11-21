@@ -115,7 +115,7 @@ exports.getStudentById = async (data) => {
       return {
         success: true,
         code: 200,
-        message: 'Student with given email found found!',
+        message: 'Student with given email found!',
         studentData: findStudent,
       };
     }
@@ -140,6 +140,7 @@ exports.updateStudentArray = async (data) => {
       };
     } else {
       const dataToUpdate = data.dataToUpdate;
+      // console.log(dataToUpdate);
       const updatedStudent = await Student.findOneAndUpdate(
         { email },
         { $addToSet: dataToUpdate },
@@ -206,7 +207,7 @@ exports.deleteFromStudentArray = async (data) => {
       };
     } else {
       const dataToUpdate = data.dataToUpdate;
-      const updatedStudent = await Student.findByIdAndUpdate(
+      const updatedStudent = await Student.findOneAndUpdate(
         { email },
         { $pull: dataToUpdate },
         { safe: true, multi: true, new: true }
