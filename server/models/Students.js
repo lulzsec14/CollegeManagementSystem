@@ -19,13 +19,12 @@ const studentSchema = mongoose.Schema({
       'Please provide a valid email',
     ],
     minLength: 8,
-    maxLength: 20,
+    maxLength: 50,
   },
   password: {
     type: String,
     required: [true, 'Please provide a password!'],
     minLength: 8,
-    select: false,
   },
   name: {
     type: String,
