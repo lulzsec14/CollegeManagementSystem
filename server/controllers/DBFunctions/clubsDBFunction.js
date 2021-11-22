@@ -1,9 +1,9 @@
 const Clubs = require('../../models/Clubs');
-exports.getClubByIndex = async (data) => {
+exports.getClubByIndex = async (data,session) => {
     try {
         
         const { clubIndex } = data
-        const findClub = await Clubs.findOne({ clubIndex })
+        const findClub = await Clubs.findOne({ clubIndex }).session(session)
         if(!findClub)
         {
             return {
@@ -30,11 +30,11 @@ exports.getClubByIndex = async (data) => {
       }
 
 }
-exports.getClubByID = async (data) => {
+exports.getClubByID = async (data,session) => {
     try {
         
         const { clubID } = data
-        const findClub = await Clubs.findById(clubID)
+        const findClub = await Clubs.findById(clubID).session(session)
         if(!findClub)
         {
             return {
@@ -61,10 +61,10 @@ exports.getClubByID = async (data) => {
       }
 
 }
-exports.getAllClubs = async () => {
+exports.getAllClubs = async (session) => {
     try {
         
-        const findClubs = await Clubs.find({ })
+        const findClubs = await Clubs.find({ }).session(session)
         if(!findClubs)
         {
             return {
@@ -91,11 +91,11 @@ exports.getAllClubs = async () => {
       }
 
 }
-exports.insertClub = async (data) => {
+exports.insertClub = async (data,session) => {
     try
     {
         const { clubIndex, clubName, clubDescription, managedBy } = data
-        const findClub = await Clubs.findOne({ clubIndex })
+        const findClub = await Clubs.findOne({ clubIndex }).session(session)
         if(findClub)
         {
             return {
@@ -110,7 +110,7 @@ exports.insertClub = async (data) => {
             clubDescription,
             managedBy
         })
-        const clubInserted = await club.save()
+        const clubInserted = await club.save({session})
         return { success:true, clubData:clubInserted, code:201, message:"Club created successfully"}
        
     }
@@ -124,7 +124,7 @@ exports.insertClub = async (data) => {
   }
     
 }
-exports.updateClubByIndex = async (data) => {
+exports.updateClubByIndex = async (data,session) => {
     try
     {
         const dataToUpdate = {}
@@ -136,7 +136,7 @@ exports.updateClubByIndex = async (data) => {
             }
         }
         const {clubIndex} = data
-        const findClub = await Clubs.findOne({ clubIndex })
+        const findClub = await Clubs.findOne({ clubIndex }).session(session)
         if(!findClub)
         {
             return {
@@ -149,7 +149,7 @@ exports.updateClubByIndex = async (data) => {
         {
             dataToUpdate.clubIndex=dataToUpdate.clubIndexNew
         }
-        const clubUpdated = await Clubs.findOneAndUpdate({ clubIndex }, dataToUpdate, {new:true} )
+        const clubUpdated = await Clubs.findOneAndUpdate({ clubIndex }, dataToUpdate, {new:true} ).session(session)
         return {success:true,clubData:clubUpdated,code:200, message:"Club updated successfully"}
        
     }
@@ -163,7 +163,7 @@ exports.updateClubByIndex = async (data) => {
       }
     
 }
-exports.updateClubByID = async (data) => {
+exports.updateClubByID = async (data,session) => {
     try
     {
         const dataToUpdate = {}
@@ -175,7 +175,7 @@ exports.updateClubByID = async (data) => {
             }
         }
         const {clubID} = data
-        const findClub = await Clubs.findById( clubID )
+        const findClub = await Clubs.findById( clubID ).session(session)
         if(!findClub)
         {
             return {
@@ -188,7 +188,7 @@ exports.updateClubByID = async (data) => {
         {
             dataToUpdate.clubIndex=dataToUpdate.clubIndexNew
         }
-        const clubUpdated = await Clubs.findByIdAndUpdate(clubID,dataToUpdate,{new:true})
+        const clubUpdated = await Clubs.findByIdAndUpdate(clubID,dataToUpdate,{new:true}).session(session)
         return {success:true,clubData:clubUpdated,code:200, message:"Club updated successfully"}
        
     }
@@ -203,7 +203,7 @@ exports.updateClubByID = async (data) => {
     
 }
 
-exports.updateClubArrayByIndex = async (data) => {
+exports.updateClubArrayByIndex = async (data,session) => {
     try
     {
         const dataToUpdate = {}
@@ -215,7 +215,7 @@ exports.updateClubArrayByIndex = async (data) => {
             }
         }
         const {clubIndex} = data
-        const findClub = await Clubs.findOne({ clubIndex })
+        const findClub = await Clubs.findOne({ clubIndex }).session(session)
         if(!findClub)
         {
             return {
@@ -224,7 +224,7 @@ exports.updateClubArrayByIndex = async (data) => {
                 code: 404
               }
         }
-        const clubUpdated = await Clubs.findOneAndUpdate({ clubIndex },{ $addToSet: dataToUpdate },{new:true})
+        const clubUpdated = await Clubs.findOneAndUpdate({ clubIndex },{ $addToSet: dataToUpdate },{new:true}).session(session)
         return {success:true,clubData:clubUpdated,code:201,message:"Data inserted successfully in club array"}
        
     }
@@ -250,7 +250,7 @@ exports.updateClubArrayByID = async (data,session) => {
             }
         }
         const {clubID} = data
-        const findClub = await Clubs.findById( clubID )
+        const findClub = await Clubs.findById( clubID ).session(session)
         if(!findClub)
         {
             return {
@@ -274,7 +274,7 @@ exports.updateClubArrayByID = async (data,session) => {
     
 }
 
-exports.deleteFromClubArrayByID = async (data) => {
+exports.deleteFromClubArrayByID = async (data,session) => {
     try
     {
         const dataToUpdate = {}
@@ -286,7 +286,7 @@ exports.deleteFromClubArrayByID = async (data) => {
             }
         }
         const {clubID} = data
-        const findClub = await Clubs.findById(clubID)
+        const findClub = await Clubs.findById(clubID).session(session)
         if(!findClub)
         {
             return {
@@ -299,7 +299,7 @@ exports.deleteFromClubArrayByID = async (data) => {
             clubID, 
             { $pull: dataToUpdate },
             { safe: true, multi: true,new:true }
-          );
+          ).session(session);
         return {success:true,clubData:clubUpdated,code:200,message:"Data deleted successfully from club array"}
        
     }
@@ -313,7 +313,7 @@ exports.deleteFromClubArrayByID = async (data) => {
   }
     
 }
-exports.deleteFromClubArrayByIndex = async (data) => {
+exports.deleteFromClubArrayByIndex = async (data,session) => {
     try
     {
         const dataToUpdate = {}
@@ -325,7 +325,7 @@ exports.deleteFromClubArrayByIndex = async (data) => {
             }
         }
         const {clubIndex} = data
-        const findClub = await Clubs.findOne({ clubIndex })
+        const findClub = await Clubs.findOne({ clubIndex }).session(session)
         if(!findClub)
         {
             return {
@@ -338,7 +338,7 @@ exports.deleteFromClubArrayByIndex = async (data) => {
             { clubIndex },
             { $pull: dataToUpdate },
             { safe: true, multi: true,new:true }
-          );
+          ).session(session);
         return {success:true,clubData:clubUpdated,code:200,message:"Data deleted successfully from club array"}
        
     }
@@ -353,11 +353,11 @@ exports.deleteFromClubArrayByIndex = async (data) => {
     
 }
 
-exports.deleteClubByIndex = async (data) => {
+exports.deleteClubByIndex = async (data,session) => {
     try
     {
         const { clubIndex } = data
-        const findClub = await Clubs.findOne({ clubIndex })
+        const findClub = await Clubs.findOne({ clubIndex }).session(session)
         if(!findClub)
         {
             return {
@@ -366,7 +366,7 @@ exports.deleteClubByIndex = async (data) => {
                 code: 404
               }
         }
-        const clubDeleted = await Clubs.findOneAndDelete({clubIndex})
+        const clubDeleted = await Clubs.findOneAndDelete({clubIndex}).session(session)
         return {success:true,clubData:clubDeleted,code:200,message:"Club deleted successfully"}       
     }
     catch (error) {
@@ -379,11 +379,11 @@ exports.deleteClubByIndex = async (data) => {
   }
     
 }
-exports.deleteClubByID = async (data) => {
+exports.deleteClubByID = async (data,session) => {
     try
     {
         const { clubID } = data
-        const findClub = await Clubs.findById( clubID )
+        const findClub = await Clubs.findById( clubID ).session(session)
         if(!findClub)
         {
             return {
@@ -392,7 +392,7 @@ exports.deleteClubByID = async (data) => {
                 code: 404,
               }
         }
-        const clubDeleted = await Clubs.findByIdAndDelete(clubID)
+        const clubDeleted = await Clubs.findByIdAndDelete(clubID).session(session)
         return {success:true,clubData:clubDeleted,code:200,message:"Club deleted successfully"}       
     }
     catch (error) {

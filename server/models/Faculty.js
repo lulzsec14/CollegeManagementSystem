@@ -40,7 +40,7 @@ const facultySchema = mongoose.Schema({
     clubID: { 
         type: Schema.Types.ObjectId, 
         ref: 'Clubs',
-        unique:true
+        default:null
     }
 
 

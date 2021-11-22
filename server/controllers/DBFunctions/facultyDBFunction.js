@@ -1,10 +1,10 @@
 const Faculty = require('../../models/Faculty')
 const textToHash = require('../../utilities/textToHashed')
-exports.getFacultyByFacultyEmail = async (data) => {
+exports.getFacultyByFacultyEmail = async (data,session) => {
     try {
         
         const { facultyEmail } = data
-        const findFaculty = await Faculty.findOne({ facultyEmail })
+        const findFaculty = await Faculty.findOne({ facultyEmail }).session(session)
         if(!findFaculty)
         {
             return {
@@ -32,11 +32,11 @@ exports.getFacultyByFacultyEmail = async (data) => {
     }
 
 }
-exports.getFacultyByID = async (data) => {
+exports.getFacultyByID = async (data,session) => {
     try {
         
         const { facultyID } = data
-        const findFaculty = await Faculty.findById(facultyID)
+        const findFaculty = await Faculty.findById(facultyID).session(session)
         if(!findFaculty)
         {
             return {
@@ -63,10 +63,10 @@ exports.getFacultyByID = async (data) => {
     }
 
 }
-exports.getAllFaculty = async () => {
+exports.getAllFaculty = async (session) => {
     try {
         
-        const findFaculty = await Faculty.find({ })
+        const findFaculty = await Faculty.find({ }).session(session)
         return {
             success: true,
             facultyData: findFaculty,
@@ -85,11 +85,11 @@ exports.getAllFaculty = async () => {
     }
 
 }
-exports.getFacultyByClubID = async (data) => {
+exports.getFacultyByClubID = async (data,session) => {
     try {
         
         const { clubID } = data
-        const findFaculty = await Faculty.findOne({clubID})
+        const findFaculty = await Faculty.findOne({clubID}).session(session)
         if(!findFaculty)
         {
             return {
@@ -116,11 +116,11 @@ exports.getFacultyByClubID = async (data) => {
     }
 
 }
-exports.insertFaculty = async (data) => {
+exports.insertFaculty = async (data,session) => {
     try
     {
         const { facultyName, facultyEmail, password, phone, clubID } = data
-        const findFaculty = await Faculty.findOne({ facultyEmail })
+        const findFaculty = await Faculty.findOne({ facultyEmail }).session(session)
         if(findFaculty)
         {
             return {
@@ -139,7 +139,7 @@ exports.insertFaculty = async (data) => {
             clubID
             
         })
-        const facultyInserted = await faculty.save()
+        const facultyInserted = await faculty.save({session})
         return {success:true, facultyData:facultyInserted, code:201, message:"Faculty created successfully"}
        
     }
@@ -153,7 +153,7 @@ exports.insertFaculty = async (data) => {
     }
     
 }
-exports.updateFacultyByFacultyEmail = async (data) => {
+exports.updateFacultyByFacultyEmail = async (data,session) => {
     try
     {
         const dataToUpdate = {}
@@ -171,7 +171,7 @@ exports.updateFacultyByFacultyEmail = async (data) => {
           dataToUpdate.password = hashedPassword
 
         }
-        const findFaculty = await Faculty.findOne({ facultyEmail })
+        const findFaculty = await Faculty.findOne({ facultyEmail }).session(session)
         if(!findFaculty)
         {
             return {
@@ -184,7 +184,7 @@ exports.updateFacultyByFacultyEmail = async (data) => {
         {
             dataToUpdate.facultyEmail=dataToUpdate.facultyEmailNew
         }
-        const facultyUpdated = await Faculty.findOneAndUpdate({ facultyEmail },dataToUpdate,{new:true})
+        const facultyUpdated = await Faculty.findOneAndUpdate({ facultyEmail },dataToUpdate,{new:true}).session(session)
         return {success:true, facultyData:facultyUpdated, code:200, message:"Faculty data updated successfully"}
        
     }
@@ -199,7 +199,7 @@ exports.updateFacultyByFacultyEmail = async (data) => {
     }
     
 }
-exports.updateFacultyByID = async (data) => {
+exports.updateFacultyByID = async (data,session) => {
     try
     {
         const dataToUpdate = {}
@@ -217,7 +217,7 @@ exports.updateFacultyByID = async (data) => {
 
         }
         const {facultyID} = data
-        const findFaculty = await Faculty.findById( facultyID )
+        const findFaculty = await Faculty.findById( facultyID ).session(session)
         if(!findFaculty)
         {
             return {
@@ -230,7 +230,7 @@ exports.updateFacultyByID = async (data) => {
         {
             dataToUpdate.facultyEmail=dataToUpdate.facultyEmailNew
         }
-        const facultyUpdated = await Faculty.findByIdAndUpdate(facultyID,dataToUpdate,{new:true})
+        const facultyUpdated = await Faculty.findByIdAndUpdate(facultyID,dataToUpdate,{new:true}).session(session)
         return {success:true, facultyData:facultyUpdated, code:200, message:"Faculty data updated successfully"}
        
     }
@@ -247,11 +247,11 @@ exports.updateFacultyByID = async (data) => {
 }
 
 
-exports.deleteFacultyByFacultyEmail = async (data) => {
+exports.deleteFacultyByFacultyEmail = async (data,session) => {
     try
     {
         const { facultyEmail } = data
-        const findFaculty = await Faculty.findOne({ facultyEmail })
+        const findFaculty = await Faculty.findOne({ facultyEmail }).session(session)
         if(!findFaculty)
         {
             return {
@@ -260,8 +260,17 @@ exports.deleteFacultyByFacultyEmail = async (data) => {
                 code:400
               }
         }
-        const facultyDeleted = await Faculty.findOneAndDelete({facultyEmail})
-        return {success:true, facultyData:facultyDeleted, code:200, message:"Faculty data updated successfully"}       
+        if(findFaculty.clubID!==null)
+        {
+            return {
+                success: false,
+                error: 'Unable to delete this faculty because this faculty manages a club!',
+                code: 400
+              }
+
+        }
+        const facultyDeleted = await Faculty.findOneAndDelete({facultyEmail}).session(session)
+        return {success:true, facultyData:facultyDeleted, code:200, message:"Faculty data deleted successfully"}       
     }
     catch (error) {
         console.log(error)
@@ -274,11 +283,11 @@ exports.deleteFacultyByFacultyEmail = async (data) => {
     
 }
 
-exports.deleteFacultyByID = async (data) => {
+exports.deleteFacultyByID = async (data,session) => {
     try
     {
         const { facultyID } = data
-        const findFaculty = await Faculty.findById( facultyID )
+        const findFaculty = await Faculty.findById( facultyID ).session(session)
         if(!findFaculty)
         {
             return {
@@ -287,8 +296,17 @@ exports.deleteFacultyByID = async (data) => {
                 code: 400
               }
         }
-        const facultyDeleted = await Faculty.findByIdAndDelete(facultyID)
-        return {success:true, facultyData:facultyDeleted, code:200, message:"Faculty data updated successfully"}       
+        if(findFaculty.clubID!==null)
+        {
+            return {
+                success: false,
+                error: 'Unable to delete this faculty because this faculty manages a club!',
+                code: 400
+              }
+
+        }
+        const facultyDeleted = await Faculty.findByIdAndDelete(facultyID).session(session)
+        return {success:true, facultyData:facultyDeleted, code:200, message:"Faculty data deleted successfully"}       
     }
     catch (error) {
         console.log(error)
