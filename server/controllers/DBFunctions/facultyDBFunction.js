@@ -1,15 +1,15 @@
 const Faculty = require('../../models/Faculty')
 const textToHash = require('../../utilities/textToHashed')
-exports.getFacultyByEmail = async (data) => {
+exports.getFacultyByFacultyEmail = async (data) => {
     try {
         
-        const { email } = data
-        const findFaculty = await Faculty.findOne({ email })
+        const { facultyEmail } = data
+        const findFaculty = await Faculty.findOne({ facultyEmail })
         if(!findFaculty)
         {
             return {
                 success: false,
-                error: 'Faculty with this email does not exist!',
+                error: 'Faculty with this faculty email does not exist!',
                 code: 404
               }
         }
@@ -119,13 +119,13 @@ exports.getFacultyByClubID = async (data) => {
 exports.insertFaculty = async (data) => {
     try
     {
-        const { facultyName, email, password, phone, clubID } = data
-        const findFaculty = await Faculty.findOne({ email })
+        const { facultyName, facultyEmail, password, phone, clubID } = data
+        const findFaculty = await Faculty.findOne({ facultyEmail })
         if(findFaculty)
         {
             return {
                 success: false,
-                error: 'Faculty with same email already exists!',
+                error: 'Faculty with same facultyEmail already exists!',
                 code: 400
               }
         }
@@ -133,7 +133,7 @@ exports.insertFaculty = async (data) => {
         const hashedPassword = textToHash(password)
         const faculty = new Faculty({
             facultyName, 
-            email, 
+            facultyEmail, 
             password: hashedPassword, 
             phone, 
             clubID
@@ -153,25 +153,25 @@ exports.insertFaculty = async (data) => {
     }
     
 }
-exports.updateFacultyByEmail = async (data) => {
+exports.updateFacultyByFacultyEmail = async (data) => {
     try
     {
         const dataToUpdate = {}
         for(key in data)
         {
-            if(key!=="facultyID"&&key!=="email")
+            if(key!=="facultyID"&&key!=="facultyEmail")
             {
                 dataToUpdate[key] = data[key]
             }
         }
-        const {email} = data
+        const {facultyEmail} = data
         if(dataToUpdate.password)
         {
           const hashedPassword = textToHash(dataToUpdate.password)
           dataToUpdate.password = hashedPassword
 
         }
-        const findFaculty = await Faculty.findOne({ email })
+        const findFaculty = await Faculty.findOne({ facultyEmail })
         if(!findFaculty)
         {
             return {
@@ -182,9 +182,9 @@ exports.updateFacultyByEmail = async (data) => {
         }
         if(dataToUpdate.facultyEmailNew)
         {
-            dataToUpdate.email=dataToUpdate.facultyEmailNew
+            dataToUpdate.facultyEmail=dataToUpdate.facultyEmailNew
         }
-        const facultyUpdated = await Faculty.findOneAndUpdate({ email },dataToUpdate,{new:true})
+        const facultyUpdated = await Faculty.findOneAndUpdate({ facultyEmail },dataToUpdate,{new:true})
         return {success:true, facultyData:facultyUpdated, code:200, message:"Faculty data updated successfully"}
        
     }
@@ -205,7 +205,7 @@ exports.updateFacultyByID = async (data) => {
         const dataToUpdate = {}
         for(key in data)
         {
-            if(key!=="facultyID"&&key!=="email")
+            if(key!=="facultyID"&&key!=="facultyEmail")
             {
                 dataToUpdate[key] = data[key]
             }
@@ -228,7 +228,7 @@ exports.updateFacultyByID = async (data) => {
         }
         if(dataToUpdate.facultyEmailNew)
         {
-            dataToUpdate.email=dataToUpdate.facultyEmailNew
+            dataToUpdate.facultyEmail=dataToUpdate.facultyEmailNew
         }
         const facultyUpdated = await Faculty.findByIdAndUpdate(facultyID,dataToUpdate,{new:true})
         return {success:true, facultyData:facultyUpdated, code:200, message:"Faculty data updated successfully"}
@@ -247,20 +247,20 @@ exports.updateFacultyByID = async (data) => {
 }
 
 
-exports.deleteFacultyByEmail = async (data) => {
+exports.deleteFacultyByFacultyEmail = async (data) => {
     try
     {
-        const { email } = data
-        const findFaculty = await Faculty.findOne({ email })
+        const { facultyEmail } = data
+        const findFaculty = await Faculty.findOne({ facultyEmail })
         if(!findFaculty)
         {
             return {
                 success: false,
-                error: 'Faculty with this email does not exist!',
+                error: 'Faculty with this facultyEmail does not exist!',
                 code:400
               }
         }
-        const facultyDeleted = await Faculty.findOneAndDelete({email})
+        const facultyDeleted = await Faculty.findOneAndDelete({facultyEmail})
         return {success:true, facultyData:facultyDeleted, code:200, message:"Faculty data updated successfully"}       
     }
     catch (error) {
