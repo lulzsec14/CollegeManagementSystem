@@ -21,11 +21,7 @@ const clubManagersSchema = mongoose.Schema({
         type:String,
         required:[true,"Role can't be empty"],
         maxlength:[50,"Character length limit exceeded: 50"]
-    },
-    taskList: [{ 
-        type: Schema.Types.ObjectId, 
-        ref: 'Task_List'
-    }]
+    }
 
 
 })
