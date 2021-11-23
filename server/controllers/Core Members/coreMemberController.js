@@ -13,6 +13,10 @@ const {
   
   } = require('../DBFunctions/taskListDBFunction')
 
+const {
+    getStudentByRollNo
+  
+  } = require('../DBFunctions/studentDBFunction')
 
   const {
     updateClubArrayByID,
@@ -29,6 +33,15 @@ const {
       try {
         const data1 = req.body.data;
         session.startTransaction()
+        const { studentRollNo } = data1
+        const op = await getStudentByRollNo({studentRollNo: studentRollNo},session)
+        if(!op.success){
+            session.abortTransaction()
+            session.endSession()
+            res.status(op.code).json({error:op.error})
+            return
+
+        } 
         const op1 = await insertCoreMember(data1,session);
         if(!op1.success) {
           session.abortTransaction()
@@ -95,7 +108,7 @@ const {
         res.status(op1.code).json({error:op1.error})
         return
       }
-      const {CoreMemberData} = op1
+      const {coreMemberData} = op1
       const message = op1.message
       const response = {coreMemberData: coreMemberData, message: message}
       res.status(op1.code).json({data:response})
@@ -118,7 +131,7 @@ const {
         res.status(op1.code).json({error:op1.error})
         return
       }
-      const {CoreMemberData} = op1
+      const {coreMemberData} = op1
       const message = op1.message
       const response = {coreMemberData: coreMemberData, message: message}
       res.status(op1.code).json({data:response})

@@ -13,6 +13,11 @@ const {
   deleteFromClubArrayByID
 
 } = require('../DBFunctions/clubsDBFunction')
+
+const {
+  getStudentByRollNo
+
+} = require('../DBFunctions/studentDBFunction')
   // ------------------------------------
   
   // Adding Club manager
@@ -21,6 +26,15 @@ const {
     try {
       const data1 = req.body.data;
       session.startTransaction()
+      const { studentRollNo } = data1
+        const op = await getStudentByRollNo({studentRollNo: studentRollNo},session)
+        if(!op.success){
+            session.abortTransaction()
+            session.endSession()
+            res.status(op.code).json({error:op.error})
+            return
+
+        }
       const op1 = await insertClubManager(data1,session);
       if(!op1.success) {
         session.abortTransaction()

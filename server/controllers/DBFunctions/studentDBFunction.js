@@ -101,6 +101,33 @@ exports.getStudent = async (data) => {
   }
 };
 
+exports.getStudentByRollNo = async (data,session) => {
+  const { rollNo } = data;
+  try {
+    const findStudent = await Student.findOne({ rollNo }).session(session);
+    if (!findStudent) {
+      return {
+        success: false,
+        code: 404,
+        error: 'No student with specified Roll no. found!',
+      };
+    } else {
+      return {
+        success: true,
+        code: 200,
+        message: 'Student with given Roll no found!',
+        studentData: findStudent,
+      };
+    }
+  } catch (err) {
+    return {
+      success: false,
+      code: 500,
+      error: err.message,
+    };
+  }
+};
+
 exports.getStudentById = async (data) => {
   const { studentId } = data;
   try {
