@@ -1,7 +1,11 @@
 // Imports
+const Admin = require('../../models/Admin');
 const {
   registerAdmin,
   retrieveAllAdmins,
+  deleteSingleAdmin,
+  updateAdminDetails,
+  updateAdminPassword,
 } = require('../DBFunctions/adminDBFunction');
 // ------------------------------------
 
@@ -15,15 +19,20 @@ exports.register = async (req, res, next) => {
         .status(result.code)
         .json({ success: result.success, error: result.error });
     } else {
-      res
-        .status(result.code)
-        .json({ success: result.success, message: result.message });
+      res.status(result.code).json({
+        success: result.success,
+        message: result.message,
+        adminData: result.adminData,
+      });
     }
     // const resReturn = {success: result.success, resresult.}
     // res.status(201).json(data);
   } catch (err) {
-    console.log(err);
-    res.status(500).json({ error: err });
+    console.log(err.message);
+    res.status(500).json({
+      success: false,
+      error: 'A server error occured while registering an Admin!',
+    });
   }
 };
 // ------------------------------------
@@ -34,11 +43,33 @@ exports.getAllAdmins = async (req, res, next) => {
     const data = req.body;
     const result = await retrieveAllAdmins(data);
     if (result.success == false) {
+      res.status(result.code).json({ success: false, error: result.error });
+    } else {
+      res.status(200).json({
+        success: true,
+        message: result.message,
+        adminData: result.adminData,
+      });
+    }
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      error: 'A server error occured while getting all admins!',
+    });
+  }
+};
+// ------------------------------------
+
+// Delete an Admin
+exports.deleteAdmin = async (req, res, next) => {
+  const data = req.body;
+  try {
+    const result = await deleteSingleAdmin(data);
+    if (result.success == false) {
       res
         .status(result.code)
         .json({ success: result.success, error: result.error });
     } else {
-      console.log('Here');
       res.status(result.code).json({
         success: result.success,
         message: result.message,
@@ -48,14 +79,50 @@ exports.getAllAdmins = async (req, res, next) => {
   } catch (err) {
     res.status(500).json({
       success: false,
-      error: 'An error occured while getting all admins!',
+      error: 'A server error occured while deleting an admin!',
     });
   }
 };
 // ------------------------------------
 
-// Delete an Admin
-exports.deleteAdmin = async (req, res, next) => {
-  const { email } = req.body;
+// Update Admin's Phone number
+exports.updateAdminDetails = async (req, res, next) => {
+  const data = req.body;
+  try {
+    const result = await updateAdminDetails(data);
+    if (result.success == false) {
+      res.status(result.code).json({
+        success: false,
+        error: result.error,
+      });
+    } else {
+      res.status(200).json({
+        succes: true,
+        message: result.message,
+        adminData: result.adminData,
+      });
+    }
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
 };
 // ------------------------------------
+
+// Update Admin's password
+exports.updatePassword = async (req, res, next) => {
+  const data = req.body;
+  try {
+    const result = await updateAdminPassword(data);
+    if (result.success == false) {
+      res.status(result.code).json({ success: false, error: result.error });
+    } else {
+      res.status(result.code).json({
+        success: true,
+        message: result.message,
+        adminData: result.adminData,
+      });
+    }
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+};

@@ -6,16 +6,16 @@ const mongoose = require('mongoose');
 const requestSchema = mongoose.Schema({
   rollNo: {
     type: String,
-    unique: true,
     required: [true, 'Please provide studentId'],
   },
   studentId: {
-    type: Schema.Types.ObjectId,
-    unique: true,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Students',
     required: [true, 'Please provide a studentId'],
   },
   clubId: {
-    type: Schema.Types.ObjectId,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Clubs',
     unique: true,
     required: [true, 'Please provide clubId'],
   },

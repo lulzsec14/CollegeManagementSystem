@@ -1,5 +1,5 @@
 // imports
-const mongoose = require('mongoose')
+const mongoose = require('mongoose'), Schema = mongoose.Schema
 // -----------------------------
 
 // Schema
@@ -9,16 +9,17 @@ const IdeaBoxSchema = new mongoose.Schema({
 		required: [true, 'Please enter the description of idea.'],
 	},
 	givenBy: {
-		type: mongoose.Schema.Types.ObjectId,
+		type: Schema.Types.ObjectId,
 		ref: 'Students',
 		required: [true, 'Please enter student ID of the suggester.'],
 	},
 	clubId: {
-		type: mongoose.Schema.Types.ObjectId,
+		type: Schema.Types.ObjectId,
 		ref: 'Clubs',
 		required: [true, 'Please enter club ID.'],
 	},
 })
 // -----------------------------
 
-module.exports = mongoose.model('Ideabox', IdeaBoxSchema);
+const Ideabox = mongoose.model('Ideabox', IdeaBoxSchema);
+module.exports = Ideabox;

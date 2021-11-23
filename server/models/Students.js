@@ -19,13 +19,12 @@ const studentSchema = mongoose.Schema({
       'Please provide a valid email',
     ],
     minLength: 8,
-    maxLength: 20,
+    maxLength: 50,
   },
   password: {
     type: String,
     required: [true, 'Please provide a password!'],
     minLength: 8,
-    select: false,
   },
   name: {
     type: String,
@@ -47,14 +46,14 @@ const studentSchema = mongoose.Schema({
   },
   clubsJoined: [
     {
-      type: Schema.Types.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
       ref: 'Clubs',
     },
   ],
   clubsRequested: [
     {
-      type: Schema.Types.ObjectId,
-      ref: 'Club',
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Clubs',
       joined: {
         type: Boolean,
         default: false,
@@ -63,19 +62,19 @@ const studentSchema = mongoose.Schema({
   ],
   certificates: [
     {
-      type: Schema.Types.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
       ref: 'Certificates',
     },
   ],
   eventsParticipated: [
     {
-      type: Schema.Types.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
       ref: 'Events',
     },
   ],
   eventsAttended: [
     {
-      type: Schema.Types.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
       ref: 'Events',
     },
   ],

@@ -17,17 +17,18 @@ const adminSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Please provide a name!'],
     minLength: 3,
-    maxLength: [20, "Name can not be longer than 20 characters!"],
+    maxLength: [20, 'Name can not be longer than 20 characters!'],
   },
   password: {
     type: String,
     required: [true, 'Please provide a password!'],
     minLength: 8,
-    select: false,
+    unique: true,
   },
   phoneNo: {
     type: String,
     required: [true, 'Please provide a phone number!'],
+    unique: true,
   },
 });
 // ------------------------------------
