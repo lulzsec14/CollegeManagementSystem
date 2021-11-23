@@ -4,6 +4,7 @@ const {
     updateTask,
     getTask,
     getTasksByClubID,
+    getTasksByCoreMemberID,
     deleteTask
 
  } = require('../DBFunctions/taskListDBFunction')
@@ -117,7 +118,7 @@ exports.getTask = async (req, res, next) => {
   };  
     
 // get all tasks of a club
-exports.getAllTasks = async (req, res, next) => {
+exports.getAllTasksOfClub = async (req, res, next) => {
   
     try {
       const data1 = req.body.data;
@@ -137,6 +138,28 @@ exports.getAllTasks = async (req, res, next) => {
       res.status(500).json({ error: 'Server Error' });
     }
   };  
+
+// get all tasks of a core member
+exports.getAllTasksOfCoreMember = async (req, res, next) => {
+  
+  try {
+    const data1 = req.body.data;
+    const op1 = await getTasksByCoreMemberID(data1);
+    if(!op1.success) {
+      res.status(op1.code).json({error:op1.error})
+      return
+    }
+    const {taskData} = op1
+    const message = op1.message
+    const response = {taskData: taskData, message: message}
+    res.status(op1.code).json({data:response})
+    return
+
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: 'Server Error' });
+  }
+};  
 
 // delete task
 exports.deleteTask = async (req, res, next) => {

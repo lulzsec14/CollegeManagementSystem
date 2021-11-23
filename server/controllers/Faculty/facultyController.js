@@ -18,7 +18,7 @@ exports.addFaculty = async (req, res, next) => {
   
   try {
     const data1 = req.body.data;
-    const op1 = await insertFaculty(data1,session);
+    const op1 = await insertFaculty(data1);
     if(!op1.success) {
       res.status(op1.code).json({error:op1.error})
       return
@@ -40,7 +40,7 @@ exports.getFaculty = async (req, res, next) => {
   
   try {
     const data1 = req.body.data;
-    const op1 = await getFacultyByFacultyEmail(data1,session);
+    const op1 = await getFacultyByFacultyEmail(data1);
     if(!op1.success) {
       res.status(op1.code).json({error:op1.error})
       return
@@ -60,7 +60,7 @@ exports.getFaculty = async (req, res, next) => {
 exports.getAllFaculty = async (req, res, next) => {
   
   try {
-    const op1 = await getAllFaculty(session);
+    const op1 = await getAllFaculty();
     if(!op1.success) {
       res.status(op1.code).json({error:op1.error})
       return
@@ -132,7 +132,7 @@ exports.updateFaculty = async (req, res, next) => {
 exports.deleteFaculty = async (req, res, next) => {
   try {
     const data1 = req.body.data;
-    const op1 = await deleteFacultyByID(data1,session);
+    const op1 = await deleteFacultyByID(data1);
     if(!op1.success) {
       res.status(op1.code).json({error:op1.error})
       return
