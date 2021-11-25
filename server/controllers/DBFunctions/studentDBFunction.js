@@ -101,10 +101,10 @@ exports.getStudent = async (data) => {
   }
 };
 
-exports.getStudentByRollNo = async (data,session) => {
+exports.getStudentByRollNo = async (data) => {
   const { rollNo } = data;
   try {
-    const findStudent = await Student.findOne({ rollNo }).session(session);
+    const findStudent = await Student.findOne({ rollNo });
     if (!findStudent) {
       return {
         success: false,
@@ -185,7 +185,7 @@ exports.getStudentByRollNo = async (data) => {
 exports.updateStudentArray = async (data, session) => {
   const { email } = data;
   try {
-    const findStudent = await Student.findOne({ email });
+    const findStudent = await Student.findOne({ email }).session(session);
     if (!findStudent) {
       return {
         success: false,
@@ -199,7 +199,7 @@ exports.updateStudentArray = async (data, session) => {
         { email },
         { $addToSet: dataToUpdate },
         { new: true }
-      );
+      ).session(session);
       return {
         success: true,
         code: 200,
@@ -219,7 +219,7 @@ exports.updateStudentArray = async (data, session) => {
 exports.updateStudentArrayByRollNo = async (data, session) => {
   const { rollNo } = data;
   try {
-    const findStudent = await Student.findOne({ rollNo });
+    const findStudent = await Student.findOne({ rollNo }).session(session);
     if (!findStudent) {
       return {
         success: false,
@@ -250,10 +250,10 @@ exports.updateStudentArrayByRollNo = async (data, session) => {
   }
 };
 
-exports.updateStudentArrayById = async (data) => {
+exports.updateStudentArrayById = async (data, session) => {
   const { studentId } = data;
   try {
-    const findStudent = await Student.findById(studentId);
+    const findStudent = await Student.findById(studentId).session(session);
     if (!findStudent) {
       return {
         success: false,
@@ -266,7 +266,7 @@ exports.updateStudentArrayById = async (data) => {
         studentId,
         { $addToSet: dataToUpdate },
         { new: true }
-      );
+      ).session(session);
       return {
         success: true,
         code: 200,
@@ -283,10 +283,10 @@ exports.updateStudentArrayById = async (data) => {
   }
 };
 
-exports.deleteFromStudentArray = async (data) => {
+exports.deleteFromStudentArray = async (data, session) => {
   const { email } = data;
   try {
-    const findStudent = await Student.findOne({ email });
+    const findStudent = await Student.findOne({ email }).session(session);
     if (!findStudent) {
       return {
         success: false,
@@ -299,7 +299,7 @@ exports.deleteFromStudentArray = async (data) => {
         { email },
         { $pull: dataToUpdate },
         { safe: true, multi: true, new: true }
-      );
+      ).session(session);
       return {
         success: true,
         code: 200,
@@ -316,10 +316,10 @@ exports.deleteFromStudentArray = async (data) => {
   }
 };
 
-exports.deleteFromStudentArrayByRollNo = async (data) => {
+exports.deleteFromStudentArrayByRollNo = async (data, session) => {
   const { rollNo } = data;
   try {
-    const findStudent = await Student.findOne({ rollNo });
+    const findStudent = await Student.findOne({ rollNo }).session(session);
     if (!findStudent) {
       return {
         success: false,
@@ -332,7 +332,7 @@ exports.deleteFromStudentArrayByRollNo = async (data) => {
         { rollNo },
         { $pull: dataToUpdate },
         { safe: true, multi: true, new: true }
-      );
+      ).session(session);
       return {
         success: true,
         code: 200,
@@ -349,10 +349,10 @@ exports.deleteFromStudentArrayByRollNo = async (data) => {
   }
 };
 
-exports.deleteFromStudentArrayById = async (data) => {
+exports.deleteFromStudentArrayById = async (data, session) => {
   const { studentId } = data;
   try {
-    const findStudent = await Student.findById(studentId);
+    const findStudent = await Student.findById(studentId).session(session);
     if (!findStudent) {
       return {
         success: false,
@@ -365,7 +365,7 @@ exports.deleteFromStudentArrayById = async (data) => {
         studentId,
         { $pull: dataToUpdate },
         { safe: true, multi: true, new: true }
-      );
+      ).session(session);
       return {
         success: true,
         code: 200,

@@ -5,7 +5,9 @@ const Requests = require('../../models/Requests');
 exports.createRequest = async (data, session) => {
   const { rollNo, studentId, clubId } = data;
   try {
-    const findRequest = await Requests.findOne({ rollNo, clubId });
+    const findRequest = await Requests.findOne({ rollNo, clubId }).session(
+      session
+    );
     if (findRequest) {
       return {
         success: false,
@@ -198,7 +200,9 @@ exports.getRequestByClubId = async (data) => {
 exports.deleteRequest = async (data, session) => {
   const { rollNo, studentId, clubId } = data;
   try {
-    const findRequest = await Requests.find({ rollNo, clubId });
+    const findRequest = await Requests.find({ rollNo, clubId }).session(
+      session
+    );
     // console.log(findRequest);
     if (!findRequest) {
       return {
@@ -228,10 +232,10 @@ exports.deleteRequest = async (data, session) => {
   }
 };
 
-exports.deleteRequestById = async (data) => {
+exports.deleteRequestById = async (data, session) => {
   const { requestId } = data;
   try {
-    const findRequest = await Requests.findById(requestId);
+    const findRequest = await Requests.findById(requestId).session(session);
     if (!findRequest) {
       return {
         success: flase,
@@ -240,7 +244,9 @@ exports.deleteRequestById = async (data) => {
           'No request realted to the rollNo and Club of the student found!',
       };
     } else {
-      const deletedRequest = await Requests.findByIdAndDelete(requestId);
+      const deletedRequest = await Requests.findByIdAndDelete(
+        requestId
+      ).session(session);
       return {
         success: true,
         code: 200,
