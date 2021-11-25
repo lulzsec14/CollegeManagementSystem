@@ -133,7 +133,7 @@ exports.updateCoreMemberByRollNo = async (data,session) => {
         const dataToUpdate = {}
         for(key in data)
         {
-            if(key!=="coreMemberID"&&key!=="studentRollNo")
+            if(key!=="coreMemberID"&&key!=="studentRollNo"&&key!=="clubID"&&key!=="role")
             {
                 dataToUpdate[key] = data[key]
             }
@@ -175,7 +175,7 @@ exports.updateCoreMemberByID = async (data,session) => {
         const dataToUpdate = {}
         for(key in data)
         {
-            if(key!=="coreMemberID"&&key!=="studentRollNo")
+            if(key!=="coreMemberID"&&key!=="studentRollNo"&&key!=="clubID"&&key!=="role")
             {
                 dataToUpdate[key] = data[key]
             }

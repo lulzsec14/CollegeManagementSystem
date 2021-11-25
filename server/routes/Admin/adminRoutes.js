@@ -53,16 +53,9 @@ adminRouter.route('/allCoreMember').get(getAllCoreMembers);
 
 
 
-
-
-
-
-
-// -----------------------------------------------------
-
+// admin admin routes
 adminRouter.route('/register').post(register);
 adminRouter.route('/getAllAdmins').get(getAllAdmins);
-
 adminRouter.route('/updateAdminDetails').put(updateAdminDetails);
 adminRouter.route('/deleteAdmin').delete(deleteAdmin);
 

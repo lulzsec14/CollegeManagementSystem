@@ -117,7 +117,7 @@ exports.updateTask = async (data,session) => {
   try {
     const dataToUpdate = {};
     for (key in data) {
-      if (key !== 'taskID'&& key!=='assignedTo'&&key!=='assignedBy') {
+      if (key !== 'taskID'&& key!=='assignedTo'&&key!=='assignedBy'&&key!=="clubID") {
         dataToUpdate[key] = data[key];
       }
     }

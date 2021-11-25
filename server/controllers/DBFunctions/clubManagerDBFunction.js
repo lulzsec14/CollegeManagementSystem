@@ -133,7 +133,7 @@ exports.updateClubManagerByRollNo = async (data,session) => {
         const dataToUpdate = {}
         for(key in data)
         {
-            if(key!=="clubManagerID"&&key!=="studentRollNo"&&key!=="clubID")
+            if(key!=="clubManagerID"&&key!=="studentRollNo"&&key!=="clubID"&&key!=="role")
             {
                 dataToUpdate[key] = data[key]
             }
@@ -175,7 +175,7 @@ exports.updateClubManagerByID = async (data,session) => {
         const dataToUpdate = {}
         for(key in data)
         {
-            if(key!=="clubManagerID"&&key!=="studentRollNo"&&key!=="clubID")
+            if(key!=="clubManagerID"&&key!=="studentRollNo"&&key!=="clubID"&&key!=="role")
             {
                 dataToUpdate[key] = data[key]
             }
