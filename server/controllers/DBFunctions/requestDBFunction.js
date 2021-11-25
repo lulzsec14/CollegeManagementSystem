@@ -2,7 +2,7 @@
 const Requests = require('../../models/Requests');
 // ------------------------------------
 
-exports.createRequest = async (data) => {
+exports.createRequest = async (data, session) => {
   const { rollNo, studentId, clubId } = data;
   try {
     const findRequest = await Requests.findOne({ rollNo, clubId });
@@ -13,12 +13,17 @@ exports.createRequest = async (data) => {
         error: 'Request to the Club mentioned already made!',
       };
     } else {
-      const createdRequest = await Requests.create({
-        rollNo,
-        studentId,
-        clubId,
-      });
-      await createdRequest.save();
+      const createdRequest = await Requests.create(
+        [
+          {
+            rollNo,
+            studentId,
+            clubId,
+          },
+        ],
+        { session }
+      );
+      // await createdRequest.save();
       return {
         success: true,
         code: 201,
@@ -190,7 +195,7 @@ exports.getRequestByClubId = async (data) => {
   }
 };
 
-exports.deleteRequest = async (data) => {
+exports.deleteRequest = async (data, session) => {
   const { rollNo, studentId, clubId } = data;
   try {
     const findRequest = await Requests.find({ rollNo, clubId });
@@ -206,7 +211,7 @@ exports.deleteRequest = async (data) => {
       const deletedRequest = await Requests.findOneAndDelete({
         rollNo,
         clubId,
-      });
+      }).session(session);
       return {
         success: true,
         code: 200,
