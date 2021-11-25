@@ -130,14 +130,7 @@ exports.insertClubManager = async (data,session) => {
 exports.updateClubManagerByRollNo = async (data,session) => {
     try
     {
-        const dataToUpdate = {}
-        for(key in data)
-        {
-            if(key!=="clubManagerId"&&key!=="studentRollNo"&&key!=="clubId"&&key!=="role")
-            {
-                dataToUpdate[key] = data[key]
-            }
-        }
+        const dataToUpdate = data.dataToUpdate
         const {studentRollNo} = data
         if(dataToUpdate.password)
         {
@@ -172,14 +165,8 @@ exports.updateClubManagerByRollNo = async (data,session) => {
 exports.updateClubManagerById = async (data,session) => {
     try
     {
-        const dataToUpdate = {}
-        for(key in data)
-        {
-            if(key!=="clubManagerId"&&key!=="studentRollNo"&&key!=="clubId"&&key!=="role")
-            {
-                dataToUpdate[key] = data[key]
-            }
-        }
+      
+        const dataToUpdate = data.dataToUpdate
         const {clubManagerId} = data
         if(dataToUpdate.password)
         {
@@ -215,14 +202,8 @@ exports.updateClubManagerById = async (data,session) => {
 exports.updateClubManagerArrayByRollNo = async (data,session) => {
     try
     {
-        const dataToUpdate = {}
-        for(key in data)
-        {
-            if(key==="taskList")
-            {
-                dataToUpdate[key] = data[key]
-            }
-        }
+        
+        const dataToUpdate = data.dataToUpdate
         const {studentRollNo} = data
         const findClubManager = await ClubManagers.findOne({ studentRollNo }).session(session)
         if(!findClubManager)
@@ -250,14 +231,8 @@ exports.updateClubManagerArrayByRollNo = async (data,session) => {
 exports.updateClubManagerArrayById = async (data,session) => {
     try
     {
-        const dataToUpdate = {}
-        for(key in data)
-        {
-            if(key==="taskList")
-            {
-                dataToUpdate[key] = data[key]
-            }
-        }
+      
+        const dataToUpdate = data.dataToUpdate
         const {clubManagerId} = data
         const findClubManager = await ClubManagers.findById( clubManagerId ).session(session)
         if(!findClubManager)
@@ -286,14 +261,8 @@ exports.updateClubManagerArrayById = async (data,session) => {
 exports.deleteFromClubManagerArrayById = async (data,session) => {
     try
     {
-        const dataToUpdate = {}
-        for(key in data)
-        {
-            if(key==="taskList")
-            {
-                dataToUpdate[key] = data[key]
-            }
-        }
+      
+        const dataToUpdate = data.dataToUpdate
         const {clubManagerId} = data
         const findClubManager = await ClubManagers.findById(clubManagerId).session(session)
         if(!findClubManager)
@@ -325,14 +294,8 @@ exports.deleteFromClubManagerArrayById = async (data,session) => {
 exports.deleteFromClubManagerArrayByRollNo = async (data,session) => {
     try
     {
-        const dataToUpdate = {}
-        for(key in data)
-        {
-            if(key==="taskList")
-            {
-                dataToUpdate[key] = data[key]
-            }
-        }
+        
+        const dataToUpdate = data.dataToUpdate
         const {studentRollNo} = data
         const findClubManager = await ClubManagers.findOne({ studentRollNo }).session(session)
         if(!findClubManager)
