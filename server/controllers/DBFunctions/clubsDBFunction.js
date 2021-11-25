@@ -127,14 +127,8 @@ exports.insertClub = async (data,session) => {
 exports.updateClubByIndex = async (data,session) => {
     try
     {
-        const dataToUpdate = {}
-        for(key in data)
-        {
-            if(key!=="clubIndex"&&key!=="clubId")
-            {
-                dataToUpdate[key] = data[key]
-            }
-        }
+      
+        const dataToUpdate = data.dataToUpdate
         const {clubIndex} = data
         const findClub = await Clubs.findOne({ clubIndex }).session(session)
         if(!findClub)
@@ -166,14 +160,7 @@ exports.updateClubByIndex = async (data,session) => {
 exports.updateClubById = async (data,session) => {
     try
     {
-        const dataToUpdate = {}
-        for(key in data)
-        {
-            if(key!=="clubId"&&key!=="clubIndex")
-            {
-                dataToUpdate[key] = data[key]
-            }
-        }
+        const dataToUpdate = data.dataToUpdate
         const {clubId} = data
         const findClub = await Clubs.findById( clubId ).session(session)
         if(!findClub)
@@ -206,14 +193,7 @@ exports.updateClubById = async (data,session) => {
 exports.updateClubArrayByIndex = async (data,session) => {
     try
     {
-        const dataToUpdate = {}
-        for(key in data)
-        {
-            if(key!=="clubIndex"&&key!=="clubId"&&key!=="clubName"&&key!=="clubDescription")
-            {
-                dataToUpdate[key] = data[key]
-            }
-        }
+        const dataToUpdate = data.dataToUpdate
         const {clubIndex} = data
         const findClub = await Clubs.findOne({ clubIndex }).session(session)
         if(!findClub)
@@ -241,14 +221,8 @@ exports.updateClubArrayByIndex = async (data,session) => {
 exports.updateClubArrayById = async (data,session) => {
     try
     {
-        const dataToUpdate = {}
-        for(key in data)
-        {
-            if(key!=="clubIndex"&&key!=="clubId"&&key!=="clubDescription"&&key!=="clubName")
-            {
-                dataToUpdate[key] = data[key]
-            }
-        }
+      const dataToUpdate = data.dataToUpdate
+        
         const {clubId} = data
         const findClub = await Clubs.findById( clubId ).session(session)
         if(!findClub)
@@ -277,14 +251,8 @@ exports.updateClubArrayById = async (data,session) => {
 exports.deleteFromClubArrayById = async (data,session) => {
     try
     {
-        const dataToUpdate = {}
-        for(key in data)
-        {
-            if(key!=="clubIndex"&&key!=="clubId"&&key!=="clubDescription"&&key!=="clubName")
-            {
-                dataToUpdate[key] = data[key]
-            }
-        }
+       const dataToUpdate = data.dataToUpdate
+        
         const {clubId} = data
         const findClub = await Clubs.findById(clubId).session(session)
         if(!findClub)
@@ -316,14 +284,7 @@ exports.deleteFromClubArrayById = async (data,session) => {
 exports.deleteFromClubArrayByIndex = async (data,session) => {
     try
     {
-        const dataToUpdate = {}
-        for(key in data)
-        {
-            if(key!=="clubIndex"&&key!=="clubId"&&key!=="clubDescription"&&key!=="clubName")
-            {
-                dataToUpdate[key] = data[key]
-            }
-        }
+        const dataToUpdate = data.dataToUpdate
         const {clubIndex} = data
         const findClub = await Clubs.findOne({ clubIndex }).session(session)
         if(!findClub)

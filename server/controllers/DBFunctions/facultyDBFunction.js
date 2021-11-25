@@ -156,14 +156,7 @@ exports.insertFaculty = async (data,session) => {
 exports.updateFacultyByFacultyEmail = async (data,session) => {
     try
     {
-        const dataToUpdate = {}
-        for(key in data)
-        {
-            if(key!=="facultyId"&&key!=="facultyEmail")
-            {
-                dataToUpdate[key] = data[key]
-            }
-        }
+        const dataToUpdate = data.dataToUpdate
         const {facultyEmail} = data
         if(dataToUpdate.password)
         {
@@ -202,19 +195,17 @@ exports.updateFacultyByFacultyEmail = async (data,session) => {
 exports.updateFacultyById = async (data,session) => {
     try
     {
-        const dataToUpdate = {}
-        for(key in data)
-        {
-            if(key!=="facultyId"&&key!=="facultyEmail")
-            {
-                dataToUpdate[key] = data[key]
-            }
-        }
+        const dataToUpdate = data.dataToUpdate
+        
         if(dataToUpdate.password)
         {
           const hashedPassword = textToHash(dataToUpdate.password)
           dataToUpdate.password = hashedPassword
 
+        }
+        if(dataToUpdate.facultyEmailNew)
+        {
+            dataToUpdate.facultyEmail=dataToUpdate.facultyEmailNew
         }
         const {facultyId} = data
         const findFaculty = await Faculty.findById( facultyId ).session(session)
@@ -226,10 +217,7 @@ exports.updateFacultyById = async (data,session) => {
                 code:400
               }
         }
-        if(dataToUpdate.facultyEmailNew)
-        {
-            dataToUpdate.facultyEmail=dataToUpdate.facultyEmailNew
-        }
+        
         const facultyUpdated = await Faculty.findByIdAndUpdate(facultyId,dataToUpdate,{new:true}).session(session)
         return {success:true, facultyData:facultyUpdated, code:200, message:"Faculty data updated successfully"}
        

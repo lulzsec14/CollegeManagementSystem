@@ -115,12 +115,8 @@ exports.insertTask = async (data,session) => {
 };
 exports.updateTask = async (data,session) => {
   try {
-    const dataToUpdate = {};
-    for (key in data) {
-      if (key !== 'taskId'&& key!=='assignedTo'&&key!=='assignedBy'&&key!=="clubId") {
-        dataToUpdate[key] = data[key];
-      }
-    }
+    
+    const dataToUpdate = data.dataToUpdate
     const { taskId } = data;
     const findTask = await Task_List.findById(taskId).session(session);
     if (!findTask) {
