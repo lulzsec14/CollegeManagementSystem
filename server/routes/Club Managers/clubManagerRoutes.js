@@ -14,25 +14,25 @@ const { addTask,getTask,getAllTasksOfClub,updateTask,deleteTask } = require('../
 
 
 // club Manager club Routes
-clubManagerRouter.route('/club').get(getClub);
+clubManagerRouter.route('/getClubByIndex').get(getClub);
 
 
 // club manager core member routes
-clubManagerRouter.route('/coreMember').post(addCoreMember);
-clubManagerRouter.route('/coreMember').get(getCoreMember);
-clubManagerRouter.route('/coreMember').delete(deleteCoreMember);
-clubManagerRouter.route('/allCoreMember').get(getAllCoreMembers);
+clubManagerRouter.route('/addCoreMember').post(addCoreMember);
+clubManagerRouter.route('/getCoreMemberByRollNo').get(getCoreMember);
+clubManagerRouter.route('/deleteCoreMemberById').delete(deleteCoreMember);
+clubManagerRouter.route('/getAllCoreMembersByClubId').get(getAllCoreMembers);
 
 // club manager Routes
 
-clubManagerRouter.route('/clubManager').get(getClubManager);
-clubManagerRouter.route('/clubManager').put(updateClubManager);
-clubManagerRouter.route('/allClubManagers').get(getAllClubManagers);
+clubManagerRouter.route('/getClubManagerByRollNo').get(getClubManager);
+clubManagerRouter.route('/updateClubManagerById').put(updateClubManager);
+clubManagerRouter.route('/getAllClubManagersById').get(getAllClubManagers);
 
 // club manager task list routes
 
-clubManagerRouter.route('/taskList').post(addTask);
-clubManagerRouter.route('/taskList').get(getTask);
-clubManagerRouter.route('/taskList').put(updateTask);
-clubManagerRouter.route('/taskList').delete(deleteTask);
-clubManagerRouter.route('/allTaskListClub').get(getAllTasksOfClub);
+clubManagerRouter.route('/addTask').post(addTask);
+clubManagerRouter.route('/getTaskById').get(getTask);
+clubManagerRouter.route('/updateTaskById').put(updateTask);
+clubManagerRouter.route('/deleteTaskById').delete(deleteTask);
+clubManagerRouter.route('/getAllTasksByClubId').get(getAllTasksOfClub);

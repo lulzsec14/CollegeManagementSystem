@@ -21,35 +21,35 @@ const { addCoreMember,getCoreMember,getAllCoreMembers,updateCoreMember,deleteCor
 // Admin Routes
 
 // admin club Routes
-adminRouter.route('/club').post(addClub);
-adminRouter.route('/club').get(getClub);
-adminRouter.route('/club').put(updateClub);
-adminRouter.route('/club').delete(deleteClub);
-adminRouter.route('/allClubs').get(getAllClubs);
+adminRouter.route('/addClub').post(addClub);
+adminRouter.route('/getClubByIndex').get(getClub);
+adminRouter.route('/updateClubById').put(updateClub);
+adminRouter.route('/deleteClubById').delete(deleteClub);
+adminRouter.route('/getAllClubs').get(getAllClubs);
 
 // admin faculty routes
-adminRouter.route('/faculty').post(addFaculty);
-adminRouter.route('/faculty').get(getFaculty);
-adminRouter.route('/faculty').put(updateFaculty);
-adminRouter.route('/faculty').delete(deleteFaculty);
-adminRouter.route('/allFaculty').get(getAllFaculty);
+adminRouter.route('/addFaculty').post(addFaculty);
+adminRouter.route('/getFacultyByEmail').get(getFaculty);
+adminRouter.route('/updateFacultyById').put(updateFaculty);
+adminRouter.route('/deleteFacultyById').delete(deleteFaculty);
+adminRouter.route('/getAllFaculty').get(getAllFaculty);
 
 
 // admin club manager routes
-adminRouter.route('/clubManager').post(addClubManager);
-adminRouter.route('/clubManager').get(getClubManager);
-adminRouter.route('/clubManager').put(updateClubManager);
-adminRouter.route('/clubManager').delete(deleteClubManager);
-adminRouter.route('/allClubManagers').get(getAllClubManagers);
+adminRouter.route('/addClubManager').post(addClubManager);
+adminRouter.route('/getClubManagerByRollNo').get(getClubManager);
+adminRouter.route('/updateClubManagerById').put(updateClubManager);
+adminRouter.route('/deleteClubManagerById').delete(deleteClubManager);
+adminRouter.route('/getAllClubManagersByClubId').get(getAllClubManagers);
 
 
 
 // admin core member routes
-adminRouter.route('/coreMember').post(addCoreMember);
-adminRouter.route('/coreMember').get(getCoreMember);
-adminRouter.route('/coreMember').put(updateCoreMember);
-adminRouter.route('/coreMember').delete(deleteCoreMember);
-adminRouter.route('/allCoreMember').get(getAllCoreMembers);
+adminRouter.route('/addCoreMember').post(addCoreMember);
+adminRouter.route('/getCoreMemberByRollNo').get(getCoreMember);
+adminRouter.route('/updateCoreMemberById').put(updateCoreMember);
+adminRouter.route('/deleteCoreMemberById').delete(deleteCoreMember);
+adminRouter.route('/getAllCoreMembersByClubId').get(getAllCoreMembers);
 
 
 
