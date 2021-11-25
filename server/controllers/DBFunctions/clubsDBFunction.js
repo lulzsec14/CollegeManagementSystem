@@ -30,11 +30,11 @@ exports.getClubByIndex = async (data,session) => {
       }
 
 }
-exports.getClubByID = async (data,session) => {
+exports.getClubById = async (data,session) => {
     try {
         
-        const { clubID } = data
-        const findClub = await Clubs.findById(clubID).session(session)
+        const { clubId } = data
+        const findClub = await Clubs.findById(clubId).session(session)
         if(!findClub)
         {
             return {
@@ -130,7 +130,7 @@ exports.updateClubByIndex = async (data,session) => {
         const dataToUpdate = {}
         for(key in data)
         {
-            if(key!=="clubIndex"&&key!=="clubID")
+            if(key!=="clubIndex"&&key!=="clubId")
             {
                 dataToUpdate[key] = data[key]
             }
@@ -163,19 +163,19 @@ exports.updateClubByIndex = async (data,session) => {
       }
     
 }
-exports.updateClubByID = async (data,session) => {
+exports.updateClubById = async (data,session) => {
     try
     {
         const dataToUpdate = {}
         for(key in data)
         {
-            if(key!=="clubID"&&key!=="clubIndex")
+            if(key!=="clubId"&&key!=="clubIndex")
             {
                 dataToUpdate[key] = data[key]
             }
         }
-        const {clubID} = data
-        const findClub = await Clubs.findById( clubID ).session(session)
+        const {clubId} = data
+        const findClub = await Clubs.findById( clubId ).session(session)
         if(!findClub)
         {
             return {
@@ -188,7 +188,7 @@ exports.updateClubByID = async (data,session) => {
         {
             dataToUpdate.clubIndex=dataToUpdate.clubIndexNew
         }
-        const clubUpdated = await Clubs.findByIdAndUpdate(clubID,dataToUpdate,{new:true}).session(session)
+        const clubUpdated = await Clubs.findByIdAndUpdate(clubId,dataToUpdate,{new:true}).session(session)
         return {success:true,clubData:clubUpdated,code:200, message:"Club updated successfully"}
        
     }
@@ -209,7 +209,7 @@ exports.updateClubArrayByIndex = async (data,session) => {
         const dataToUpdate = {}
         for(key in data)
         {
-            if(key!=="clubIndex"&&key!=="clubID"&&key!=="clubName"&&key!=="clubDescription")
+            if(key!=="clubIndex"&&key!=="clubId"&&key!=="clubName"&&key!=="clubDescription")
             {
                 dataToUpdate[key] = data[key]
             }
@@ -238,19 +238,19 @@ exports.updateClubArrayByIndex = async (data,session) => {
   }
     
 }
-exports.updateClubArrayByID = async (data,session) => {
+exports.updateClubArrayById = async (data,session) => {
     try
     {
         const dataToUpdate = {}
         for(key in data)
         {
-            if(key!=="clubIndex"&&key!=="clubID"&&key!=="clubDescription"&&key!=="clubName")
+            if(key!=="clubIndex"&&key!=="clubId"&&key!=="clubDescription"&&key!=="clubName")
             {
                 dataToUpdate[key] = data[key]
             }
         }
-        const {clubID} = data
-        const findClub = await Clubs.findById( clubID ).session(session)
+        const {clubId} = data
+        const findClub = await Clubs.findById( clubId ).session(session)
         if(!findClub)
         {
             return {
@@ -259,7 +259,7 @@ exports.updateClubArrayByID = async (data,session) => {
                 code:404
               }
         }
-        const clubUpdated = await Clubs.findByIdAndUpdate(clubID,{ $addToSet: dataToUpdate },{new:true}).session(session)
+        const clubUpdated = await Clubs.findByIdAndUpdate(clubId,{ $addToSet: dataToUpdate },{new:true}).session(session)
         return {success:true,clubData:clubUpdated,code:201,message:"Data inserted successfully in club array"}
        
     }
@@ -274,19 +274,19 @@ exports.updateClubArrayByID = async (data,session) => {
     
 }
 
-exports.deleteFromClubArrayByID = async (data,session) => {
+exports.deleteFromClubArrayById = async (data,session) => {
     try
     {
         const dataToUpdate = {}
         for(key in data)
         {
-            if(key!=="clubIndex"&&key!=="clubID"&&key!=="clubDescription"&&key!=="clubName")
+            if(key!=="clubIndex"&&key!=="clubId"&&key!=="clubDescription"&&key!=="clubName")
             {
                 dataToUpdate[key] = data[key]
             }
         }
-        const {clubID} = data
-        const findClub = await Clubs.findById(clubID).session(session)
+        const {clubId} = data
+        const findClub = await Clubs.findById(clubId).session(session)
         if(!findClub)
         {
             return {
@@ -296,7 +296,7 @@ exports.deleteFromClubArrayByID = async (data,session) => {
               }
         }
         const clubUpdated = await Clubs.findByIdAndUpdate(
-            clubID, 
+            clubId, 
             { $pull: dataToUpdate },
             { safe: true, multi: true,new:true }
           ).session(session);
@@ -319,7 +319,7 @@ exports.deleteFromClubArrayByIndex = async (data,session) => {
         const dataToUpdate = {}
         for(key in data)
         {
-            if(key!=="clubIndex"&&key!=="clubID"&&key!=="clubDescription"&&key!=="clubName")
+            if(key!=="clubIndex"&&key!=="clubId"&&key!=="clubDescription"&&key!=="clubName")
             {
                 dataToUpdate[key] = data[key]
             }
@@ -379,11 +379,11 @@ exports.deleteClubByIndex = async (data,session) => {
   }
     
 }
-exports.deleteClubByID = async (data,session) => {
+exports.deleteClubById = async (data,session) => {
     try
     {
-        const { clubID } = data
-        const findClub = await Clubs.findById( clubID ).session(session)
+        const { clubId } = data
+        const findClub = await Clubs.findById( clubId ).session(session)
         if(!findClub)
         {
             return {
@@ -392,7 +392,7 @@ exports.deleteClubByID = async (data,session) => {
                 code: 404,
               }
         }
-        const clubDeleted = await Clubs.findByIdAndDelete(clubID).session(session)
+        const clubDeleted = await Clubs.findByIdAndDelete(clubId).session(session)
         return {success:true,clubData:clubDeleted,code:200,message:"Club deleted successfully"}       
     }
     catch (error) {
