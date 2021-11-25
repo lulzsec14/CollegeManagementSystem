@@ -1,15 +1,15 @@
 // Imports
 const {
     insertCoreMember,
-    updateCoreMemberByID,
+    updateCoreMemberById,
     getCoreMemberByRollNo,
-    getCoreMembersByClubID,
-    deleteCoreMemberByID
+    getCoreMembersByClubId,
+    deleteCoreMemberById
       
     } = require('../DBFunctions/CoreMemberDBFunction');
     
 const {
-    deleteTasksByCoreMemberID
+    deleteTasksByCoreMemberId
   
   } = require('../DBFunctions/taskListDBFunction')
 
@@ -19,8 +19,8 @@ const {
   } = require('../DBFunctions/studentDBFunction')
 
   const {
-    updateClubArrayByID,
-    deleteFromClubArrayByID
+    updateClubArrayById,
+    deleteFromClubArrayById
   
   } = require('../DBFunctions/clubsDBFunction')
 
@@ -50,10 +50,10 @@ const {
           return
         }
         const { coreMemberData } = op1
-        const { _id, clubID } = coreMemberData
+        const { _id, clubId } = coreMemberData
         const coreMembers = _id
-        const data2 = {clubID,coreMembers}
-        const op2 = await updateClubArrayByID(data2,session)
+        const data2 = {clubId,coreMembers}
+        const op2 = await updateClubArrayById(data2,session)
         if(!op2.success){
           
           session.abortTransaction()
@@ -81,7 +81,7 @@ const {
     
     try {
       const data1 = req.body.data;
-      const op1 = await updateCoreMemberByID(data1);
+      const op1 = await updateCoreMemberById(data1);
       if(!op1.success) {
         res.status(op1.code).json({error:op1.error})
         return
@@ -126,7 +126,7 @@ const {
     
     try {
       const data1 = req.body.data;
-      const op1 = await getCoreMembersByClubID(data1);
+      const op1 = await getCoreMembersByClubId(data1);
       if(!op1.success) {
         res.status(op1.code).json({error:op1.error})
         return
@@ -150,7 +150,7 @@ const {
     try {
       const data1 = req.body.data;
       session.startTransaction()
-      const op1 = await deleteCoreMemberByID(data1,session);
+      const op1 = await deleteCoreMemberById(data1,session);
       if(!op1.success) {
         session.abortTransaction()
         session.endSession()
@@ -158,10 +158,10 @@ const {
         return
       }
       const {coreMemberData } = op1
-      const { _id, clubID } = coreMemberData
+      const { _id, clubId } = coreMemberData
       const coreMembers = _id
-      const data2 = {clubID,coreMembers}
-      const op2 = await deleteFromClubArrayByID(data2,session)
+      const data2 = {clubId,coreMembers}
+      const op2 = await deleteFromClubArrayById(data2,session)
       if(!op2.success){
         
         session.abortTransaction()
@@ -170,9 +170,9 @@ const {
         return
   
       }
-      const coreMemberID = _id
-      const data3 = {coreMemberID}
-      const op3 = await deleteTasksByCoreMemberID(data3,session)
+      const coreMemberId = _Id
+      const data3 = {coreMemberId}
+      const op3 = await deleteTasksByCoreMemberId(data3,session)
       if(!op3.success){
         
         session.abortTransaction()

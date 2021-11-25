@@ -1,16 +1,16 @@
 // Imports
 const {
   insertClubManager,
-  updateClubManagerByID,
+  updateClubManagerById,
   getClubManagerByRollNo,
-  getClubManagersByClubID,
-  deleteClubManagerByID
+  getClubManagersByClubId,
+  deleteClubManagerById
     
   } = require('../DBFunctions/clubManagerDBFunction');
   
 const {
-  updateClubArrayByID,
-  deleteFromClubArrayByID
+  updateClubArrayById,
+  deleteFromClubArrayById
 
 } = require('../DBFunctions/clubsDBFunction')
 
@@ -43,10 +43,10 @@ const {
         return
       }
       const { clubManagerData } = op1
-      const { _id, clubID } = clubManagerData
+      const { _id, clubId } = clubManagerData
       const clubManagers = _id
-      const data2 = {clubID,clubManagers}
-      const op2 = await updateClubArrayByID(data2,session)
+      const data2 = {clubId,clubManagers}
+      const op2 = await updateClubArrayById(data2,session)
       if(!op2.success){
         
         session.abortTransaction()
@@ -74,7 +74,7 @@ exports.updateClubManager = async (req, res, next) => {
   
   try {
     const data1 = req.body.data;
-    const op1 = await updateClubManagerByID(data1);
+    const op1 = await updateClubManagerById(data1);
     if(!op1.success) {
       res.status(op1.code).json({error:op1.error})
       return
@@ -119,7 +119,7 @@ exports.getAllClubManagers = async (req, res, next) => {
   
   try {
     const data1 = req.body.data;
-    const op1 = await getClubManagersByClubID(data1);
+    const op1 = await getClubManagersByClubId(data1);
     if(!op1.success) {
       res.status(op1.code).json({error:op1.error})
       return
@@ -143,7 +143,7 @@ exports.deleteClubManager = async (req, res, next) => {
   try {
     const data1 = req.body.data;
     session.startTransaction()
-    const op1 = await deleteClubManagerByID(data1,session);
+    const op1 = await deleteClubManagerById(data1,session);
     if(!op1.success) {
       session.abortTransaction()
       session.endSession()
@@ -151,10 +151,10 @@ exports.deleteClubManager = async (req, res, next) => {
       return
     }
     const {clubManagerData } = op1
-    const { _id, clubID } = clubManagerData
+    const { _id, clubId } = clubManagerData
     const clubManagers = _id
-    const data2 = {clubID,clubManagers}
-    const op2 = await deleteFromClubArrayByID(data2,session)
+    const data2 = {clubId,clubManagers}
+    const op2 = await deleteFromClubArrayById(data2,session)
     if(!op2.success){
       
       session.abortTransaction()

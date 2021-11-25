@@ -3,19 +3,19 @@ const {
     insertTask,
     updateTask,
     getTask,
-    getTasksByClubID,
-    getTasksByCoreMemberID,
+    getTasksByClubId,
+    getTasksByCoreMemberId,
     deleteTask
 
  } = require('../DBFunctions/taskListDBFunction')
 const {
-    updateClubArrayByID,
-    deleteFromClubArrayByID
+    updateClubArrayById,
+    deleteFromClubArrayById
 
 } = require('../DBFunctions/clubsDBFunction')
 const {
-    updateCoreMemberArrayByID,
-    deleteFromCoreMemberArrayByID
+    updateCoreMemberArrayById,
+    deleteFromCoreMemberArrayById
 
 } = require('../DBFunctions/coreManagerDBFunction')
 const mongoose = require('mongoose')
@@ -36,11 +36,11 @@ exports.addTask = async (req, res, next) => {
         return
       }
       const { taskData } = op1
-      const { _id, assignedTo, clubID } = taskData
-      const coreMemberID = assignedTo
+      const { _id, assignedTo, clubId } = taskData
+      const coreMemberId = assignedTo
       const taskList = _id
-      const data2 = {coreMemberID,taskList}
-      const op2 = await updateCoreMemberArrayByID(data2,session)
+      const data2 = {coreMemberId,taskList}
+      const op2 = await updateCoreMemberArrayById(data2,session)
       if(!op2.success){
         
         session.abortTransaction()
@@ -49,8 +49,8 @@ exports.addTask = async (req, res, next) => {
         return
   
       }
-      const data3 = {clubID,taskList}
-      const op3 = await updateClubArrayByID(data3,session)
+      const data3 = {clubId,taskList}
+      const op3 = await updateClubArrayById(data3,session)
       if(!op3.success){
         
         session.abortTransaction()
@@ -122,7 +122,7 @@ exports.getAllTasksOfClub = async (req, res, next) => {
   
     try {
       const data1 = req.body.data;
-      const op1 = await getTasksByClubID(data1);
+      const op1 = await getTasksByClubId(data1);
       if(!op1.success) {
         res.status(op1.code).json({error:op1.error})
         return
@@ -144,7 +144,7 @@ exports.getAllTasksOfCoreMember = async (req, res, next) => {
   
   try {
     const data1 = req.body.data;
-    const op1 = await getTasksByCoreMemberID(data1);
+    const op1 = await getTasksByCoreMemberId(data1);
     if(!op1.success) {
       res.status(op1.code).json({error:op1.error})
       return
@@ -176,11 +176,11 @@ exports.deleteTask = async (req, res, next) => {
         return
       }
       const {taskData } = op1
-      const { _id,assignedTo, clubID } = taskData
-      const coreMemberID = assignedTo
+      const { _id,assignedTo, clubId } = taskData
+      const coreMemberId = assignedTo
       const taskList = _id
-      const data2 = {coreMemberID,taskList}
-      const op2 = await deleteFromCoreMemberArrayByID(data2,session)
+      const data2 = {coreMemberId,taskList}
+      const op2 = await deleteFromCoreMemberArrayById(data2,session)
       if(!op2.success){
         
         session.abortTransaction()
@@ -189,8 +189,8 @@ exports.deleteTask = async (req, res, next) => {
         return
   
       }
-      const data3 = {clubID,taskList}
-      const op3 = await deleteFromClubArrayByID(data3,session)
+      const data3 = {clubId,taskList}
+      const op3 = await deleteFromClubArrayById(data3,session)
       if(!op3.success){
         
         session.abortTransaction()

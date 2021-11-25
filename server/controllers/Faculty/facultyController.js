@@ -1,15 +1,15 @@
 // Imports
 const {
   insertFaculty,
-  updateFacultyByID,
-  deleteFacultyByID,
+  updateFacultyById,
+  deleteFacultyById,
   getFacultyByFacultyEmail,
   getAllFaculty
   
 } = require('../DBFunctions/facultyDBFunction');
 
 const {
-  updateClubByID
+  updateClubById
 } = require('../DBFunctions/clubssDBFunction');
 // ------------------------------------
 
@@ -82,14 +82,14 @@ exports.updateFaculty = async (req, res, next) => {
   try {
     const data1 = req.body.data;
     session.startTransaction()
-    const op1 = await updateFacultyByID(data1,session);
+    const op1 = await updateFacultyById(data1,session);
     if(!op1.success) {
       session.abortTransaction()
       session.endSession()
       res.status(op1.code).json({error:op1.error})
       return
     }
-    if(!data1.clubID)
+    if(!data1.clubId)
     {
       await session.commitTransaction()
       session.endSession() 
@@ -101,10 +101,10 @@ exports.updateFaculty = async (req, res, next) => {
       
     }
     const { facultyData } = op1
-    const { clubID, facultyEmail } = facultyData
+    const { clubId, facultyEmail } = facultyData
     const  managedBy = facultyEmail
-    const data2 = {clubID,managedBy}
-    const op2 = await updateClubByID(data2,session)
+    const data2 = {clubId,managedBy}
+    const op2 = await updateClubById(data2,session)
     if(!op2.success){
       
       session.abortTransaction()
@@ -132,7 +132,7 @@ exports.updateFaculty = async (req, res, next) => {
 exports.deleteFaculty = async (req, res, next) => {
   try {
     const data1 = req.body.data;
-    const op1 = await deleteFacultyByID(data1);
+    const op1 = await deleteFacultyById(data1);
     if(!op1.success) {
       res.status(op1.code).json({error:op1.error})
       return

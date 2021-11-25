@@ -3,8 +3,8 @@ const {
   insertClub,
   getClubByIndex,
   getAllClubs,
-  updateClubByID,
-  deleteClubByID
+  updateClubById,
+  deleteClubById
   
 } = require('../DBFunctions/clubsDBFunction');
 
@@ -28,9 +28,9 @@ exports.addClub = async (req, res, next) => {
       return
     }
     const { clubData } = op1
-    const { managedBy, clubID } = clubData
+    const { managedBy, clubId } = clubData
     const facultyEmail = managedBy
-    const data2 = {facultyEmail,clubID}
+    const data2 = {facultyEmail,clubId}
     const op2 = await updateFacultyByFacultyEmail(data2,session)
     if(!op2.success){
       
@@ -59,7 +59,7 @@ exports.updateClub = async (req, res, next) => {
   try {
     const data1 = req.body.data;
     session.startTransaction()
-    const op1 = await updateClubByID(data1,session);
+    const op1 = await updateClubById(data1,session);
     if(!op1.success) {
       session.abortTransaction()
       session.endSession()
@@ -78,9 +78,9 @@ exports.updateClub = async (req, res, next) => {
       
     }
     const { clubData } = op1
-    const { managedBy, clubID } = clubData
+    const { managedBy, clubId } = clubData
     const facultyEmail = managedBy
-    const data2 = {facultyEmail,clubID}
+    const data2 = {facultyEmail,clubId}
     const op2 = await updateFacultyByFacultyEmail(data2,session)
     if(!op2.success){
       
@@ -144,7 +144,7 @@ exports.getAllClubs = async (req, res, next) => {
 exports.deleteClub = async (req, res, next) => {
   try {
     const data = req.body.data;
-    const result = await deleteClubByID(data);
+    const result = await deleteClubById(data);
     res.status(200).json(result);
   } catch (err) {
     console.log(err);
