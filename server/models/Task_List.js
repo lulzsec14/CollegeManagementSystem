@@ -37,10 +37,10 @@ const taskListSchema = mongoose.Schema({
         ref: 'CoreMembers',
         required:[true,"Please enter core member ID to which task is assigned"]
     },
-    clubID: { 
+    clubId: { 
         type: Schema.Types.ObjectId, 
         ref: 'Clubs',
-        required:[true,"Please enter club ID"]
+        required:[true,"Please enter club Id"]
     }
 
 

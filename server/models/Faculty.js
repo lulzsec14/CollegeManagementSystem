@@ -37,7 +37,7 @@ const facultySchema = mongoose.Schema({
             message:"Please enter a valid phone number"
           }
     },
-    clubID: { 
+    clubId: { 
         type: Schema.Types.ObjectId, 
         ref: 'Clubs',
         default:null
