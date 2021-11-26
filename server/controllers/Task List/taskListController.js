@@ -17,7 +17,7 @@ const {
     updateCoreMemberArrayById,
     deleteFromCoreMemberArrayById
 
-} = require('../DBFunctions/coreManagerDBFunction')
+} = require('../DBFunctions/coreMemberDBFunction')
 const mongoose = require('mongoose')
 
 
@@ -39,7 +39,7 @@ exports.addTask = async (req, res, next) => {
       const { _id, assignedTo, clubId } = taskData
       const coreMemberId = assignedTo
       const taskList = _id
-      const data2 = {coreMemberId,taskList}
+      const data2 = {coreMemberId,dataToUpdate:{taskList:taskList}}
       const op2 = await updateCoreMemberArrayById(data2,session)
       if(!op2.success){
         
@@ -49,7 +49,7 @@ exports.addTask = async (req, res, next) => {
         return
   
       }
-      const data3 = {clubId,taskList}
+      const data3 = {clubId,dataToUpdate:{taskList:taskList}}
       const op3 = await updateClubArrayById(data3,session)
       if(!op3.success){
         

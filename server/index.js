@@ -21,7 +21,7 @@ const PORT = process.env.PORT || 5000;
 const {
   adminRouter,
   coreMemberRouter,
-
+  clubManagerRouter,
   eventsRouter,
   certificateRouter,
   studentRouter,
@@ -39,6 +39,7 @@ app.use(express.json());
 
 app.use("/api/admin", adminRouter);
 app.use("/api/coreMember", coreMemberRouter);
+app.use("/api/clubManager", clubManagerRouter);
 app.use("/api/event", eventsRouter);
 app.use("/api/certificate", certificateRouter);
 app.use("/api/student", studentRouter);

@@ -36,3 +36,7 @@ clubManagerRouter.route('/getTaskById').get(getTask);
 clubManagerRouter.route('/updateTaskById').put(updateTask);
 clubManagerRouter.route('/deleteTaskById').delete(deleteTask);
 clubManagerRouter.route('/getAllTasksByClubId').get(getAllTasksOfClub);
+
+// Exports
+module.exports = clubManagerRouter;
+// --------------------------

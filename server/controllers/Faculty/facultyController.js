@@ -10,7 +10,7 @@ const {
 
 const {
   updateClubById
-} = require('../DBFunctions/clubssDBFunction');
+} = require('../DBFunctions/clubsDBFunction');
 // ------------------------------------
 
 // Adding faculty
