@@ -19,14 +19,16 @@ exports.register = async (req, res, next) => {
         .status(result.code)
         .json({ success: result.success, error: result.error });
     } else {
-      res
-        .status(result.code)
-        .json({ success: result.success, message: result.message });
+      res.status(result.code).json({
+        success: result.success,
+        message: result.message,
+        adminData: result.adminData,
+      });
     }
     // const resReturn = {success: result.success, resresult.}
     // res.status(201).json(data);
   } catch (err) {
-    // console.log(err);
+    console.log(err.message);
     res.status(500).json({
       success: false,
       error: 'A server error occured while registering an Admin!',
@@ -41,14 +43,12 @@ exports.getAllAdmins = async (req, res, next) => {
     const data = req.body;
     const result = await retrieveAllAdmins(data);
     if (result.success == false) {
-      res
-        .status(result.code)
-        .json({ success: result.success, error: result.error });
+      res.status(result.code).json({ success: false, error: result.error });
     } else {
-      res.status(result.code).json({
-        success: result.success,
+      res.status(200).json({
+        success: true,
         message: result.message,
-        data: result.data,
+        adminData: result.adminData,
       });
     }
   } catch (err) {
@@ -89,34 +89,18 @@ exports.deleteAdmin = async (req, res, next) => {
 exports.updateAdminDetails = async (req, res, next) => {
   const data = req.body;
   try {
-    // const { email } = data;
-    // const findAdmin = await Admin.findOne({ email });
-    // if (!findAdmin) {
-    //   res.status(400).json({
-    //     success: false,
-    //     message: 'No Admin account found with the mentioned email!',
-    //   });
-    // } else {
-    //   const dataToUpdate = data.dataToUpdate;
-    //   const updatedData = await Admin.findOneAndUpdate(
-    //     { email },
-    //     { $set: dataToUpdate },
-    //     { new: true }
-    //   );
-    //   res
-    //     .status(201)
-    //     .json({ success: true, message: 'Data Updated successfully!' });
-    // }
-
     const result = await updateAdminDetails(data);
-
     if (result.success == false) {
       res.status(result.code).json({
         success: false,
         error: result.error,
       });
     } else {
-      res.status(result.code).json({ succes: true });
+      res.status(200).json({
+        succes: true,
+        message: result.message,
+        adminData: result.adminData,
+      });
     }
   } catch (err) {
     res.status(500).json({ success: false, error: err.message });

@@ -88,7 +88,34 @@ exports.getStudent = async (data) => {
       return {
         success: true,
         code: 200,
-        message: 'Student with given email found found!',
+        message: 'Student with given email found!',
+        studentData: findStudent,
+      };
+    }
+  } catch (err) {
+    return {
+      success: false,
+      code: 500,
+      error: err.message,
+    };
+  }
+};
+
+exports.getStudentByRollNo = async (data) => {
+  const { rollNo } = data;
+  try {
+    const findStudent = await Student.findOne({ rollNo });
+    if (!findStudent) {
+      return {
+        success: false,
+        code: 404,
+        error: 'No student with specified Roll no. found!',
+      };
+    } else {
+      return {
+        success: true,
+        code: 200,
+        message: 'Student with given Roll no found!',
         studentData: findStudent,
       };
     }
@@ -115,7 +142,7 @@ exports.getStudentById = async (data) => {
       return {
         success: true,
         code: 200,
-        message: 'Student with given email found found!',
+        message: 'Student with given student id found!',
         studentData: findStudent,
       };
     }
@@ -128,10 +155,138 @@ exports.getStudentById = async (data) => {
   }
 };
 
-exports.updateStudentArray = async (data) => {
+exports.getStudentByRollNo = async (data) => {
+  const { rollNo } = data;
+  try {
+    const findStudent = await Student.findById({ rollNo });
+    if (!findStudent) {
+      return {
+        success: false,
+        code: 404,
+        error: 'No student with specified roll no found!',
+      };
+    } else {
+      return {
+        success: true,
+        code: 200,
+        message: 'Student with given roll no found!',
+        studentData: findStudent,
+      };
+    }
+  } catch (err) {
+    return {
+      success: false,
+      code: 500,
+      error: err.message,
+    };
+  }
+};
+
+exports.updateStudentArray = async (data, session) => {
   const { email } = data;
   try {
-    const findStudent = await Student.findOne({ email });
+    const findStudent = await Student.findOne({ email }).session(session);
+    if (!findStudent) {
+      return {
+        success: false,
+        code: 404,
+        error: 'No student with specified email found!',
+      };
+    } else {
+      const dataToUpdate = data.dataToUpdate;
+      // console.log(dataToUpdate);
+      const updatedStudent = await Student.findOneAndUpdate(
+        { email },
+        { $addToSet: dataToUpdate },
+        { new: true }
+      ).session(session);
+      return {
+        success: true,
+        code: 200,
+        message: 'Student Data updated successfully!',
+        studentData: updatedStudent,
+      };
+    }
+  } catch (err) {
+    return {
+      success: false,
+      code: 500,
+      error: err.message,
+    };
+  }
+};
+
+exports.updateStudentArrayByRollNo = async (data, session) => {
+  const { rollNo } = data;
+  try {
+    const findStudent = await Student.findOne({ rollNo }).session(session);
+    if (!findStudent) {
+      return {
+        success: false,
+        code: 404,
+        error: 'No student with specified rollNo found!',
+      };
+    } else {
+      const dataToUpdate = data.dataToUpdate;
+      // console.log(dataToUpdate);
+      const updatedStudent = await Student.findOneAndUpdate(
+        { rollNo },
+        { $addToSet: dataToUpdate },
+        { new: true }
+      ).session(session);
+      return {
+        success: true,
+        code: 200,
+        message: 'Student Data updated successfully!',
+        studentData: updatedStudent,
+      };
+    }
+  } catch (err) {
+    return {
+      success: false,
+      code: 500,
+      error: err.message,
+    };
+  }
+};
+
+exports.updateStudentArrayById = async (data, session) => {
+  const { studentId } = data;
+  try {
+    const findStudent = await Student.findById(studentId).session(session);
+    if (!findStudent) {
+      return {
+        success: false,
+        code: 404,
+        error: 'No student with specified email found!',
+      };
+    } else {
+      const dataToUpdate = data.dataToUpdate;
+      const updatedStudent = await Student.findByIdAndUpdate(
+        studentId,
+        { $addToSet: dataToUpdate },
+        { new: true }
+      ).session(session);
+      return {
+        success: true,
+        code: 200,
+        message: 'Student Data updated successfully!',
+        studentData: updatedStudent,
+      };
+    }
+  } catch (err) {
+    return {
+      success: false,
+      code: 500,
+      error: err.message,
+    };
+  }
+};
+
+exports.deleteFromStudentArray = async (data, session) => {
+  const { email } = data;
+  try {
+    const findStudent = await Student.findOne({ email }).session(session);
     if (!findStudent) {
       return {
         success: false,
@@ -142,75 +297,9 @@ exports.updateStudentArray = async (data) => {
       const dataToUpdate = data.dataToUpdate;
       const updatedStudent = await Student.findOneAndUpdate(
         { email },
-        { $addToSet: dataToUpdate },
-        { new: true }
-      );
-      return {
-        success: true,
-        code: 200,
-        message: 'Student Data updated successfully!',
-        studentData: updatedStudent,
-      };
-    }
-  } catch (err) {
-    return {
-      success: false,
-      code: 500,
-      error: err.message,
-    };
-  }
-};
-
-exports.updateStudentArrayById = async (data) => {
-  const { studentId } = data;
-  try {
-    const findStudent = await Student.findById(studentId);
-    if (!findStudent) {
-      return {
-        success: false,
-        code: 404,
-        error: 'No student with specified email found!',
-      };
-    } else {
-      const dataToUpdate = data.dataToUpdate;
-      const updatedStudent = await Student.findByIdAndUpdate(
-        studentId,
-        { $addToSet: dataToUpdate },
-        { new: true }
-      );
-      return {
-        success: true,
-        code: 200,
-        message: 'Student Data updated successfully!',
-        studentData: updatedStudent,
-      };
-    }
-  } catch (err) {
-    return {
-      success: false,
-      code: 500,
-      error: err.message,
-    };
-  }
-};
-
-exports.deleteFromStudentArray = async (data) => {
-  const { email } = data;
-  try {
-    const findStudent = await Student.findOne({ email });
-    if (!findStudent) {
-      return {
-        success: false,
-        code: 404,
-        error: 'No student with specified email found!',
-      };
-    } else {
-      const dataToUpdate = data.dataToUpdate;
-      const updatedStudent = await Student.findByIdAndUpdate(
-        { email },
         { $pull: dataToUpdate },
         { safe: true, multi: true, new: true }
-      );
+      ).session(session);
       return {
         success: true,
         code: 200,
@@ -227,10 +316,43 @@ exports.deleteFromStudentArray = async (data) => {
   }
 };
 
-exports.deleteFromStudentArrayById = async (data) => {
+exports.deleteFromStudentArrayByRollNo = async (data, session) => {
+  const { rollNo } = data;
+  try {
+    const findStudent = await Student.findOne({ rollNo }).session(session);
+    if (!findStudent) {
+      return {
+        success: false,
+        code: 404,
+        error: 'No student with specified rollNo found!',
+      };
+    } else {
+      const dataToUpdate = data.dataToUpdate;
+      const updatedStudent = await Student.findOneAndUpdate(
+        { rollNo },
+        { $pull: dataToUpdate },
+        { safe: true, multi: true, new: true }
+      ).session(session);
+      return {
+        success: true,
+        code: 200,
+        message: 'Student Data updated successfully!',
+        studentData: updatedStudent,
+      };
+    }
+  } catch (err) {
+    return {
+      success: false,
+      code: 500,
+      error: err.message,
+    };
+  }
+};
+
+exports.deleteFromStudentArrayById = async (data, session) => {
   const { studentId } = data;
   try {
-    const findStudent = await Student.findById(studentId);
+    const findStudent = await Student.findById(studentId).session(session);
     if (!findStudent) {
       return {
         success: false,
@@ -243,7 +365,7 @@ exports.deleteFromStudentArrayById = async (data) => {
         studentId,
         { $pull: dataToUpdate },
         { safe: true, multi: true, new: true }
-      );
+      ).session(session);
       return {
         success: true,
         code: 200,

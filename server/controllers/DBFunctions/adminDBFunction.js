@@ -2,26 +2,37 @@
 const Admin = require('../../models/Admin');
 const textToHash = require('../../utilities/textToHashed');
 const comparePasswords = require('../../utilities/comparePasswords');
-const validateCreateAdmin = require('../../Validators/AdminValidators');
+// const validateCreateAdmin = require('../../Validators/AdminValidators');
+const {
+  validateCreateAdmin,
+  validateUpdateAdmin,
+  validateDeleteAdmin,
+} = require('../../Validators/AdminValidators');
 // ------------------------------------
 
 // Function for registering an Admin
 exports.registerAdmin = async (data) => {
+  data.email = data.email.toLowerCase();
   const { email, name, password, phoneNo } = data;
-  const error = validateCreateAdmin(data);
-  if (error) {
-    const { details } = error;
+  const validationError = validateCreateAdmin(data);
+  if (validationError) {
+    const { details } = validationError;
     return { success: false, code: 400, error: details[0].message };
   }
   try {
-    const findAdmin = await Admin.findOne({
-      email: data.email,
-    });
+    const findAdmin = await Admin.findOne({ email });
+    const findAdminPhone = await Admin.findOne({ phoneNo });
     if (findAdmin) {
       return {
         success: false,
         code: 400,
         error: 'Account with this email already exists!',
+      };
+    } else if (findAdminPhone) {
+      return {
+        success: false,
+        code: 400,
+        error: 'Account with this phoneno already exists!',
       };
     } else {
       const hashedPassword = textToHash(password);
@@ -40,7 +51,7 @@ exports.registerAdmin = async (data) => {
       };
     }
   } catch (err) {
-    // console.log(err);
+    console.log(err.message);
     return {
       success: false,
       code: 500,
@@ -65,7 +76,7 @@ exports.retrieveAllAdmins = async (data) => {
         sucess: true,
         code: 201,
         message: 'Admin accounts retrieved successfully',
-        data: findAllAdmins,
+        adminData: findAllAdmins,
       };
     }
   } catch (err) {
@@ -79,14 +90,19 @@ exports.retrieveAllAdmins = async (data) => {
 // ------------------------------------
 
 exports.updateAdminDetails = async (data) => {
+  data.email = data.email.toLowerCase();
+
+  const validationError = validateUpdateAdmin(data);
+  if (validationError) {
+    const { details } = validationError;
+    return { success: false, code: 400, error: details[0].message };
+  }
+
   try {
+    console.log(data);
     const { email } = data;
     const findAdmin = await Admin.findOne({ email });
     if (!findAdmin) {
-      // res.status(400).json({
-      //   success: false,
-      //   message: 'No Admin account found with the mentioned email!',
-      // });
       return {
         success: false,
         code: 400,
@@ -100,14 +116,11 @@ exports.updateAdminDetails = async (data) => {
         { $set: dataToUpdate },
         { new: true }
       );
-      // res
-      //   .status(201)
-      //   .json({ success: true, message: 'Data Updated successfully!' });
       return {
         success: true,
         code: 201,
         message: 'Admin data updated successfully!',
-        data: updatedData,
+        adminData: updatedData,
       };
     }
   } catch (err) {
@@ -164,6 +177,11 @@ exports.updateAdminPassword = async (data) => {
 
 // Function to delete an Admin
 exports.deleteSingleAdmin = async (data) => {
+  const validationError = validateDeleteAdmin(data);
+  if (validationError) {
+    const { details } = validationError;
+    return { success: false, code: 400, error: details[0].message };
+  }
   try {
     const { email } = data;
     const findAdmin = await Admin.findOne({ email });

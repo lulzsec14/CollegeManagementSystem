@@ -1,142 +1,147 @@
 const Ideabox = require("../../models/Ideabox");
-// const validateCreateIdeabox = require();
+const validateCreateIdeabox = require('../../Validators/IdeaboxValidators');
 
-exports.createIdea = async(data) => {	
+exports.createIdea = async(data, session) => {	
 	const {ideaDescription, givenBy, clubId} = data;
 	try {
-		// const error = validateCreateIdeabox(data);
-		// if(error) {
-		// 	const {details} = error;
-		// 	return {
-		// 		success: false,
-		// 		code: 400,
-		// 		error: details[0].message
-		// 	}
-		// }
+		const error = validateCreateIdeabox(data);
+		if(error) {
+			const {details} = error;
+			return {
+				success: false,
+				code: 400,
+				error: details[0].message
+			}
+		}
 		
-		const idea = await Ideabox.create({
+		const idea = await Ideabox.create([{
 			ideaDescription,
 			givenBy,
 			clubId
-		});
-
-		const createIdea = await idea.save();
+		}], {session: session});
 
 		return {
 			success: true,
 			code: 201,
-			ideaData: createIdea
+			ideaData: idea,
+			message: "Idea created successfully!"
 		}
 	} catch(error) {
-		console.error(error);
+		console.log(error);
 		return {
 			success: false,
 			code: 500,
-			error
+			error: "Server Error"
 		}
 	}
 }
 
-exports.getIdea = async(data) => {
+exports.getIdea = async(data, session) => {
 	try {
 		const {ideaId} = data;
-		const findIdea = await Ideabox.findById(ideaId);
-		if(!findTask) {
+		const findIdea = await Ideabox.findById(ideaId).session(session);
+		if(!findIdea) {
 			return {
 				success: false,
-				code: 204,
+				code: 404,
 				error: 'Idea does not exist!'
 			}
 		}
 		return {
 			success: true,
-			code: 201,
-			ideaData: findIdea
+			code: 200,
+			ideaData: findIdea,
+			message: "Idea Found and returned"
 		}
 	} catch(error) {
+		console.log(error)
 		return {
 			success: false,
 			code: 500,
-			error
+			error: "Server Error"
 		}
 	}
 }
 
-exports.getIdeasByClub = async(data) => {
+exports.getIdeasByClub = async(data, session) => {
 	try {
 		const {clubId} = data;
-		const findIdeas = await Ideabox.findById(clubId);
+		const findIdeas = await Ideabox.find({clubId}).session(session);
 		if(!findIdeas) {
 			return {
 				success: false,
-				code: 204,
+				code: 404,
 				error: 'No Ideas found!'
 			}
 		}
 		return {
 			success: true,
 			code: 200,
-			ideaData: findIdeas
+			ideaData: findIdeas,
+			message: "Ideas found and returned"
 		}
 	} catch(error) {
+		console.log(error)
 		return {
 			success: false,
 			code: 500,
-			error
+			error: "Server Error"
 		}
 	}
 }
 
-exports.getIdeasByUploader = async(data) => {
-	try {
-		const {givenBy} = data;
-		const findIdeas = await Ideabox.findById(givenBy);
-		if(!findIdeas) {
-			return {
-				success: false,
-				code: 204,
-				error: 'No Ideas found!'
-			}
-		}
-		return {
-			success: true,
-			code: 200,
-			ideaData: findIdeas
-		}
-	} catch(error) {
-		return {
-			success: false,
-			code: 500,
-			error
-		}
-	}
-}
-
-exports.deleteIdea = async(data) => {
+exports.deleteIdea = async(data, session) => {
 	try {
 		const {ideaId} = data;
-		const findIdea = await Ideabox.findById(ideaId)
+		const findIdea = await Ideabox.findById(ideaId).session(session)
 		if(!findIdea) {
 			return {
 				success : false,
-				code: 204,
+				code: 404,
 				error: 'Idea does not exist'
 			}
 		}
-		const deletedIdea = await Ideabox.findByIdAndDelete(ideaId);
+		const deletedIdea = await Ideabox.findByIdAndDelete(ideaId).session(session);
 		return {
 			success: true,
-			code: 201,
-			ideaData: deletedIdea
+			code: 200,
+			ideaData: deletedIdea,
+			message: "Idea deleted successfully!"
 		}
 	} catch(error) {
+		console.log(error)
 		return {
 			success: false,
 			code: 500,
-			error
+			error: "Server Error"
 		}
 	}
 }
+
+// exports.getIdeasByUploader = async(data) => {
+// 	try {
+// 		const {givenBy} = data;
+// 		const findIdeas = await Ideabox.findById(givenBy);
+// 		if(!findIdeas) {
+// 			return {
+// 				success: false,
+// 				code: 204,
+// 				error: 'No Ideas found!'
+// 			}
+// 		}
+// 		return {
+// 			success: true,
+// 			code: 200,
+// 			ideaData: findIdeas
+// 		}
+// 	} catch(error) {
+// 		return {
+// 			success: false,
+// 			code: 500,
+// 			error
+// 		}
+// 	}
+// }
 
 // exports.searchIdea = async(data) => {
 // 	try {

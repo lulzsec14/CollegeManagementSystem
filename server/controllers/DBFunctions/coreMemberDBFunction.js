@@ -1,10 +1,10 @@
 const CoreMembers = require('../../models/CoreMembers');
 const textToHash = require('../../utilities/textToHashed')
-exports.getCoreMemberByID = async (data) => {
+exports.getCoreMemberById = async (data,session) => {
     try {
         
-        const { coreMemberID } = data
-        const findCoreMember = await CoreMembers.findById( coreMemberID )
+        const { coreMemberId } = data
+        const findCoreMember = await CoreMembers.findById( coreMemberId ).session(session)
         if(!findCoreMember)
         {
             return {
@@ -31,11 +31,11 @@ exports.getCoreMemberByID = async (data) => {
       }
 
 }
-exports.getCoreMemberByRollNo = async (data) => {
+exports.getCoreMemberByRollNo = async (data,session) => {
     try {
         
         const { studentRollNo } = data
-        const findCoreMember = await CoreMembers.findOne({studentRollNo})
+        const findCoreMember = await CoreMembers.findOne({studentRollNo}).session(session)
         if(!findCoreMember)
         {
             return {
@@ -62,11 +62,11 @@ exports.getCoreMemberByRollNo = async (data) => {
       }
 
 }
-exports.getCoreMembersByClubID = async (data) => {
+exports.getCoreMembersByClubId = async (data,session) => {
     try {
         
-        const { clubID } = data;
-        const findCoreMembers = await CoreMembers.find({ clubID })
+        const { clubId } = data;
+        const findCoreMembers = await CoreMembers.find({ clubId }).session(session)
         if(!findCoreMembers)
         {
             return {
@@ -93,11 +93,11 @@ exports.getCoreMembersByClubID = async (data) => {
       }
 
 }
-exports.insertCoreMember = async (data) => {
+exports.insertCoreMember = async (data,session) => {
     try
     {
-        const { studentRollNo, clubID, password, role } = data
-        const findCoreMember = await CoreMembers.findOne({ studentRollNo })
+        const { studentRollNo, clubId, password, role } = data
+        const findCoreMember = await CoreMembers.findOne({ studentRollNo }).session(session)
         if(findCoreMember)
         {
             return {
@@ -109,11 +109,11 @@ exports.insertCoreMember = async (data) => {
         const hashedPassword = textToHash(password)
         const coreMember = new CoreMembers({
             studentRollNo, 
-            clubID, 
+            clubId, 
             password: hashedPassword, 
             role
         })
-        const coreMemberInserted = await coreMember.save()
+        const coreMemberInserted = await coreMember.save({session})
         return { success:true, coreMemberData:coreMemberInserted, code:201, message:"Core Member created successfully"}
        
     }
@@ -127,17 +127,10 @@ exports.insertCoreMember = async (data) => {
   }
     
 }
-exports.updateCoreMemberByRollNo = async (data) => {
+exports.updateCoreMemberByRollNo = async (data,session) => {
     try
     {
-        const dataToUpdate = {}
-        for(key in data)
-        {
-            if(key!=="coreMemberID"&&key!=="studentRollNo")
-            {
-                dataToUpdate[key] = data[key]
-            }
-        }
+        const dataToUpdate = data.dataToUpdate
         const {studentRollNo} = data
         if(dataToUpdate.password)
         {
@@ -145,7 +138,7 @@ exports.updateCoreMemberByRollNo = async (data) => {
           dataToUpdate.password = hashedPassword
 
         }
-        const findCoreMember = await CoreMembers.findOne({ studentRollNo })
+        const findCoreMember = await CoreMembers.findOne({ studentRollNo }).session(session)
         if(!findCoreMember)
         {
             return {
@@ -154,7 +147,7 @@ exports.updateCoreMemberByRollNo = async (data) => {
                 code:400
               }
         }
-        const coreMemberUpdated = await CoreMembers.findOneAndUpdate({ studentRollNo },dataToUpdate,{new:true})
+        const coreMemberUpdated = await CoreMembers.findOneAndUpdate({ studentRollNo },dataToUpdate,{new:true}).session(session)
         return {success:true, coreMemberData:coreMemberUpdated, code:200, message:"Core Member data updated successfully"}
        
     }
@@ -169,25 +162,18 @@ exports.updateCoreMemberByRollNo = async (data) => {
     }
     
 }
-exports.updateCoreMemberByID = async (data) => {
+exports.updateCoreMemberById = async (data,session) => {
     try
     {
-        const dataToUpdate = {}
-        for(key in data)
-        {
-            if(key!=="coreMemberID"&&key!=="studentRollNo")
-            {
-                dataToUpdate[key] = data[key]
-            }
-        }
-        const {coreMemberID} = data
+         const dataToUpdate = data.dataToUpdate
+        const {coreMemberId} = data
         if(dataToUpdate.password)
         {
           const hashedPassword = textToHash(dataToUpdate.password)
           dataToUpdate.password = hashedPassword
 
         }
-        const findCoreMember = await CoreMembers.findById( coreMemberID )
+        const findCoreMember = await CoreMembers.findById( coreMemberId ).session(session)
         if(!findCoreMember)
         {
             return {
@@ -197,7 +183,7 @@ exports.updateCoreMemberByID = async (data) => {
               }
         }
         
-        const coreMemberUpdated = await CoreMembers.findByIdAndUpdate(coreMemberID,dataToUpdate,{new:true})
+        const coreMemberUpdated = await CoreMembers.findByIdAndUpdate(coreMemberId,dataToUpdate,{new:true}).session(session)
         return {success:true,coreMemberData:coreMemberUpdated,code:200, message:"Core Member updated successfully"}
        
     }
@@ -212,19 +198,13 @@ exports.updateCoreMemberByID = async (data) => {
     
 }
 
-exports.updateCoreMemberArrayByRollNo = async (data) => {
+exports.updateCoreMemberArrayByRollNo = async (data,session) => {
     try
     {
-        const dataToUpdate = {}
-        for(key in data)
-        {
-            if(key==="taskList")
-            {
-                dataToUpdate[key] = data[key]
-            }
-        }
+      const dataToUpdate = data.dataToUpdate
+        
         const {studentRollNo} = data
-        const findCoreMember = await CoreMembers.findOne({ studentRollNo })
+        const findCoreMember = await CoreMembers.findOne({ studentRollNo }).session(session)
         if(!findCoreMember)
         {
             return {
@@ -233,7 +213,7 @@ exports.updateCoreMemberArrayByRollNo = async (data) => {
                 code: 404
               }
         }
-        const coreMemberUpdated = await CoreMembers.findOneAndUpdate({ studentRollNo },{ $addToSet: dataToUpdate },{new:true})
+        const coreMemberUpdated = await CoreMembers.findOneAndUpdate({ studentRollNo },{ $addToSet: dataToUpdate },{new:true}).session(session)
         return {success:true,coreMemberData:coreMemberUpdated,code:201,message:"Data inserted successfully in Core Member array"}
        
     }
@@ -247,19 +227,13 @@ exports.updateCoreMemberArrayByRollNo = async (data) => {
   }
     
 }
-exports.updateCoreMemberArrayByID = async (data,session) => {
+exports.updateCoreMemberArrayById = async (data,session) => {
     try
     {
-        const dataToUpdate = {}
-        for(key in data)
-        {
-            if(key==="taskList")
-            {
-                dataToUpdate[key] = data[key]
-            }
-        }
-        const {coreMemberID} = data
-        const findCoreMember = await CoreMembers.findById( coreMemberID )
+      const dataToUpdate = data.dataToUpdate
+        
+        const {coreMemberId} = data
+        const findCoreMember = await CoreMembers.findById( coreMemberId ).session(session)
         if(!findCoreMember)
         {
             return {
@@ -268,7 +242,7 @@ exports.updateCoreMemberArrayByID = async (data,session) => {
                 code:404
               }
         }
-        const coreMemberUpdated = await CoreMembers.findByIdAndUpdate(coreMemberID,{ $addToSet: dataToUpdate },{new:true}).session(session)
+        const coreMemberUpdated = await CoreMembers.findByIdAndUpdate(coreMemberId,{ $addToSet: dataToUpdate },{new:true}).session(session)
         return {success:true,coreMemberData:coreMemberUpdated,code:201,message:"Data inserted successfully in Core Member array"}
        
     }
@@ -283,19 +257,13 @@ exports.updateCoreMemberArrayByID = async (data,session) => {
     
 }
 
-exports.deleteFromCoreMemberArrayByID = async (data) => {
+exports.deleteFromCoreMemberArrayById = async (data,session) => {
     try
     {
-        const dataToUpdate = {}
-        for(key in data)
-        {
-            if(key==="taskList")
-            {
-                dataToUpdate[key] = data[key]
-            }
-        }
-        const {coreMemberID} = data
-        const findCoreMember = await CoreMembers.findById(coreMemberID)
+      const dataToUpdate = data.dataToUpdate
+        
+        const {coreMemberId} = data
+        const findCoreMember = await CoreMembers.findById(coreMemberId).session(session)
         if(!findCoreMember)
         {
             return {
@@ -305,10 +273,10 @@ exports.deleteFromCoreMemberArrayByID = async (data) => {
               }
         }
         const coreMemberUpdated = await CoreMembers.findByIdAndUpdate(
-            coreMemberID, 
+            coreMemberId, 
             { $pull: dataToUpdate },
             { safe: true, multi: true,new:true }
-          );
+          ).session(session);
         return {success:true,coreMemberData:coreMemberUpdated,code:200,message:"Data deleted successfully from Core Member array"}
        
     }
@@ -322,19 +290,13 @@ exports.deleteFromCoreMemberArrayByID = async (data) => {
   }
     
 }
-exports.deleteFromCoreMemberArrayByRollNo = async (data) => {
+exports.deleteFromCoreMemberArrayByRollNo = async (data,session) => {
     try
     {
-        const dataToUpdate = {}
-        for(key in data)
-        {
-            if(key==="taskList")
-            {
-                dataToUpdate[key] = data[key]
-            }
-        }
+      const dataToUpdate = data.dataToUpdate
+        
         const {studentRollNo} = data
-        const findCoreMember = await CoreMembers.findOne({ studentRollNo })
+        const findCoreMember = await CoreMembers.findOne({ studentRollNo }).session(session)
         if(!findCoreMember)
         {
             return {
@@ -347,7 +309,7 @@ exports.deleteFromCoreMemberArrayByRollNo = async (data) => {
             { studentRollNo },
             { $pull: dataToUpdate },
             { safe: true, multi: true,new:true }
-          );
+          ).session(session);
         return {success:true,coreMemberData:coreMemberUpdated,code:200,message:"Data deleted successfully from Core Member array"}
        
     }
@@ -362,11 +324,11 @@ exports.deleteFromCoreMemberArrayByRollNo = async (data) => {
     
 }
 
-exports.deleteCoreMemberByRollNo = async (data) => {
+exports.deleteCoreMemberByRollNo = async (data,session) => {
     try
     {
         const { studentRollNo } = data
-        const findCoreMember = await CoreMembers.findOne({ studentRollNo })
+        const findCoreMember = await CoreMembers.findOne({ studentRollNo }).session(session)
         if(!findCoreMember)
         {
             return {
@@ -375,7 +337,7 @@ exports.deleteCoreMemberByRollNo = async (data) => {
                 code: 404
               }
         }
-        const coreMemberDeleted = await CoreMembers.findOneAndDelete({studentRollNo})
+        const coreMemberDeleted = await CoreMembers.findOneAndDelete({studentRollNo}).session(session)
         return {success:true,coreMemberData:coreMemberDeleted,code:200,message:"Core Member deleted successfully"}       
     }
     catch (error) {
@@ -388,11 +350,11 @@ exports.deleteCoreMemberByRollNo = async (data) => {
   }
     
 }
-exports.deleteCoreMemberByID = async (data) => {
+exports.deleteCoreMemberById = async (data,session) => {
     try
     {
-        const { coreMemberID } = data
-        const findCoreMember = await CoreMembers.findById( coreMemberID )
+        const { coreMemberId } = data
+        const findCoreMember = await CoreMembers.findById( coreMemberId ).session(session)
         if(!findCoreMember)
         {
             return {
@@ -401,7 +363,7 @@ exports.deleteCoreMemberByID = async (data) => {
                 code: 404,
               }
         }
-        const coreMemberDeleted = await CoreMembers.findByIdAndDelete(CoreMemberID)
+        const coreMemberDeleted = await CoreMembers.findByIdAndDelete(CoreMemberId).session(session)
         return {success:true,coreMemberData:coreMemberDeleted,code:200,message:"Core Member deleted successfully"}       
     }
     catch (error) {
@@ -414,10 +376,10 @@ exports.deleteCoreMemberByID = async (data) => {
   }
     
 }
-exports.deleteCoreMembersByClubID = async (data) => {
+exports.deleteCoreMembersByClubId = async (data,session) => {
     try {
-      const { clubID } = data;
-      const coreMembersDeleted = await CoreMembers.deleteMany({ clubID });
+      const { clubId } = data;
+      const coreMembersDeleted = await CoreMembers.deleteMany({ clubId }).session(session);
       return { success: true, coreMemberData: coreMembersDeleted, code:200, message:"Core Members deleted successfully" };
     } 
     catch (error) {

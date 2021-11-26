@@ -1,8 +1,8 @@
 const Task_List = require('../../models/Task_List');
-exports.getTask = async (data) => {
+exports.getTask = async (data,session) => {
   try {
-    const { taskID } = data;
-    const findTask = await Task_List.findById(taskID);
+    const { taskId } = data;
+    const findTask = await Task_List.findById(taskId).session(session);
     if (!findTask) {
       return {
         success: false,
@@ -27,10 +27,10 @@ exports.getTask = async (data) => {
     };
   }
 };
-exports.getTasksByClubID = async (data) => {
+exports.getTasksByClubId = async (data,session) => {
   try {
-    const { clubID } = data;
-    const findTasks = await Task_List.find({ clubID });
+    const { clubId } = data;
+    const findTasks = await Task_List.find({ clubId }).session(session);
     if (!findTasks) {
       return {
         success: false,
@@ -54,11 +54,11 @@ exports.getTasksByClubID = async (data) => {
     };
   }
 };
-exports.getTasksByCoreMemberID = async (data) => {
+exports.getTasksByCoreMemberId = async (data,session) => {
   try {
-    const { coreMemberID } = data;
-    const assignedTo = coreMemberID
-    const findTasks = await Task_List.find({ assignedTo });
+    const { coreMemberId } = data;
+    const assignedTo = coreMemberId
+    const findTasks = await Task_List.find({ assignedTo }).session(session);
     if (!findTasks) {
       return {
         success: false,
@@ -90,7 +90,7 @@ exports.insertTask = async (data,session) => {
       taskStatus,
       assignedBy,
       assignedTo,
-      clubID,
+      clubId,
     } = data;
     const task = new Task_List({
       taskTitle,
@@ -98,7 +98,7 @@ exports.insertTask = async (data,session) => {
       taskStatus,
       assignedBy,
       assignedTo,
-      clubID,
+      clubId,
     });
     const taskInserted = await task.save({session});
     return { success: true, taskData: taskInserted, code:201, message: 'Task inserted successfully' };
@@ -113,16 +113,12 @@ exports.insertTask = async (data,session) => {
 
   }
 };
-exports.updateTask = async (data) => {
+exports.updateTask = async (data,session) => {
   try {
-    const dataToUpdate = {};
-    for (key in data) {
-      if (key !== 'taskID') {
-        dataToUpdate[key] = data[key];
-      }
-    }
-    const { taskID } = data;
-    const findTask = await Task_List.findById(taskID);
+    
+    const dataToUpdate = data.dataToUpdate
+    const { taskId } = data;
+    const findTask = await Task_List.findById(taskId).session(session);
     if (!findTask) {
       return {
         success: false,
@@ -131,10 +127,10 @@ exports.updateTask = async (data) => {
       };
     }
     const taskUpdated = await Task_List.findByIdAndUpdate(
-      taskID,
+      taskId,
       dataToUpdate,
       { new: true }
-    );
+    ).session(session);
     return { success: true, taskData: taskUpdated, code:200, message:"Task updated successfully" };
   } 
   catch (error) {
@@ -147,10 +143,10 @@ exports.updateTask = async (data) => {
   }
 };
 
-exports.deleteTask = async (data) => {
+exports.deleteTask = async (data,session) => {
   try {
-    const { taskID } = data;
-    const findTask = await Task_List.findById(taskID);
+    const { taskId } = data;
+    const findTask = await Task_List.findById(taskId).session(session);
     if (!findTask) {
       return {
         success: false,
@@ -158,7 +154,7 @@ exports.deleteTask = async (data) => {
         code: 404
       };
     }
-    const taskDeleted = await Task_List.findByIdAndDelete(taskID);
+    const taskDeleted = await Task_List.findByIdAndDelete(taskId).session(session);
     return { success: true, taskData: taskDeleted, code:200, message:"Task deleted successfully" };
   } 
   catch (error) {
@@ -170,10 +166,10 @@ exports.deleteTask = async (data) => {
     }; 
   }
 };
-exports.deleteTasksByClubID = async (data) => {
+exports.deleteTasksByClubId = async (data,session) => {
   try {
-    const { clubID } = data;
-    const tasksDeleted = await Task_List.deleteMany({ clubID });
+    const { clubId } = data;
+    const tasksDeleted = await Task_List.deleteMany({ clubId }).session(session);
     return { success: true, taskData: tasksDeleted, code:200, message:"Tasks deleted successfully" };
   } 
   catch (error) {
@@ -185,11 +181,11 @@ exports.deleteTasksByClubID = async (data) => {
     };
   }
 };
-exports.deleteTasksByCoreMemberID = async (data) => {
+exports.deleteTasksByCoreMemberId = async (data,session) => {
   try {
-    const { coreMemberID } = data;
-    const assignedTo = coreMemberID
-    const tasksDeleted = await Task_List.deleteMany({ assignedTo })
+    const { coreMemberId } = data;
+    const assignedTo = coreMemberId
+    const tasksDeleted = await Task_List.deleteMany({ assignedTo }).session(session)
     return { success: true, taskData: tasksDeleted, code:200, message:"Tasks deleted successfully" };
   } 
   catch (error) {
