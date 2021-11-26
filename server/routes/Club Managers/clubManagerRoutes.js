@@ -8,6 +8,8 @@ const { getClub } = require('../../controllers/Clubs/clubController');
 const { getClubManager,getAllClubManagers,updateClubManager } = require('../../controllers/Club Managers/clubManagerController');
 const { addCoreMember,getCoreMember,getAllCoreMembers,deleteCoreMember } = require('../../controllers/Core Members/coreMemberController');
 const { addTask,getTask,getAllTasksOfClub,updateTask,deleteTask } = require('../../controllers/Task List/taskListController');
+const { createIdea, getIdea, getIdeasByClub, deleteIdea } = require("../../controllers/Idea Box/ideaBoxController");
+const { getFeedback, getFeedbacksByClub, deleteFeedback } = require("../../controllers/Feedback/feedbackController");
 
 // ------------------------------------
 

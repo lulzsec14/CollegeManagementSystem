@@ -1,17 +1,17 @@
 // Imports
 const {
-    insertCoreMember,
-    updateCoreMemberById,
-    getCoreMemberByRollNo,
-    getCoreMembersByClubId,
-    deleteCoreMemberById
-      
-    } = require('../DBFunctions/CoreMemberDBFunction');
-    
+	insertCoreMember,
+	updateCoreMemberById,
+	getCoreMemberByRollNo,
+	getCoreMembersByClubId,
+	deleteCoreMemberById
+		
+	} = require('../DBFunctions/CoreMemberDBFunction');
+	
 const {
-    deleteTasksByCoreMemberId
-  
-  } = require('../DBFunctions/taskListDBFunction')
+	deleteTasksByCoreMemberId
+
+} = require('../DBFunctions/taskListDBFunction')
 
 const {
     getStudentByRollNo

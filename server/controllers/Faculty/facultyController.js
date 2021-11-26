@@ -147,7 +147,4 @@ exports.deleteFaculty = async (req, res, next) => {
     console.log(err);
     res.status(500).json({ error: 'Server Error' });
   }
-  
-  
 };
-
