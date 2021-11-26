@@ -30,7 +30,7 @@ exports.addClub = async (req, res, next) => {
     const { clubData } = op1
     const { managedBy, clubId } = clubData
     const facultyEmail = managedBy
-    const data2 = {facultyEmail,clubId}
+    const data2 = {facultyEmail,dataToUpdate:{clubId:clubId}}
     const op2 = await updateFacultyByFacultyEmail(data2,session)
     if(!op2.success){
       
@@ -80,7 +80,7 @@ exports.updateClub = async (req, res, next) => {
     const { clubData } = op1
     const { managedBy, clubId } = clubData
     const facultyEmail = managedBy
-    const data2 = {facultyEmail,clubId}
+    const data2 = {facultyEmail,dataToUpdate:{clubId:clubId}}
     const op2 = await updateFacultyByFacultyEmail(data2,session)
     if(!op2.success){
       
@@ -108,7 +108,7 @@ exports.updateClub = async (req, res, next) => {
 // reading one club
 exports.getClub = async (req, res, next) => {
   try {
-    const data = req.params.index;
+    const data = req.body.data;
     const op1 = await getClubByIndex(data);
     if(!op.success){
       res.status(op1.code).json({error:op1.error})

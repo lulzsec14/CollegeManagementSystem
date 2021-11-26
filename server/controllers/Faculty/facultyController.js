@@ -103,7 +103,7 @@ exports.updateFaculty = async (req, res, next) => {
     const { facultyData } = op1
     const { clubId, facultyEmail } = facultyData
     const  managedBy = facultyEmail
-    const data2 = {clubId,managedBy}
+    const data2 = {clubId,dataToUpdate:{managedBy:managedBy}}
     const op2 = await updateClubById(data2,session)
     if(!op2.success){
       

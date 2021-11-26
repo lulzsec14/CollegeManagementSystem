@@ -45,7 +45,7 @@ const {
       const { clubManagerData } = op1
       const { _id, clubId } = clubManagerData
       const clubManagers = _id
-      const data2 = {clubId,clubManagers}
+      const data2 = {clubId,dataToUpdate:{clubManagers:clubManagers}}
       const op2 = await updateClubArrayById(data2,session)
       if(!op2.success){
         
@@ -153,7 +153,7 @@ exports.deleteClubManager = async (req, res, next) => {
     const {clubManagerData } = op1
     const { _id, clubId } = clubManagerData
     const clubManagers = _id
-    const data2 = {clubId,clubManagers}
+    const data2 = {clubId,dataToUpdate:{clubManagers:clubManagers}}
     const op2 = await deleteFromClubArrayById(data2,session)
     if(!op2.success){
       
