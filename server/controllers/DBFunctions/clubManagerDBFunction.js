@@ -1,10 +1,10 @@
 const ClubManagers = require('../../models/ClubManagers');
 const textToHash = require('../../utilities/textToHashed')
-exports.getClubManagerByID = async (data) => {
+exports.getClubManagerById = async (data,session) => {
     try {
         
-        const { clubManagerID } = data
-        const findClubManager = await ClubManagers.findById( clubManagerID )
+        const { clubManagerId } = data
+        const findClubManager = await ClubManagers.findById( clubManagerId ).session(session)
         if(!findClubManager)
         {
             return {
@@ -31,11 +31,11 @@ exports.getClubManagerByID = async (data) => {
       }
 
 }
-exports.getClubManagerByRollNo = async (data) => {
+exports.getClubManagerByRollNo = async (data,session) => {
     try {
         
         const { studentRollNo } = data
-        const findClubManager = await ClubManagers.findOne({studentRollNo})
+        const findClubManager = await ClubManagers.findOne({studentRollNo}).session(session)
         if(!findClubManager)
         {
             return {
@@ -62,11 +62,11 @@ exports.getClubManagerByRollNo = async (data) => {
       }
 
 }
-exports.getClubManagersByClubID = async (data) => {
+exports.getClubManagersByClubId = async (data,session) => {
     try {
         
-        const { clubID } = data;
-        const findClubManagers = await ClubManagers.find({ clubID })
+        const { clubId } = data;
+        const findClubManagers = await ClubManagers.find({ clubId }).session(session)
         if(!findClubManagers)
         {
             return {
@@ -93,11 +93,11 @@ exports.getClubManagersByClubID = async (data) => {
       }
 
 }
-exports.insertClubManager = async (data) => {
+exports.insertClubManager = async (data,session) => {
     try
     {
-        const { studentRollNo, clubID, password, role } = data
-        const findClubManager = await ClubManagers.findOne({ studentRollNo })
+        const { studentRollNo, clubId, password, role } = data
+        const findClubManager = await ClubManagers.findOne({ studentRollNo }).session(session)
         if(findClubManager)
         {
             return {
@@ -109,11 +109,11 @@ exports.insertClubManager = async (data) => {
         const hashedPassword = textToHash(password)
         const ClubManager = new ClubManagers({
             studentRollNo, 
-            clubID, 
+            clubId, 
             password: hashedPassword, 
             role
         })
-        const clubManagerInserted = await ClubManager.save()
+        const clubManagerInserted = await ClubManager.save({session})
         return { success:true, clubManagerData:clubManagerInserted, code:201, message:"Club Manager created successfully"}
        
     }
@@ -127,17 +127,10 @@ exports.insertClubManager = async (data) => {
   }
     
 }
-exports.updateClubManagerByRollNo = async (data) => {
+exports.updateClubManagerByRollNo = async (data,session) => {
     try
     {
-        const dataToUpdate = {}
-        for(key in data)
-        {
-            if(key!=="clubManagerID"&&key!=="studentRollNo")
-            {
-                dataToUpdate[key] = data[key]
-            }
-        }
+        const dataToUpdate = data.dataToUpdate
         const {studentRollNo} = data
         if(dataToUpdate.password)
         {
@@ -145,7 +138,7 @@ exports.updateClubManagerByRollNo = async (data) => {
           dataToUpdate.password = hashedPassword
 
         }
-        const findClubManager = await ClubManagers.findOne({ studentRollNo })
+        const findClubManager = await ClubManagers.findOne({ studentRollNo }).session(session)
         if(!findClubManager)
         {
             return {
@@ -154,7 +147,7 @@ exports.updateClubManagerByRollNo = async (data) => {
                 code:400
               }
         }
-        const clubManagerUpdated = await ClubManagers.findOneAndUpdate({ studentRollNo },dataToUpdate,{new:true})
+        const clubManagerUpdated = await ClubManagers.findOneAndUpdate({ studentRollNo },dataToUpdate,{new:true}).session(session)
         return {success:true, clubManagerData:clubManagerUpdated, code:200, message:"Club Manager data updated successfully"}
        
     }
@@ -169,25 +162,19 @@ exports.updateClubManagerByRollNo = async (data) => {
     }
     
 }
-exports.updateClubManagerByID = async (data) => {
+exports.updateClubManagerById = async (data,session) => {
     try
     {
-        const dataToUpdate = {}
-        for(key in data)
-        {
-            if(key!=="clubManagerID"&&key!=="studentRollNo")
-            {
-                dataToUpdate[key] = data[key]
-            }
-        }
-        const {clubManagerID} = data
+      
+        const dataToUpdate = data.dataToUpdate
+        const {clubManagerId} = data
         if(dataToUpdate.password)
         {
           const hashedPassword = textToHash(dataToUpdate.password)
           dataToUpdate.password = hashedPassword
 
         }
-        const findClubManager = await ClubManagers.findById( clubManagerID )
+        const findClubManager = await ClubManagers.findById( clubManagerId ).session(session)
         if(!findClubManager)
         {
             return {
@@ -197,7 +184,7 @@ exports.updateClubManagerByID = async (data) => {
               }
         }
         
-        const clubManagerUpdated = await ClubManagers.findByIdAndUpdate(clubManagerID,dataToUpdate,{new:true})
+        const clubManagerUpdated = await ClubManagers.findByIdAndUpdate(clubManagerId,dataToUpdate,{new:true}).session(session)
         return {success:true,clubManagerData:clubManagerUpdated,code:200, message:"Club Manager updated successfully"}
        
     }
@@ -212,19 +199,13 @@ exports.updateClubManagerByID = async (data) => {
     
 }
 
-exports.updateClubManagerArrayByRollNo = async (data) => {
+exports.updateClubManagerArrayByRollNo = async (data,session) => {
     try
     {
-        const dataToUpdate = {}
-        for(key in data)
-        {
-            if(key==="taskList")
-            {
-                dataToUpdate[key] = data[key]
-            }
-        }
+        
+        const dataToUpdate = data.dataToUpdate
         const {studentRollNo} = data
-        const findClubManager = await ClubManagers.findOne({ studentRollNo })
+        const findClubManager = await ClubManagers.findOne({ studentRollNo }).session(session)
         if(!findClubManager)
         {
             return {
@@ -233,7 +214,7 @@ exports.updateClubManagerArrayByRollNo = async (data) => {
                 code: 404
               }
         }
-        const clubManagerUpdated = await ClubManagers.findOneAndUpdate({ studentRollNo },{ $addToSet: dataToUpdate },{new:true})
+        const clubManagerUpdated = await ClubManagers.findOneAndUpdate({ studentRollNo },{ $addToSet: dataToUpdate },{new:true}).session(session)
         return {success:true,clubManagerData:clubManagerUpdated,code:201,message:"Data inserted successfully in Club Manager array"}
        
     }
@@ -247,19 +228,13 @@ exports.updateClubManagerArrayByRollNo = async (data) => {
   }
     
 }
-exports.updateClubManagerArrayByID = async (data,session) => {
+exports.updateClubManagerArrayById = async (data,session) => {
     try
     {
-        const dataToUpdate = {}
-        for(key in data)
-        {
-            if(key==="taskList")
-            {
-                dataToUpdate[key] = data[key]
-            }
-        }
-        const {clubManagerID} = data
-        const findClubManager = await ClubManagers.findById( clubManagerID )
+      
+        const dataToUpdate = data.dataToUpdate
+        const {clubManagerId} = data
+        const findClubManager = await ClubManagers.findById( clubManagerId ).session(session)
         if(!findClubManager)
         {
             return {
@@ -268,7 +243,7 @@ exports.updateClubManagerArrayByID = async (data,session) => {
                 code:404
               }
         }
-        const clubManagerUpdated = await ClubManagers.findByIdAndUpdate(clubManagerID,{ $addToSet: dataToUpdate },{new:true}).session(session)
+        const clubManagerUpdated = await ClubManagers.findByIdAndUpdate(clubManagerId,{ $addToSet: dataToUpdate },{new:true}).session(session)
         return {success:true,clubManagerData:clubManagerUpdated,code:201,message:"Data inserted successfully in Club Manager array"}
        
     }
@@ -283,19 +258,13 @@ exports.updateClubManagerArrayByID = async (data,session) => {
     
 }
 
-exports.deleteFromClubManagerArrayByID = async (data) => {
+exports.deleteFromClubManagerArrayById = async (data,session) => {
     try
     {
-        const dataToUpdate = {}
-        for(key in data)
-        {
-            if(key==="taskList")
-            {
-                dataToUpdate[key] = data[key]
-            }
-        }
-        const {clubManagerID} = data
-        const findClubManager = await ClubManagers.findById(clubManagerID)
+      
+        const dataToUpdate = data.dataToUpdate
+        const {clubManagerId} = data
+        const findClubManager = await ClubManagers.findById(clubManagerId).session(session)
         if(!findClubManager)
         {
             return {
@@ -305,10 +274,10 @@ exports.deleteFromClubManagerArrayByID = async (data) => {
               }
         }
         const clubManagerUpdated = await ClubManagers.findByIdAndUpdate(
-            clubManagerID, 
+            clubManagerId, 
             { $pull: dataToUpdate },
             { safe: true, multi: true,new:true }
-          );
+          ).session(session);
         return {success:true,clubManagerData:clubManagerUpdated,code:200,message:"Data deleted successfully from Club Manager array"}
        
     }
@@ -322,19 +291,13 @@ exports.deleteFromClubManagerArrayByID = async (data) => {
   }
     
 }
-exports.deleteFromClubManagerArrayByRollNo = async (data) => {
+exports.deleteFromClubManagerArrayByRollNo = async (data,session) => {
     try
     {
-        const dataToUpdate = {}
-        for(key in data)
-        {
-            if(key==="taskList")
-            {
-                dataToUpdate[key] = data[key]
-            }
-        }
+        
+        const dataToUpdate = data.dataToUpdate
         const {studentRollNo} = data
-        const findClubManager = await ClubManagers.findOne({ studentRollNo })
+        const findClubManager = await ClubManagers.findOne({ studentRollNo }).session(session)
         if(!findClubManager)
         {
             return {
@@ -347,7 +310,7 @@ exports.deleteFromClubManagerArrayByRollNo = async (data) => {
             { studentRollNo },
             { $pull: dataToUpdate },
             { safe: true, multi: true,new:true }
-          );
+          ).session(session);
         return {success:true,clubManagerData:clubManagerUpdated,code:200,message:"Data deleted successfully from Club Manager array"}
        
     }
@@ -362,11 +325,11 @@ exports.deleteFromClubManagerArrayByRollNo = async (data) => {
     
 }
 
-exports.deleteClubManagerByRollNo = async (data) => {
+exports.deleteClubManagerByRollNo = async (data,session) => {
     try
     {
         const { studentRollNo } = data
-        const findClubManager = await ClubManagers.findOne({ studentRollNo })
+        const findClubManager = await ClubManagers.findOne({ studentRollNo }).session(session)
         if(!findClubManager)
         {
             return {
@@ -375,7 +338,7 @@ exports.deleteClubManagerByRollNo = async (data) => {
                 code: 404
               }
         }
-        const clubManagerDeleted = await ClubManagers.findOneAndDelete({studentRollNo})
+        const clubManagerDeleted = await ClubManagers.findOneAndDelete({studentRollNo}).session(session)
         return {success:true,clubManagerData:clubManagerDeleted,code:200,message:"Club Manager deleted successfully"}       
     }
     catch (error) {
@@ -388,11 +351,11 @@ exports.deleteClubManagerByRollNo = async (data) => {
   }
     
 }
-exports.deleteClubManagerByID = async (data) => {
+exports.deleteClubManagerById = async (data,session) => {
     try
     {
-        const { clubManagerID } = data
-        const findClubManager = await ClubManagers.findById( clubManagerID )
+        const { clubManagerId } = data
+        const findClubManager = await ClubManagers.findById( clubManagerId ).session(session)
         if(!findClubManager)
         {
             return {
@@ -401,7 +364,7 @@ exports.deleteClubManagerByID = async (data) => {
                 code: 404,
               }
         }
-        const clubManagerDeleted = await ClubManagers.findByIdAndDelete(clubManagerID)
+        const clubManagerDeleted = await ClubManagers.findByIdAndDelete(clubManagerId).session(session)
         return {success:true,clubManagerData:clubManagerDeleted,code:200,message:"Club Manager deleted successfully"}       
     }
     catch (error) {
@@ -414,10 +377,10 @@ exports.deleteClubManagerByID = async (data) => {
   }
     
 }
-exports.deleteClubManagersByClubID = async (data) => {
+exports.deleteClubManagersByClubId = async (data,session) => {
     try {
-      const { clubID } = data;
-      const clubManagersDeleted = await ClubManagers.deleteMany({ clubID });
+      const { clubId } = data;
+      const clubManagersDeleted = await ClubManagers.deleteMany({ clubId }).session(session);
       return { success: true, clubManagerData: clubManagersDeleted, code:200, message:"Club Managers deleted successfully" };
     } 
     catch (error) {

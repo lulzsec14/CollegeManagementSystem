@@ -11,9 +11,9 @@ const facultySchema = mongoose.Schema({
         maxlength:[40,"Character limit exceeded: 40"]
 
     },
-    email:{
+    facultyEmail:{
         type:String,
-        required:[true,"Please enter email"],
+        required:[true,"Please enter faculty email"],
         unique:true,
         index:true,
         validate: {
@@ -37,10 +37,10 @@ const facultySchema = mongoose.Schema({
             message:"Please enter a valid phone number"
           }
     },
-    clubID: { 
+    clubId: { 
         type: Schema.Types.ObjectId, 
         ref: 'Clubs',
-        unique:true
+        default:null
     }
 
 

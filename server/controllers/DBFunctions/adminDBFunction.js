@@ -2,11 +2,17 @@
 const Admin = require('../../models/Admin');
 const textToHash = require('../../utilities/textToHashed');
 const comparePasswords = require('../../utilities/comparePasswords');
-const validateCreateAdmin = require('../../Validators/AdminValidators');
+// const validateCreateAdmin = require('../../Validators/AdminValidators');
+const {
+  validateCreateAdmin,
+  validateUpdateAdmin,
+  validateDeleteAdmin,
+} = require('../../Validators/AdminValidators');
 // ------------------------------------
 
 // Function for registering an Admin
 exports.registerAdmin = async (data) => {
+  data.email = data.email.toLowerCase();
   const { email, name, password, phoneNo } = data;
   const validationError = validateCreateAdmin(data);
   if (validationError) {
@@ -84,7 +90,16 @@ exports.retrieveAllAdmins = async (data) => {
 // ------------------------------------
 
 exports.updateAdminDetails = async (data) => {
+  data.email = data.email.toLowerCase();
+
+  const validationError = validateUpdateAdmin(data);
+  if (validationError) {
+    const { details } = validationError;
+    return { success: false, code: 400, error: details[0].message };
+  }
+
   try {
+    console.log(data);
     const { email } = data;
     const findAdmin = await Admin.findOne({ email });
     if (!findAdmin) {
@@ -162,6 +177,11 @@ exports.updateAdminPassword = async (data) => {
 
 // Function to delete an Admin
 exports.deleteSingleAdmin = async (data) => {
+  const validationError = validateDeleteAdmin(data);
+  if (validationError) {
+    const { details } = validationError;
+    return { success: false, code: 400, error: details[0].message };
+  }
   try {
     const { email } = data;
     const findAdmin = await Admin.findOne({ email });

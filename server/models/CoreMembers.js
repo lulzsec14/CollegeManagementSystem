@@ -8,10 +8,10 @@ const coreMembersSchema = mongoose.Schema({
         type: String,
         required:[true,"Student Roll no can't be empty"],
     },
-    clubID: { 
+    clubId: { 
         type: Schema.Types.ObjectId, 
         ref: 'Clubs',
-        required:[true,"Club ID can't be empty"],
+        required:[true,"Club Id can't be empty"],
     },
     password: {
         type:String,
