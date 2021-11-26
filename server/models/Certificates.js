@@ -11,6 +11,15 @@ const certificateSchema = new Schema({
     index: true,
     trim: true,
   },
+  email: {
+    type: String,
+    trim: true,
+    required: true,
+    match: [
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+      "Please provide a valid email",
+    ],
+  },
   eventId: {
     type: Schema.Types.ObjectId,
     ref: "Events",

@@ -1,7 +1,7 @@
-const moongose = require("mongoose");
-// require("mongoose-type-url");
+const mongoose = require("mongoose");
+require("mongoose-type-url");
 
-const Schema = moongose.Schema;
+const Schema = mongoose.Schema;
 //schema for new Event
 const eventSchema = new Schema({
   clubId: {
@@ -26,7 +26,9 @@ const eventSchema = new Schema({
     required: true,
   },
   posterURL: {
-    type: String, //validate
+    type: String,
+    work: mongoose.SchemaTypes.Url,
+    profile: mongoose.SchemaTypes.Url,
     required: true,
     createdDate: Date.now,
   },
@@ -43,10 +45,6 @@ const eventSchema = new Schema({
       email: {
         type: String,
         trim: true,
-        required: true,
-        index: true,
-        unique: true,
-        sparse: true,
         match: [
           /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
           "Please provide a valid email",
@@ -55,19 +53,13 @@ const eventSchema = new Schema({
       rollNo: {
         type: String,
         trim: true,
-        required: true,
-        index: true,
-        unique: true,
-        sparse: true,
+        required: [true, "Please provide a Roll number!"],
       },
       studentId: {
-        type: moongose.Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: "Students",
         trim: true,
-        required: true,
-        index: true,
-        unique: true,
-        sparse: true,
+        required: [true, "Please provide studentID!"],
       },
     },
   ],
@@ -97,7 +89,7 @@ const eventSchema = new Schema({
   attended: [
     {
       studentId: {
-        type: moongose.Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: "Students",
         trim: true,
         required: true,
@@ -153,7 +145,7 @@ const eventSchema = new Schema({
 });
 
 //generatig model for new Event
-const Events = moongose.model("Events", eventSchema);
+const Events = mongoose.model("Events", eventSchema);
 
 //exporting Event model
 module.exports = Events;

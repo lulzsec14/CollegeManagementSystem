@@ -3,16 +3,17 @@ const joi = require("joi");
 //exporting this function for validation call
 module.exports = (data) => {
   const schema = joi.object({
-    clubId: joi.string(),
+    clubId: joi.string().required(),
     isPrivate: joi.boolean(),
     eventName: joi.string(),
     eventDescription: joi.string().min(200),
     posterURL: joi.string(),
     registered: joi.array().items(
       joi.object({
-        name: joi.string().required(),
+        name: joi.string(),
         email: joi.string().required(),
-        strudentId: joi.string(),
+        rollNo: joi.string(),
+        studentId: joi.string(),
       })
     ),
     eventTime: joi.string().required(),
@@ -22,22 +23,14 @@ module.exports = (data) => {
     attended: joi.array().items(
       joi.object({
         studentId: joi.string(),
-        isPresent: joi.boolean().required(),
-        position: joi.string(),
+        rollNo: joi.string(),
+        ispresent: joi.boolean().required(),
       })
     ),
     position: joi.array().items(
-      joi
-        .object({
-          first: joi.string(),
-        })
-        .required(),
-      joi
-        .object({
-          second: joi.string(),
-        })
-        .required(),
       joi.object({
+        first: joi.string(),
+        second: joi.string(),
         third: joi.string(),
       })
     ),

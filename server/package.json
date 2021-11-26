@@ -20,6 +20,7 @@
     "express-session": "^1.17.2",
     "joi": "^17.4.2",
     "mongoose": "^6.0.13",
+    "mongoose-type-url": "^2.1.0",
     "validator": "^13.7.0"
   },
   "devDependencies": {
