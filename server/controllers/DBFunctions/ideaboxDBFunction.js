@@ -1,31 +1,29 @@
 const Ideabox = require("../../models/Ideabox");
-// const validateCreateIdeabox = require();
+const validateCreateIdeabox = require('../../Validators/IdeaboxValidators');
 
-exports.createIdea = async(data) => {	
+exports.createIdea = async(data, session) => {	
 	const {ideaDescription, givenBy, clubId} = data;
 	try {
-		// const error = validateCreateIdeabox(data);
-		// if(error) {
-		// 	const {details} = error;
-		// 	return {
-		// 		success: false,
-		// 		code: 400,
-		// 		error: details[0].message
-		// 	}
-		// }
+		const error = validateCreateIdeabox(data);
+		if(error) {
+			const {details} = error;
+			return {
+				success: false,
+				code: 400,
+				error: details[0].message
+			}
+		}
 		
-		const idea = await Ideabox.create({
+		const idea = await Ideabox.create([{
 			ideaDescription,
 			givenBy,
 			clubId
-		});
-
-		const createIdea = await idea.save();
+		}], {session: session});
 
 		return {
 			success: true,
 			code: 201,
-			ideaData: createIdea,
+			ideaData: idea,
 			message: "Idea created successfully!"
 		}
 	} catch(error) {
@@ -38,10 +36,10 @@ exports.createIdea = async(data) => {
 	}
 }
 
-exports.getIdea = async(data) => {
+exports.getIdea = async(data, session) => {
 	try {
 		const {ideaId} = data;
-		const findIdea = await Ideabox.findById(ideaId);
+		const findIdea = await Ideabox.findById(ideaId).session(session);
 		if(!findIdea) {
 			return {
 				success: false,
@@ -65,10 +63,10 @@ exports.getIdea = async(data) => {
 	}
 }
 
-exports.getIdeasByClub = async(data) => {
+exports.getIdeasByClub = async(data, session) => {
 	try {
 		const {clubId} = data;
-		const findIdeas = await Ideabox.find({clubId});
+		const findIdeas = await Ideabox.find({clubId}).session(session);
 		if(!findIdeas) {
 			return {
 				success: false,
@@ -92,10 +90,10 @@ exports.getIdeasByClub = async(data) => {
 	}
 }
 
-exports.deleteIdea = async(data) => {
+exports.deleteIdea = async(data, session) => {
 	try {
 		const {ideaId} = data;
-		const findIdea = await Ideabox.findById(ideaId)
+		const findIdea = await Ideabox.findById(ideaId).session(session)
 		if(!findIdea) {
 			return {
 				success : false,
@@ -103,7 +101,7 @@ exports.deleteIdea = async(data) => {
 				error: 'Idea does not exist'
 			}
 		}
-		const deletedIdea = await Ideabox.findByIdAndDelete(ideaId);
+		const deletedIdea = await Ideabox.findByIdAndDelete(ideaId).session(session);
 		return {
 			success: true,
 			code: 200,

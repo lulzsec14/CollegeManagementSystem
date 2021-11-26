@@ -33,3 +33,8 @@ coreMemberRouter.route('/getTaskById').get(getTask);
 coreMemberRouter.route('/updateTaskById').put(updateTask);
 coreMemberRouter.route('/getAllTasksOfCoreMemberByCoreMemberId').get(getAllTasksOfCoreMember);
 coreMemberRouter.route('/getAllTasksByClubId').get(getAllTasksOfClub);
+
+
+// Exports
+module.exports = coreMemberRouter;
+// --------------------------

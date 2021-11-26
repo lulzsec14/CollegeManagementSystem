@@ -10,7 +10,7 @@ const {
 
 const {
   updateClubById
-} = require('../DBFunctions/clubssDBFunction');
+} = require('../DBFunctions/clubsDBFunction');
 // ------------------------------------
 
 // Adding faculty
@@ -147,7 +147,4 @@ exports.deleteFaculty = async (req, res, next) => {
     console.log(err);
     res.status(500).json({ error: 'Server Error' });
   }
-  
-  
 };
-

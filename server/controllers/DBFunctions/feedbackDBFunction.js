@@ -1,31 +1,29 @@
 const Feedback = require("../../models/Feedback");
-// const validateCreateFeedback = require();
+const validateCreateFeedback = require('../../Validators/FeedbackValidator');
 
-exports.createFeedback = async(data) => {	
+exports.createFeedback = async(data, session) => {	
 	const {feedbackBody, feedbackBy, clubId} = data;
 	try {
-		// const error = validateCreateFeedback(data);
-		// if(error) {
-		// 	const {details} = error;
-		// 	return {
-		// 		success: false,
-		// 		code: 400,
-		// 		error: details[0].message
-		// 	}
-		// }
+		const error = validateCreateFeedback(data);
+		if(error) {
+			const {details} = error;
+			return {
+				success: false,
+				code: 400,
+				error: details[0].message
+			}
+		}
 		
-		const feedback = await Feedback.create({
+		const feedback = await Feedback.create([{
 			feedbackBody,
 			feedbackBy,
 			clubId
-		});
-
-		const createFeedback = await feedback.save();
+		}], {session: session});
 
 		return {
 			success: true,
 			code: 201,
-			feedbackData: createFeedback,
+			feedbackData: feedback,
 			message: "Feedback created successfully!"
 		}
 	} catch(error) {
@@ -38,10 +36,10 @@ exports.createFeedback = async(data) => {
 	}
 }
 
-exports.getFeedback = async(data) => {
+exports.getFeedback = async(data, session) => {
 	try {
 		const {feedbackId} = data;
-		const findFeedback = await Feedback.findById(feedbackId);
+		const findFeedback = await Feedback.findById(feedbackId).session(session);
 		if(!findFeedback) {
 			return {
 				success: false,
@@ -65,10 +63,10 @@ exports.getFeedback = async(data) => {
 	}
 }
 
-exports.getFeedbacksByClub = async(data) => {
+exports.getFeedbacksByClub = async(data, session) => {
 	try {
 		const {clubId} = data;
-		const findFeedbacks = await Feedback.find({clubId});
+		const findFeedbacks = await Feedback.find({clubId}).session(session);
 		if(!findFeedbacks) {
 			return {
 				success: false,
@@ -92,10 +90,10 @@ exports.getFeedbacksByClub = async(data) => {
 	}
 }
 
-exports.deleteFeedback = async(data) => {
+exports.deleteFeedback = async(data, session) => {
 	try {
 		const {feedbackId} = data;
-		const findFeedback = await Feedback.findById(feedbackId)
+		const findFeedback = await Feedback.findById(feedbackId).session(session)
 		if(!findFeedback) {
 			return {
 				success : false,
@@ -103,7 +101,7 @@ exports.deleteFeedback = async(data) => {
 				error: 'Feedback does not exist'
 			}
 		}
-		const deletedFeedback = await Feedback.findByIdAndDelete(feedbackId);
+		const deletedFeedback = await Feedback.findByIdAndDelete(feedbackId).session(session);
 		return {
 			success: true,
 			code: 200,

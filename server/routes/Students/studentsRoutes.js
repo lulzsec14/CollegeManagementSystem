@@ -24,6 +24,8 @@ const {
   deleteFromAnyStudentArray,
   deleteFromAnyStudentArrayById,
 } = require('../../controllers/Student/studentController');
+
+const { createFeedback, getFeedback, deleteFeedback } = require("../../controllers/Feedback/feedbackController");
 // ------------------------------------
 
 // Api Route
@@ -49,6 +51,11 @@ studentRouter.route('/deleteStudentArray').delete(deleteFromAnyStudentArray);
 studentRouter
   .route('/deleteStudentArrayById')
   .delete(deleteFromAnyStudentArrayById);
+
+// Feedback Router
+studentRouter.route('/addFeedback').post(createFeedback);
+studentRouter.route('/getFeedbackById').get(getFeedback);
+studentRouter.route('/deleteFeedbackById').delete(deleteFeedback);
 // ------------------------------------
 
 // Exports
