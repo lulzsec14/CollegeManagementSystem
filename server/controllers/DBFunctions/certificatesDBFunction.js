@@ -1,16 +1,17 @@
 const Certificates = require("../../models/Certificates");
 
-exports.createCertificate = async (data) => {
+exports.createCertificate = async (data, session) => {
   try {
     const { studentId, eventId, clubId, certificateURL } = data;
 
     const certificate = new Certificates({
       studentId,
+      email,
       eventId,
       clubId,
       certificateURL,
     });
-    const certificateCreated = await certificate.save();
+    const certificateCreated = await certificate.save({ session });
     return {
       success: true,
       certificateData: certificateCreated,
@@ -147,10 +148,12 @@ exports.getAllCertificatesByClubId = async (data) => {
 
 //-----------------------------------------------------------------------
 
-exports.deleteCertificateById = async (data) => {
+exports.deleteCertificateById = async (data, session) => {
   try {
     const { certificateId } = data;
-    const findCertificate = await Certificates.findById(certificateId);
+    const findCertificate = await Certificates.findById(certificateId).session(
+      session
+    );
     if (!findCertificate) {
       return {
         success: false,
@@ -160,7 +163,7 @@ exports.deleteCertificateById = async (data) => {
     }
     const certificateDeleted = await Certificates.findByIdAndDelete(
       certificateId
-    );
+    ).session(session);
     return {
       success: true,
       certificateData: certificateDeleted,

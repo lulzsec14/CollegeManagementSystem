@@ -115,7 +115,7 @@ exports.getAllEvents = async () => {
 
 //--------------------------------------------------------------
 
-exports.createEvent = async (data) => {
+exports.createEvent = async (data, session) => {
   const error = validateEvent(data);
   if (error) {
     return {
@@ -138,7 +138,9 @@ exports.createEvent = async (data) => {
       deadlineTime,
     } = data;
 
-    const findEvent = await Events.findOne({ eventName, clubId });
+    const findEvent = await Events.findOne({ eventName, clubId }).session(
+      session
+    );
     if (findEvent) {
       return {
         success: false,
@@ -157,7 +159,7 @@ exports.createEvent = async (data) => {
       eventVenue,
       deadlineTime,
     });
-    const eventCreated = await event.save();
+    const eventCreated = await event.save({ session });
     return {
       success: true,
       eventData: eventCreated,
@@ -329,7 +331,7 @@ exports.updateEventById = async (data) => {
 
 //--------------------------------------------------------------
 
-exports.setRegistrationsByEventId = async (data) => {
+exports.setRegistrationsByEventId = async (data, session) => {
   try {
     const dataToUpdate = {};
     for (key in data) {
@@ -339,7 +341,7 @@ exports.setRegistrationsByEventId = async (data) => {
     }
     const { eventId } = data;
 
-    const findEvent = await Events.findById(eventId);
+    const findEvent = await Events.findById(eventId).session(session);
 
     if (!findEvent) {
       return {
@@ -354,7 +356,8 @@ exports.setRegistrationsByEventId = async (data) => {
         $addToSet: dataToUpdate,
       },
       { new: true }
-    );
+    ).session(session);
+
     return {
       success: true,
       code: 200,
@@ -373,7 +376,7 @@ exports.setRegistrationsByEventId = async (data) => {
 
 //--------------------------------------------------------------
 
-exports.setAttendanceByEventId = async (data) => {
+exports.setAttendanceByEventId = async (data, session) => {
   try {
     const dataToUpdate = {};
     for (key in data) {
@@ -382,7 +385,7 @@ exports.setAttendanceByEventId = async (data) => {
       }
     }
     const { eventId } = data;
-    const findEvent = await Events.findById(eventId);
+    const findEvent = await Events.findById(eventId).session(session);
 
     if (!findEvent) {
       return {
@@ -398,7 +401,7 @@ exports.setAttendanceByEventId = async (data) => {
         $addToSet: dataToUpdate,
       },
       { new: true }
-    );
+    ).session(session);
 
     return {
       success: true,
@@ -463,10 +466,12 @@ exports.setPositionsByEventId = async (data) => {
 
 //--------------------------------------------------------------
 
-exports.deleteEventById = async (data) => {
+exports.deleteEventById = async (data, session) => {
   try {
     const { eventId } = data;
-    const eventDeleted = await Events.findByIdAndDelete(eventId);
+    const eventDeleted = await Events.findByIdAndDelete(eventId).session(
+      session
+    );
     return {
       success: true,
       code: 200,
