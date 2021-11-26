@@ -119,7 +119,7 @@ exports.getFacultyByClubId = async (data,session) => {
 exports.insertFaculty = async (data,session) => {
     try
     {
-        const { facultyName, facultyEmail, password, phone, clubId } = data
+        const { facultyName, facultyEmail, password, phone } = data
         const findFaculty = await Faculty.findOne({ facultyEmail }).session(session)
         if(findFaculty)
         {
@@ -135,8 +135,7 @@ exports.insertFaculty = async (data,session) => {
             facultyName, 
             facultyEmail, 
             password: hashedPassword, 
-            phone, 
-            clubId
+            phone
             
         })
         const facultyInserted = await faculty.save({session})
@@ -157,6 +156,8 @@ exports.updateFacultyByFacultyEmail = async (data,session) => {
     try
     {
         const dataToUpdate = data.dataToUpdate
+        
+        console.log(dataToUpdate)
         const {facultyEmail} = data
         if(dataToUpdate.password)
         {
@@ -175,6 +176,17 @@ exports.updateFacultyByFacultyEmail = async (data,session) => {
         }
         if(dataToUpdate.facultyEmailNew)
         {
+            const facultyEmailNew = dataToUpdate.facultyEmailNew
+            console.log(facultyEmailNew)
+            const findFaculty1 = await Faculty.findOne({ facultyEmail:facultyEmailNew }).session(session)
+            if(findFaculty1)
+            {
+                return {
+                   success: false,
+                   error: 'Faculty with this email already exists!',
+                   code:400
+                }
+            }
             dataToUpdate.facultyEmail=dataToUpdate.facultyEmailNew
         }
         const facultyUpdated = await Faculty.findOneAndUpdate({ facultyEmail },dataToUpdate,{new:true}).session(session)
@@ -182,7 +194,6 @@ exports.updateFacultyByFacultyEmail = async (data,session) => {
        
     }
     catch (error) {
-        console.log(error)
         return {
             success: false,
             error: 'Server Error',
@@ -203,10 +214,7 @@ exports.updateFacultyById = async (data,session) => {
           dataToUpdate.password = hashedPassword
 
         }
-        if(dataToUpdate.facultyEmailNew)
-        {
-            dataToUpdate.facultyEmail=dataToUpdate.facultyEmailNew
-        }
+       
         const {facultyId} = data
         const findFaculty = await Faculty.findById( facultyId ).session(session)
         if(!findFaculty)
@@ -216,6 +224,20 @@ exports.updateFacultyById = async (data,session) => {
                 error: 'Faculty does not exist!',
                 code:400
               }
+        }
+        if(dataToUpdate.facultyEmailNew)
+        {
+            const facultyEmailNew = dataToUpdate.facultyEmailNew
+            const findFaculty1 = await Faculty.findOne({ facultyEmail:facultyEmailNew }).session(session)
+            if(findFaculty1)
+            {
+                return {
+                   success: false,
+                   error: 'Faculty with this email already exists!',
+                   code:400
+                }
+            }
+            dataToUpdate.facultyEmail=dataToUpdate.facultyEmailNew
         }
         
         const facultyUpdated = await Faculty.findByIdAndUpdate(facultyId,dataToUpdate,{new:true}).session(session)

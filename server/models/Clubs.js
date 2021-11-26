@@ -64,7 +64,6 @@ const clubsSchema = mongoose.Schema({
         type: String, // faculty email
         required:[true,"Please insert faculty email"],
         default:"",
-        unique: true
     }
 
 
