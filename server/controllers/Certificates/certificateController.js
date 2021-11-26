@@ -62,7 +62,10 @@ exports.createCertificate = async (req, res, next) => {
     }
 
     //updating Club array from club db function
-    const updateDataForClub = { clubId, certificates };
+    const updateDataForClub = {
+      clubId,
+      dataToUpdate: { certificates: certificates },
+    };
     const result2 = await updateClubArrayByClubID(updateDataForClub, session);
     if (result2.success == false) {
       await session.abortTransaction();
@@ -241,7 +244,10 @@ exports.deleteCertificateById = async (req, res, next) => {
     }
 
     //deleteing from Club array by club db function
-    const deleteDataForClub = { clubId, certificates };
+    const deleteDataForClub = {
+      clubId,
+      dataToUpdate: { certificates: certificates },
+    };
     const result2 = await deleteFromClubArrayByID(deleteDataForClub);
     if (result2.success == false) {
       await session.abortTransaction();
@@ -272,7 +278,7 @@ exports.deleteCertificateById = async (req, res, next) => {
   session.endSession();
 };
 
-//---------------------------------------------HOW WE APPLY TRANSACTIONS IN LAST TWO FUNCTIONS-------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------
 
 exports.deleteCertificateByEventId = async (req, res, next) => {
   try {

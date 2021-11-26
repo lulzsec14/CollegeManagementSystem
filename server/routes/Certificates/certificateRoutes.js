@@ -17,15 +17,15 @@ const {
 
 // ------------------------------------
 
-//Api Route
-certificateRouter.route("/create").post(createCertificate);
-certificateRouter.route("/certificate").get(getCertificateById);
-certificateRouter.route("/studentCertificate").get(getCertificateByStudentId);
-certificateRouter.route("/eventCertificate").get(getCertificateByEventId);
-certificateRouter.route("/clubCertificate").get(getCertificateByClubId);
-certificateRouter.route("/deleteCertificate").delete(deleteCertificateById);
-certificateRouter.route("/deleteEventCertificate").delete(deleteCertificateByEventId);
-certificateRouter.route("/deleteClubCertificate").delete(deleteCertificateByClubId);
+// Certifiacte Routes
+certificateRouter.route("/createCertificate").post(createCertificate);
+certificateRouter.route("/getCertificateById").get(getCertificateById);
+certificateRouter.route("/getCertificateByStudentId").get(getCertificateByStudentId);
+certificateRouter.route("/getCertificateByEventId").get(getCertificateByEventId);
+certificateRouter.route("/getCertificateByEventId").get(getCertificateByClubId);
+certificateRouter.route("/deleteCertificateById").delete(deleteCertificateById);
+certificateRouter.route("/deleteCertificateByEventId").delete(deleteCertificateByEventId);
+certificateRouter.route("/deleteCertificateByClubId").delete(deleteCertificateByClubId);
 
 // ------------------------------------
 
