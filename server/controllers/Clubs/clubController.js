@@ -34,7 +34,6 @@ exports.addClub = async (req, res, next) => {
     const facultyEmail = managedBy
     const data2 = {facultyEmail,dataToUpdate:{clubId:_id}}
     const op2 = await updateFacultyByFacultyEmail(data2,session)
-    console.log(op2)
     if(!op2.success){
       
       await session.abortTransaction()

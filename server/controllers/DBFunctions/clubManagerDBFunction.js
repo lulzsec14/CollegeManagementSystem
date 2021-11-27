@@ -62,11 +62,11 @@ exports.getClubManagerByRollNo = async (data,session) => {
       }
 
 }
-exports.getClubManagersByClubId = async (data,session) => {
+exports.getClubManagersByClubIndex = async (data,session) => {
     try {
         
-        const { clubId } = data;
-        const findClubManagers = await ClubManagers.find({ clubId }).session(session)
+        const { clubIndex } = data;
+        const findClubManagers = await ClubManagers.find({ clubIndex }).session(session)
         if(!findClubManagers)
         {
             return {
@@ -96,7 +96,7 @@ exports.getClubManagersByClubId = async (data,session) => {
 exports.insertClubManager = async (data,session) => {
     try
     {
-        const { studentRollNo, clubId, password, role } = data
+        const { studentRollNo, clubIndex, password, role } = data
         const findClubManager = await ClubManagers.findOne({ studentRollNo }).session(session)
         if(findClubManager)
         {
@@ -109,7 +109,7 @@ exports.insertClubManager = async (data,session) => {
         const hashedPassword = textToHash(password)
         const ClubManager = new ClubManagers({
             studentRollNo, 
-            clubId, 
+            clubIndex, 
             password: hashedPassword, 
             role
         })
@@ -199,132 +199,6 @@ exports.updateClubManagerById = async (data,session) => {
     
 }
 
-exports.updateClubManagerArrayByRollNo = async (data,session) => {
-    try
-    {
-        
-        const dataToUpdate = data.dataToUpdate
-        const {studentRollNo} = data
-        const findClubManager = await ClubManagers.findOne({ studentRollNo }).session(session)
-        if(!findClubManager)
-        {
-            return {
-                success: false,
-                error: 'Club Manager does not exist!',
-                code: 404
-              }
-        }
-        const clubManagerUpdated = await ClubManagers.findOneAndUpdate({ studentRollNo },{ $addToSet: dataToUpdate },{new:true}).session(session)
-        return {success:true,clubManagerData:clubManagerUpdated,code:201,message:"Data inserted successfully in Club Manager array"}
-       
-    }
-    catch (error) {
-    console.log(error)
-    return {
-      success: false,
-      code:500,
-      error:'Server Error'
-    };
-  }
-    
-}
-exports.updateClubManagerArrayById = async (data,session) => {
-    try
-    {
-      
-        const dataToUpdate = data.dataToUpdate
-        const {clubManagerId} = data
-        const findClubManager = await ClubManagers.findById( clubManagerId ).session(session)
-        if(!findClubManager)
-        {
-            return {
-                success: false,
-                error: 'Club Manager does not exist!',
-                code:404
-              }
-        }
-        const clubManagerUpdated = await ClubManagers.findByIdAndUpdate(clubManagerId,{ $addToSet: dataToUpdate },{new:true}).session(session)
-        return {success:true,clubManagerData:clubManagerUpdated,code:201,message:"Data inserted successfully in Club Manager array"}
-       
-    }
-    catch (error) {
-        console.log(error)
-        return {
-          success: false,
-          code:500,
-          error:'Server Error'
-        };
-      }
-    
-}
-
-exports.deleteFromClubManagerArrayById = async (data,session) => {
-    try
-    {
-      
-        const dataToUpdate = data.dataToUpdate
-        const {clubManagerId} = data
-        const findClubManager = await ClubManagers.findById(clubManagerId).session(session)
-        if(!findClubManager)
-        {
-            return {
-                success: false,
-                error: 'Club Manager does not exist!',
-                code: 404
-              }
-        }
-        const clubManagerUpdated = await ClubManagers.findByIdAndUpdate(
-            clubManagerId, 
-            { $pull: dataToUpdate },
-            { safe: true, multi: true,new:true }
-          ).session(session);
-        return {success:true,clubManagerData:clubManagerUpdated,code:200,message:"Data deleted successfully from Club Manager array"}
-       
-    }
-    catch (error) {
-    console.log(error)
-    return {
-      success: false,
-      code:500,
-      error:'Server Error'
-    };
-  }
-    
-}
-exports.deleteFromClubManagerArrayByRollNo = async (data,session) => {
-    try
-    {
-        
-        const dataToUpdate = data.dataToUpdate
-        const {studentRollNo} = data
-        const findClubManager = await ClubManagers.findOne({ studentRollNo }).session(session)
-        if(!findClubManager)
-        {
-            return {
-                success: false,
-                error: 'Club Manager does not exist!',
-                code: 404
-              }
-        }
-        const clubManagerUpdated = await ClubManagers.findOneAndUpdate(
-            { studentRollNo },
-            { $pull: dataToUpdate },
-            { safe: true, multi: true,new:true }
-          ).session(session);
-        return {success:true,clubManagerData:clubManagerUpdated,code:200,message:"Data deleted successfully from Club Manager array"}
-       
-    }
-    catch (error) {
-    console.log(error)
-    return {
-      success: false,
-      code:500,
-      error:'Server Error'
-    };
-  }
-    
-}
-
 exports.deleteClubManagerByRollNo = async (data,session) => {
     try
     {
@@ -377,10 +251,10 @@ exports.deleteClubManagerById = async (data,session) => {
   }
     
 }
-exports.deleteClubManagersByClubId = async (data,session) => {
+exports.deleteClubManagersByClubIndex = async (data,session) => {
     try {
-      const { clubId } = data;
-      const clubManagersDeleted = await ClubManagers.deleteMany({ clubId }).session(session);
+      const { clubIndex } = data;
+      const clubManagersDeleted = await ClubManagers.deleteMany({ clubIndex }).session(session);
       return { success: true, clubManagerData: clubManagersDeleted, code:200, message:"Club Managers deleted successfully" };
     } 
     catch (error) {

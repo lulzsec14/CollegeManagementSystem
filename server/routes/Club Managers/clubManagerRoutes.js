@@ -5,7 +5,7 @@ const clubManagerRouter = express.Router();
 // controller imports
 
 const { getClub } = require('../../controllers/Clubs/clubController');
-const { getClubManager,getAllClubManagers,updateClubManager } = require('../../controllers/Club Managers/clubManagerController');
+const { getClubManager,getAllClubManagersByClubIndex,updateClubManager } = require('../../controllers/Club Managers/clubManagerController');
 const { addCoreMember,getCoreMember,getAllCoreMembers,deleteCoreMember } = require('../../controllers/Core Members/coreMemberController');
 const { addTask,getTask,getAllTasksOfClub,updateTask,deleteTask } = require('../../controllers/Task List/taskListController');
 const { createIdea, getIdea, getIdeasByClub, deleteIdea } = require("../../controllers/Idea Box/ideaBoxController");
@@ -29,7 +29,7 @@ clubManagerRouter.route('/getAllCoreMembersByClubId').get(getAllCoreMembers);
 
 clubManagerRouter.route('/getClubManagerByRollNo').get(getClubManager);
 clubManagerRouter.route('/updateClubManagerById').put(updateClubManager);
-clubManagerRouter.route('/getAllClubManagersById').get(getAllClubManagers);
+clubManagerRouter.route('/getAllClubManagersByClubIndex').get(getAllClubManagersByClubIndex);
 
 // club manager task list routes
 
