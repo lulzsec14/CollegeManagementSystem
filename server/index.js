@@ -21,7 +21,7 @@ const PORT = process.env.PORT || 5000;
 const {
   adminRouter,
   coreMemberRouter,
-	clubManagerRouter,
+  clubManagerRouter,
   eventsRouter,
   certificateRouter,
   studentRouter,

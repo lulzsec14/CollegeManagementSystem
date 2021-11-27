@@ -1,4 +1,5 @@
 const Clubs = require('../../models/Clubs');
+const Faculty = require('../../models/Faculty');
 exports.getClubByIndex = async (data,session) => {
     try {
         
@@ -77,7 +78,7 @@ exports.getAllClubs = async (session) => {
             success: true,
             clubData: findClubs,
             code: 200, 
-            message:"Club found and data returned"
+            message:"Clubs found and data returned"
           }
 
     }
@@ -95,6 +96,17 @@ exports.insertClub = async (data,session) => {
     try
     {
         const { clubIndex, clubName, clubDescription, managedBy } = data
+        const facultyEmail = managedBy
+        const findFaculty = await Faculty.findOne({facultyEmail}).session(session)
+        if(!findFaculty)
+        {
+          return {
+            success: false,
+            error: 'Faculty of this email does not exist!',
+            code:400
+          }
+
+        }
         const findClub = await Clubs.findOne({ clubIndex }).session(session)
         if(findClub)
         {
@@ -129,6 +141,20 @@ exports.updateClubByIndex = async (data,session) => {
     {
       
         const dataToUpdate = data.dataToUpdate
+        if(dataToUpdate.managedBy)
+        {
+          const facultyEmail = dataToUpdate.managedBy
+          const findFaculty = await Faculty.findOne({facultyEmail}).session(session)
+          if(!findFaculty)
+          {
+            return {
+              success: false,
+              error: 'Faculty of this email does not exist!',
+              code:400
+            }
+
+          }
+        }
         const {clubIndex} = data
         const findClub = await Clubs.findOne({ clubIndex }).session(session)
         if(!findClub)
@@ -138,10 +164,6 @@ exports.updateClubByIndex = async (data,session) => {
                 error: 'Club does not exist!',
                 code: 404
               }
-        }
-        if(dataToUpdate.clubIndexNew)
-        {
-            dataToUpdate.clubIndex=dataToUpdate.clubIndexNew
         }
         const clubUpdated = await Clubs.findOneAndUpdate({ clubIndex }, dataToUpdate, {new:true} ).session(session)
         return {success:true,clubData:clubUpdated,code:200, message:"Club updated successfully"}
@@ -161,8 +183,23 @@ exports.updateClubById = async (data,session) => {
     try
     {
         const dataToUpdate = data.dataToUpdate
+        if(dataToUpdate.managedBy)
+        {
+          const facultyEmail = dataToUpdate.managedBy
+          const findFaculty = await Faculty.findOne({facultyEmail}).session(session)
+          if(!findFaculty)
+          {
+            return {
+              success: false,
+              error: 'Faculty of this email does not exist!',
+              code:400
+            }
+
+          }
+        }
         const {clubId} = data
         const findClub = await Clubs.findById( clubId ).session(session)
+        
         if(!findClub)
         {
             return {
@@ -170,10 +207,6 @@ exports.updateClubById = async (data,session) => {
                 error: 'Club does not exist!',
                 code:404
               }
-        }
-        if(dataToUpdate.clubIndexNew)
-        {
-            dataToUpdate.clubIndex=dataToUpdate.clubIndexNew
         }
         const clubUpdated = await Clubs.findByIdAndUpdate(clubId,dataToUpdate,{new:true}).session(session)
         return {success:true,clubData:clubUpdated,code:200, message:"Club updated successfully"}

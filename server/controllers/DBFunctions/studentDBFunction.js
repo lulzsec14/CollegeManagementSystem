@@ -158,7 +158,7 @@ exports.getStudentById = async (data) => {
 exports.getStudentByRollNo = async (data) => {
   const { rollNo } = data;
   try {
-    const findStudent = await Student.findById({ rollNo });
+    const findStudent = await Student.findOne({ rollNo });
     if (!findStudent) {
       return {
         success: false,

@@ -14,7 +14,7 @@ const studentRouter = require("./Students/studentsRoutes");
 module.exports = {
   adminRouter,
   coreMemberRouter,
-	clubManagerRouter,
+  clubManagerRouter,
   eventsRouter,
   certificateRouter,
   studentRouter,

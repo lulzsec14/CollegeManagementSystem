@@ -1,16 +1,17 @@
 // Imports
+const mongoose = require('mongoose')
 const {
   insertClubManager,
   updateClubManagerById,
   getClubManagerByRollNo,
-  getClubManagersByClubId,
+  getClubManagersByClubIndex,
   deleteClubManagerById
     
   } = require('../DBFunctions/clubManagerDBFunction');
   
 const {
-  updateClubArrayById,
-  deleteFromClubArrayById
+  updateClubArrayByIndex,
+  deleteFromClubArrayByIndex
 
 } = require('../DBFunctions/clubsDBFunction')
 
@@ -25,38 +26,36 @@ const {
     const session = await mongoose.startSession()
     try {
       const data1 = req.body.data;
+      const {studentRollNo} = data1
+      const op = await getStudentByRollNo({rollNo:studentRollNo})
+      if(!op.success) {
+        await session.endSession()
+        res.status(op.code).json({error:op.error})
+        return
+      }
       session.startTransaction()
-      const { studentRollNo } = data1
-        const op = await getStudentByRollNo({studentRollNo: studentRollNo},session)
-        if(!op.success){
-            session.abortTransaction()
-            session.endSession()
-            res.status(op.code).json({error:op.error})
-            return
-
-        }
       const op1 = await insertClubManager(data1,session);
       if(!op1.success) {
-        session.abortTransaction()
-        session.endSession()
+        await session.abortTransaction()
+        await session.endSession()
         res.status(op1.code).json({error:op1.error})
         return
       }
       const { clubManagerData } = op1
-      const { _id, clubId } = clubManagerData
+      const { _id, clubIndex } = clubManagerData
       const clubManagers = _id
-      const data2 = {clubId,clubManagers}
-      const op2 = await updateClubArrayById(data2,session)
+      const data2 = {clubIndex,dataToUpdate:{clubManagers:clubManagers}}
+      const op2 = await updateClubArrayByIndex(data2,session)
       if(!op2.success){
         
-        session.abortTransaction()
-        session.endSession()
+        await session.abortTransaction()
+        await session.endSession()
         res.status(op2.code).json({error:op2.error})
         return
   
       }
       await session.commitTransaction()
-      session.endSession() 
+      await session.endSession() 
       const message = op1.message
       const response = {clubManagerData: clubManagerData, message: message}
       res.status(op1.code).json({data:response})
@@ -64,7 +63,7 @@ const {
   
     } catch (err) {
       console.log(err);
-      session.endSession()
+      await session.endSession()
       res.status(500).json({ error: 'Server Error' });
     }
   };
@@ -115,11 +114,11 @@ exports.getClubManager = async (req, res, next) => {
 
 
 // get all club managers of a club
-exports.getAllClubManagers = async (req, res, next) => {
+exports.getAllClubManagersByClubIndex = async (req, res, next) => {
   
   try {
     const data1 = req.body.data;
-    const op1 = await getClubManagersByClubId(data1);
+    const op1 = await getClubManagersByClubIndex(data1);
     if(!op1.success) {
       res.status(op1.code).json({error:op1.error})
       return
@@ -145,26 +144,26 @@ exports.deleteClubManager = async (req, res, next) => {
     session.startTransaction()
     const op1 = await deleteClubManagerById(data1,session);
     if(!op1.success) {
-      session.abortTransaction()
-      session.endSession()
+      await session.abortTransaction()
+      await session.endSession()
       res.status(op1.code).json({error:op1.error})
       return
     }
     const {clubManagerData } = op1
-    const { _id, clubId } = clubManagerData
+    const { _id, clubIndex } = clubManagerData
     const clubManagers = _id
-    const data2 = {clubId,clubManagers}
-    const op2 = await deleteFromClubArrayById(data2,session)
+    const data2 = {clubIndex,dataToUpdate:{clubManagers:clubManagers}}
+    const op2 = await deleteFromClubArrayByIndex(data2,session)
     if(!op2.success){
       
-      session.abortTransaction()
-      session.endSession()
+      await session.abortTransaction()
+      await session.endSession()
       res.status(op2.code).json({error:op2.error})
       return
 
     }
     await session.commitTransaction()
-    session.endSession() 
+    await session.endSession() 
     const message = op1.message
     const response = {clubManagerData: clubManagerData, message: message}
     res.status(op1.code).json({data:response})
@@ -172,7 +171,7 @@ exports.deleteClubManager = async (req, res, next) => {
 
   } catch (err) {
     console.log(err);
-    session.endSession()
+    await session.endSession()
     res.status(500).json({ error: 'Server Error' });
   }
 };

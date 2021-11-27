@@ -4,14 +4,13 @@ const mongoose = require('mongoose')
 /// schema
 const coreMembersSchema = mongoose.Schema({
     studentRollNo:{
-        
         type: String,
+        ref: 'Student',
         required:[true,"Student Roll no can't be empty"],
     },
-    clubId: { 
-        type: Schema.Types.ObjectId, 
-        ref: 'Clubs',
-        required:[true,"Club Id can't be empty"],
+    clubIndex: { 
+        type:String,
+        required:[true,"Club Index can't be empty"],
     },
     password: {
         type:String,
@@ -26,7 +25,7 @@ const coreMembersSchema = mongoose.Schema({
     taskList: [{ 
         type: Schema.Types.ObjectId, 
         ref: 'Task_List'
-    }],
+    }]
 
 
 })

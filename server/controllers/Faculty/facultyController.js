@@ -1,4 +1,5 @@
 // Imports
+const mongoose = require('mongoose');
 const {
   insertFaculty,
   updateFacultyById,
@@ -83,16 +84,17 @@ exports.updateFaculty = async (req, res, next) => {
     const data1 = req.body.data;
     session.startTransaction()
     const op1 = await updateFacultyById(data1,session);
+    const { facultyData } = op1
     if(!op1.success) {
-      session.abortTransaction()
-      session.endSession()
+      await session.abortTransaction()
+      await session.endSession()
       res.status(op1.code).json({error:op1.error})
       return
     }
-    if(!data1.clubId)
+    if(!data1.dataToUpdate.facultyEmailNew||facultyData.clubId===null)
     {
       await session.commitTransaction()
-      session.endSession() 
+      await session.endSession() 
       const facultyData = op1.facultyData
       const message = op1.message
       const response = {facultyData: facultyData, message: message}
@@ -100,21 +102,20 @@ exports.updateFaculty = async (req, res, next) => {
       return
       
     }
-    const { facultyData } = op1
     const { clubId, facultyEmail } = facultyData
     const  managedBy = facultyEmail
-    const data2 = {clubId,managedBy}
+    const data2 = {clubId,dataToUpdate:{managedBy:managedBy}}
     const op2 = await updateClubById(data2,session)
     if(!op2.success){
       
-      session.abortTransaction()
-      session.endSession()
+      await session.abortTransaction()
+      await session.endSession()
       res.status(op2.code).json({error:op2.error})
       return
 
     }
     await session.commitTransaction()
-    session.endSession() 
+    await session.endSession() 
     const message = op1.message
     const response = {facultyData: facultyData, message: message}
     res.status(op1.code).json({data:response})
@@ -122,7 +123,7 @@ exports.updateFaculty = async (req, res, next) => {
 
   } catch (err) {
     console.log(err);
-    session.endSession()
+    await session.endSession()
     res.status(500).json({ error: 'Server Error' });
   }
   

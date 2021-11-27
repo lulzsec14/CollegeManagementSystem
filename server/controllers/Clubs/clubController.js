@@ -1,6 +1,8 @@
 // Imports
+const mongoose = require('mongoose');
 const {
   insertClub,
+  getClubById,
   getClubByIndex,
   getAllClubs,
   updateClubById,
@@ -22,26 +24,26 @@ exports.addClub = async (req, res, next) => {
     session.startTransaction()
     const op1 = await insertClub(data1,session);
     if(!op1.success) {
-      session.abortTransaction()
-      session.endSession()
+      await session.abortTransaction()
+      await session.endSession()
       res.status(op1.code).json({error:op1.error})
       return
     }
     const { clubData } = op1
-    const { managedBy, clubId } = clubData
+    const { managedBy, _id } = clubData
     const facultyEmail = managedBy
-    const data2 = {facultyEmail,clubId}
+    const data2 = {facultyEmail,dataToUpdate:{clubId:_id}}
     const op2 = await updateFacultyByFacultyEmail(data2,session)
     if(!op2.success){
       
-      session.abortTransaction()
-      session.endSession()
+      await session.abortTransaction()
+      await session.endSession()
       res.status(op2.code).json({error:op2.error})
       return
 
     }
     await session.commitTransaction()
-    session.endSession() 
+    await session.endSession() 
     const message = op1.message
     const response = {clubData: clubData, message: message}
     res.status(op1.code).json({data:response})
@@ -49,7 +51,7 @@ exports.addClub = async (req, res, next) => {
 
   } catch (err) {
     console.log(err);
-    session.endSession()
+    await session.endSession()
     res.status(500).json({ error: 'Server Error' });
   }
 };
@@ -59,17 +61,33 @@ exports.updateClub = async (req, res, next) => {
   try {
     const data1 = req.body.data;
     session.startTransaction()
+    if(data1.dataToUpdate.managedBy)
+    {
+      const op = await getClubById({clubId:data1.clubId})
+      const facultyEmail1 = op.clubData.managedBy
+      const dataTemp = {facultyEmail:facultyEmail1,dataToUpdate:{clubId:null}}
+      const opTemp = await updateFacultyByFacultyEmail(dataTemp,session)
+      if(!opTemp.success){
+       await session.abortTransaction()
+       await session.endSession()
+       res.status(opTemp.code).json({error:opTemp.error})
+       return
+
+       }
+
+
+    }
     const op1 = await updateClubById(data1,session);
     if(!op1.success) {
-      session.abortTransaction()
-      session.endSession()
+      await session.abortTransaction()
+      await session.endSession()
       res.status(op1.code).json({error:op1.error})
       return
     }
-    if(!data1.managedBy)
+    if(!data1.dataToUpdate.managedBy)
     {
       await session.commitTransaction()
-      session.endSession() 
+      await session.endSession() 
       const clubData = op1.clubData
       const message = op1.message
       const response = {clubData: clubData, message: message}
@@ -78,20 +96,20 @@ exports.updateClub = async (req, res, next) => {
       
     }
     const { clubData } = op1
-    const { managedBy, clubId } = clubData
+    const { managedBy, _id } = clubData
     const facultyEmail = managedBy
-    const data2 = {facultyEmail,clubId}
+    const data2 = {facultyEmail,dataToUpdate:{clubId:_id}}
     const op2 = await updateFacultyByFacultyEmail(data2,session)
     if(!op2.success){
       
-      session.abortTransaction()
-      session.endSession()
+      await session.abortTransaction()
+      await session.endSession()
       res.status(op2.code).json({error:op2.error})
       return
 
     }
     await session.commitTransaction()
-    session.endSession() 
+    await session.endSession() 
     const message = op1.message
     const response = {clubData: clubData, message: message}
     res.status(op1.code).json({data:response})
@@ -99,7 +117,7 @@ exports.updateClub = async (req, res, next) => {
 
   } catch (err) {
     console.log(err);
-    session.endSession()
+    await session.endSession()
     res.status(500).json({ error: 'Server Error' });
   }
   
@@ -108,9 +126,9 @@ exports.updateClub = async (req, res, next) => {
 // reading one club
 exports.getClub = async (req, res, next) => {
   try {
-    const data = req.params.index;
+    const data = req.body.data;
     const op1 = await getClubByIndex(data);
-    if(!op.success){
+    if(!op1.success){
       res.status(op1.code).json({error:op1.error})
       return
     }
@@ -127,7 +145,7 @@ exports.getClub = async (req, res, next) => {
 exports.getAllClubs = async (req, res, next) => {
   try {
     const op1 = await getAllClubs();
-    if(!op.success){
+    if(!op1.success){
       res.status(op1.code).json({error:op1.error})
       return
     }

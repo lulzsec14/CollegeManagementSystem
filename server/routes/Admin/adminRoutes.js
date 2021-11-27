@@ -12,8 +12,8 @@ const {
 } = require('../../controllers/Admin/adminController');
 const { addClub,getClub,getAllClubs,updateClub,deleteClub } = require('../../controllers/Clubs/clubController');
 const { addFaculty,getFaculty,getAllFaculty,updateFaculty,deleteFaculty  } = require('../../controllers/Faculty/facultyController');
-const { addClubManager,getClubManager,getAllClubManagers,updateClubManager,deleteClubManager } = require('../../controllers/Club Managers/clubManagerController');
-const { addCoreMember,getCoreMember,getAllCoreMembers,updateCoreMember,deleteCoreMember } = require('../../controllers/Core Members/coreMemberController');
+const { addClubManager,getClubManager,getAllClubManagersByClubIndex,updateClubManager,deleteClubManager } = require('../../controllers/Club Managers/clubManagerController');
+const { addCoreMember,getCoreMember,getAllCoreMembersByClubIndex,updateCoreMember,deleteCoreMember } = require('../../controllers/Core Members/coreMemberController');
 
 // ------------------------------------
 
@@ -40,16 +40,16 @@ adminRouter.route('/addClubManager').post(addClubManager);
 adminRouter.route('/getClubManagerByRollNo').get(getClubManager);
 adminRouter.route('/updateClubManagerById').put(updateClubManager);
 adminRouter.route('/deleteClubManagerById').delete(deleteClubManager);
-adminRouter.route('/getAllClubManagersByClubId').get(getAllClubManagers);
+adminRouter.route('/getAllClubManagersByClubIndex').get(getAllClubManagersByClubIndex);
 
 
 
 // admin core member routes
 adminRouter.route('/addCoreMember').post(addCoreMember);
-adminRouter.route('/getCoreMemberByRollNo').get(getCoreMember);
+adminRouter.route('/getCoreMemberByRollNoAndClubIndex').get(getCoreMember);
 adminRouter.route('/updateCoreMemberById').put(updateCoreMember);
 adminRouter.route('/deleteCoreMemberById').delete(deleteCoreMember);
-adminRouter.route('/getAllCoreMembersByClubId').get(getAllCoreMembers);
+adminRouter.route('/getAllCoreMembersByClubIndex').get(getAllCoreMembersByClubIndex);
 
 
 
