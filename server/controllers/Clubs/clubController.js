@@ -51,7 +51,7 @@ exports.addClub = async (req, res, next) => {
 
   } catch (err) {
     console.log(err);
-    session.endSession()
+    await session.endSession()
     res.status(500).json({ error: 'Server Error' });
   }
 };
@@ -117,7 +117,7 @@ exports.updateClub = async (req, res, next) => {
 
   } catch (err) {
     console.log(err);
-    session.endSession()
+    await session.endSession()
     res.status(500).json({ error: 'Server Error' });
   }
   

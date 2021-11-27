@@ -1,9 +1,10 @@
 // Imports
+const mongoose = require('mongoose')
 const {
 	insertCoreMember,
 	updateCoreMemberById,
-	getCoreMemberByRollNo,
-	getCoreMembersByClubId,
+	getCoreMemberByRollNoAndClubIndex,
+	getCoreMembersByClubIndex,
 	deleteCoreMemberById
 		
 	} = require('../DBFunctions/CoreMemberDBFunction');
@@ -19,8 +20,8 @@ const {
   } = require('../DBFunctions/studentDBFunction')
 
   const {
-    updateClubArrayById,
-    deleteFromClubArrayById
+    updateClubArrayByIndex,
+    deleteFromClubArrayByIndex
   
   } = require('../DBFunctions/clubsDBFunction')
 
@@ -32,38 +33,36 @@ const {
       const session = await mongoose.startSession()
       try {
         const data1 = req.body.data;
+        const {studentRollNo} = data1
+        const op = await getStudentByRollNo({rollNo:studentRollNo})
+        if(!op.success) {
+          await session.endSession()
+          res.status(op.code).json({error:op.error})
+          return
+        }
         session.startTransaction()
-        const { studentRollNo } = data1
-        const op = await getStudentByRollNo({studentRollNo: studentRollNo},session)
-        if(!op.success){
-            session.abortTransaction()
-            session.endSession()
-            res.status(op.code).json({error:op.error})
-            return
-
-        } 
         const op1 = await insertCoreMember(data1,session);
         if(!op1.success) {
-          session.abortTransaction()
-          session.endSession()
+          await session.abortTransaction()
+          await session.endSession()
           res.status(op1.code).json({error:op1.error})
           return
         }
         const { coreMemberData } = op1
-        const { _id, clubId } = coreMemberData
+        const { _id, clubIndex } = coreMemberData
         const coreMembers = _id
-        const data2 = {clubId,dataToUpdate:{coreMembers:coreMembers}}
-        const op2 = await updateClubArrayById(data2,session)
+        const data2 = {clubIndex,dataToUpdate:{coreMembers:coreMembers}}
+        const op2 = await updateClubArrayByIndex(data2,session)
         if(!op2.success){
           
-          session.abortTransaction()
-          session.endSession()
+          await session.abortTransaction()
+          await session.endSession()
           res.status(op2.code).json({error:op2.error})
           return
     
         }
         await session.commitTransaction()
-        session.endSession() 
+        await session.endSession() 
         const message = op1.message
         const response = {coreMemberData: coreMemberData, message: message}
         res.status(op1.code).json({data:response})
@@ -71,7 +70,7 @@ const {
     
       } catch (err) {
         console.log(err);
-        session.endSession()
+        await session.endSession()
         res.status(500).json({ error: 'Server Error' });
       }
     };
@@ -103,7 +102,7 @@ const {
     
     try {
       const data1 = req.body.data;
-      const op1 = await getCoreMemberByRollNo(data1);
+      const op1 = await getCoreMemberByRollNoAndClubIndex(data1);
       if(!op1.success) {
         res.status(op1.code).json({error:op1.error})
         return
@@ -121,12 +120,12 @@ const {
   };  
   
   
-  // get all Core Members of a club
-  exports.getAllCoreMembers = async (req, res, next) => {
+  // get all Core Members of a club 
+  exports.getAllCoreMembersByClubIndex = async (req, res, next) => {
     
     try {
       const data1 = req.body.data;
-      const op1 = await getCoreMembersByClubId(data1);
+      const op1 = await getCoreMembersByClubIndex(data1);
       if(!op1.success) {
         res.status(op1.code).json({error:op1.error})
         return
@@ -152,20 +151,20 @@ const {
       session.startTransaction()
       const op1 = await deleteCoreMemberById(data1,session);
       if(!op1.success) {
-        session.abortTransaction()
-        session.endSession()
+        await session.abortTransaction()
+        await session.endSession()
         res.status(op1.code).json({error:op1.error})
         return
       }
       const {coreMemberData } = op1
-      const { _id, clubId } = coreMemberData
+      const { _id, clubIndex } = coreMemberData
       const coreMembers = _id
-      const data2 = {clubId,dataToUpdate:{coreMembers:coreMembers}}
-      const op2 = await deleteFromClubArrayById(data2,session)
+      const data2 = {clubIndex,dataToUpdate:{coreMembers:coreMembers}}
+      const op2 = await deleteFromClubArrayByIndex(data2,session)
       if(!op2.success){
         
-        session.abortTransaction()
-        session.endSession()
+        await session.abortTransaction()
+        await session.endSession()
         res.status(op2.code).json({error:op2.error})
         return
   
@@ -175,14 +174,14 @@ const {
       const op3 = await deleteTasksByCoreMemberId(data3,session)
       if(!op3.success){
         
-        session.abortTransaction()
-        session.endSession()
+        await session.abortTransaction()
+        await session.endSession()
         res.status(op3.code).json({error:op3.error})
         return
   
       }
       await session.commitTransaction()
-      session.endSession() 
+      await session.endSession() 
       const message = op1.message
       const response = {coreMemberData: coreMemberData, message: message}
       res.status(op1.code).json({data:response})
@@ -190,7 +189,7 @@ const {
   
     } catch (err) {
       console.log(err);
-      session.endSession()
+      await session.endSession()
       res.status(500).json({ error: 'Server Error' });
     }
   };
