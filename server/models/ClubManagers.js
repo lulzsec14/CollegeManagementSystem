@@ -6,11 +6,11 @@ const clubManagersSchema = mongoose.Schema({
     studentRollNo:{
         type: String,
         required:[true,"Student Roll no can't be empty"],
+        unique: true
     },
-    clubId: { 
-        type: Schema.Types.ObjectId, 
-        ref: 'Clubs',
-        required:[true,"Club Id can't be empty"],
+    clubIndex: { 
+        type: String,
+        required:[true,"Club Index can't be empty"],
     },
     password: {
         type:String,
