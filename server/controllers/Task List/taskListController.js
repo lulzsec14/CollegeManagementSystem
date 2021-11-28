@@ -30,8 +30,8 @@ exports.addTask = async (req, res, next) => {
       session.startTransaction()
       const op1 = await insertTask(data1,session);
       if(!op1.success) {
-        session.abortTransaction()
-        session.endSession()
+        await session.abortTransaction()
+        await session.endSession()
         res.status(op1.code).json({error:op1.error})
         return
       }
@@ -43,8 +43,8 @@ exports.addTask = async (req, res, next) => {
       const op2 = await updateCoreMemberArrayById(data2,session)
       if(!op2.success){
         
-        session.abortTransaction()
-        session.endSession()
+        await session.abortTransaction()
+        await session.endSession()
         res.status(op2.code).json({error:op2.error})
         return
   
@@ -53,14 +53,14 @@ exports.addTask = async (req, res, next) => {
       const op3 = await updateClubArrayById(data3,session)
       if(!op3.success){
         
-        session.abortTransaction()
-        session.endSession()
+        await session.abortTransaction()
+        await session.endSession()
         res.status(op3.code).json({error:op3.error})
         return
   
       }
       await session.commitTransaction()
-      session.endSession() 
+      await session.endSession() 
       const message = op1.message
       const response = {taskData: taskData, message: message}
       res.status(op1.code).json({data:response})
@@ -68,7 +68,7 @@ exports.addTask = async (req, res, next) => {
   
     } catch (err) {
       console.log(err);
-      session.endSession()
+      await session.endSession()
       res.status(500).json({ error: 'Server Error' });
     }
   };
@@ -118,7 +118,7 @@ exports.getTask = async (req, res, next) => {
 };  
 	
 // get all tasks of a club
-exports.getAllTasksOfClub = async (req, res, next) => {
+exports.getAllTasksByClubId = async (req, res, next) => {
 
 	try {
 		const data1 = req.body.data;
@@ -140,7 +140,7 @@ exports.getAllTasksOfClub = async (req, res, next) => {
 };  
 
 // get all tasks of a core member
-exports.getAllTasksOfCoreMember = async (req, res, next) => {
+exports.getAllTasksByCoreMemberId = async (req, res, next) => {
 
 try {
 	const data1 = req.body.data;
@@ -170,8 +170,8 @@ exports.deleteTask = async (req, res, next) => {
       session.startTransaction()
       const op1 = await deleteTask(data1,session);
       if(!op1.success) {
-        session.abortTransaction()
-        session.endSession()
+        await session.abortTransaction()
+        await session.endSession()
         res.status(op1.code).json({error:op1.error})
         return
       }
@@ -183,8 +183,8 @@ exports.deleteTask = async (req, res, next) => {
       const op2 = await deleteFromCoreMemberArrayById(data2,session)
       if(!op2.success){
         
-        session.abortTransaction()
-        session.endSession()
+        await session.abortTransaction()
+        await session.endSession()
         res.status(op2.code).json({error:op2.error})
         return
   
@@ -193,14 +193,14 @@ exports.deleteTask = async (req, res, next) => {
       const op3 = await deleteFromClubArrayById(data3,session)
       if(!op3.success){
         
-        session.abortTransaction()
-        session.endSession()
+        await session.abortTransaction()
+        await session.endSession()
         res.status(op3.code).json({error:op3.error})
         return
   
       }
       await session.commitTransaction()
-      session.endSession() 
+      await session.endSession() 
       const message = op1.message
       const response = {taskData: taskData, message: message}
       res.status(op1.code).json({data:response})
@@ -208,7 +208,7 @@ exports.deleteTask = async (req, res, next) => {
   
     } catch (err) {
       console.log(err);
-      session.endSession()
+      await session.endSession()
       res.status(500).json({ error: 'Server Error' });
     }
   };

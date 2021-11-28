@@ -88,7 +88,6 @@ exports.insertTask = async (data,session) => {
       taskTitle,
       taskDescription,
       taskStatus,
-      assignedBy,
       assignedTo,
       clubId,
     } = data;
@@ -96,7 +95,6 @@ exports.insertTask = async (data,session) => {
       taskTitle,
       taskDescription,
       taskStatus,
-      assignedBy,
       assignedTo,
       clubId,
     });
