@@ -26,11 +26,6 @@ const taskListSchema = mongoose.Schema({
             message:"Please enter a valid status"
           }
     },
-    assignedBy: { 
-        type: Schema.Types.ObjectId, 
-        ref: 'ClubManagers',
-        required:[true,"Please enter club manager ID which assigned the task"]
-    },
     
     assignedTo: { 
         type: Schema.Types.ObjectId, 

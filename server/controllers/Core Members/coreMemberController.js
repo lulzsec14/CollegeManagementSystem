@@ -7,7 +7,7 @@ const {
 	getCoreMembersByClubIndex,
 	deleteCoreMemberById
 		
-	} = require('../DBFunctions/CoreMemberDBFunction');
+	} = require('../DBFunctions/coreMemberDBFunction');
 	
 const {
 	deleteTasksByCoreMemberId
