@@ -13,7 +13,9 @@ const connectDb = async () => {
       useUnifiedTopology: true,
     });
 
-    console.log(`Database connected: ${conn.connection.host}`.cyan.bold);
+    console.log(
+      `Database connected: ${conn.connection.host}`.cyan.bold.underline
+    );
   } catch (err) {
     console.log(`Error occured: ${err.message}`.red.bold);
   }

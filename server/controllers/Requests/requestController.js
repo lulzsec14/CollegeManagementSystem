@@ -16,67 +16,93 @@ const {
 } = require('../DBFunctions/studentDBFunction');
 const {
   updateClubByID,
-  deleteFromClubArrayByID,
-  updateClubArrayByID,
+  deleteFromClubArrayById,
+  updateClubArrayById,
   updateClubArrayByIndex,
 } = require('../DBFunctions/clubsDBFunction');
 // ------------------------------------
 
 exports.createNewRequest = async (req, res, next) => {
   const data = req.body;
+
+  let updateStudentArrayData = {
+    rollNo: data.rollNo,
+    dataToUpdate: {
+      clubsRequested: data.clubId,
+    },
+  };
+
+  let updateClubArrayData = {
+    clubId: data.clubId,
+    dataToUpdate: {
+      requests: data.studentId,
+    },
+  };
+
   const session = await mongoose.startSession();
   try {
     session.startTransaction();
-    let createdRequest = await createRequest(data, session);
+
+    const createdRequest = await createRequest(data, session);
+
+    console.log(createdRequest.requestData._id);
+
+    updateClubArrayData.dataToUpdate.requests = createdRequest.requestData._id;
+    updateStudentArrayData.dataToUpdate.clubsRequested =
+      createdRequest.requestData._id;
+
+    console.log(updateStudentArrayData);
+    console.log(updateClubArrayData);
 
     if (createdRequest.success == false) {
       await session.abortTransaction();
-      // await session.endSession();
+      await session.endSession();
       res
         .status(createdRequest.code)
         .json({ success: false, error: createdRequest.error });
+
+      return;
     }
-    console.log('HERE 1');
 
     const updatedStudentRequest = await updateStudentArrayByRollNo(
-      data,
+      updateStudentArrayData,
       session
     );
 
-    console.log('HERE 2');
-    console.log(updatedStudentRequest);
     if (updatedStudentRequest.success == false) {
       await session.abortTransaction();
-      // await session.endSession();
+      await session.endSession();
       res
         .status(updatedStudentRequest.code)
         .json({ success: false, error: updatedStudentRequest.error });
+      return;
     }
 
-    const updatedClubRequest = await updateClubArrayByID(data, session);
+    const updatedClubRequest = await updateClubArrayById(
+      updateClubArrayData,
+      session
+    );
 
     if (updatedClubRequest.success == false) {
       await session.abortTransaction();
+      await session.endSession();
       res
         .status(updatedClubRequest.code)
         .json({ success: false, error: updatedClubRequest.error });
+      return;
     }
-    console.log('HERE 3');
 
-    if (updatedClubRequest.success == true) {
-      console.log('Here');
-      await session.commitTransaction();
-      // await session.endSession();
-      console.log('HERE 4');
-      res.status(result.code).json({
-        success: true,
-        message: result.message,
-        requestData: result.requestData,
-      });
-    }
+    await session.commitTransaction();
+    await session.endSession();
+    res.status(200).json({
+      success: true,
+      message: 'Request created successfully',
+      requestData: createdRequest.requestData,
+    });
+    return;
   } catch (err) {
-    console.log('HERE');
-    session.abortTransaction();
+    await session.abortTransaction();
+    await session.endSession();
     res.status(500).json({ success: false, error: err.message });
   }
 
@@ -174,121 +200,177 @@ exports.retrieveAllRequestByRollNo = async (req, res, next) => {
 };
 
 exports.deleteOneRequest = async (req, res, next) => {
-  // const session = await mongoose.startSession();
   const data = req.body;
+  let toBeDeletedRequest = {};
+  let dataToDeleteFromStudentArray = {};
+  let dataToDeleteFromClubsArray = {};
+
+  let dataForUpdatingStudentArray = {};
+  let dataForUpdatingClubsArray = {};
+  let dataForDeletingRequest = {};
+
   try {
-    const toBeDeletedRequest = await getRequest(data);
+    toBeDeletedRequest = await getRequest(data);
+
+    dataToDeleteFromStudentArray = {
+      rollNo: toBeDeletedRequest.requestData.rollNo,
+      dataToUpdate: {
+        clubsRequested: toBeDeletedRequest.requestData._id,
+      },
+    };
+
+    dataToDeleteFromClubsArray = {
+      clubId: toBeDeletedRequest.requestData.clubId,
+      dataToUpdate: {
+        requests: toBeDeletedRequest.requestData._id,
+      },
+    };
+
+    dataForUpdatingStudentArray = {
+      rollNo: toBeDeletedRequest.requestData.rollNo,
+      dataToUpdate: {
+        clubsJoined: toBeDeletedRequest.requestData.clubId,
+      },
+    };
+
+    dataForUpdatingClubsArray = {
+      clubId: toBeDeletedRequest.requestData.clubId,
+      dataToUpdate: {
+        clubMembers: toBeDeletedRequest.requestData.studentId,
+      },
+    };
+
+    dataForDeletingRequest = {
+      requestId: toBeDeletedRequest.requestData._id,
+    };
+
     if (toBeDeletedRequest.success === false) {
-      session.endSession();
       res
         .status(400)
-        .json({ success: false, error: 'Couldnt fetch Request data!' });
+        .json({ success: false, error: "Couldn't fetch Request data!" });
+      return;
+    }
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+    return;
+  }
+
+  const session = await mongoose.startSession();
+  try {
+    await session.startTransaction();
+
+    // console.log(toBeDeletedRequest);
+
+    // console.log(dataToDeleteFromStudentArray);
+
+    // console.log(dataToDeleteFromClubsArray);
+
+    // console.log(dataForUpdatingStudentArray);
+
+    // console.log(dataForUpdatingClubsArray);
+
+    // console.log(dataForDeletingRequest);
+
+    const deletedFromStudentArray = await deleteFromStudentArrayByRollNo(
+      dataToDeleteFromStudentArray,
+      session
+    );
+
+    if (deletedFromStudentArray.success === false) {
+      await session.abortTransaction();
+      await session.endSession();
+      res
+        .status(deletedFromStudentArray.code)
+        .json({ success: false, error: deletedFromStudentArray.error });
+      return;
     }
 
-    console.log(toBeDeletedRequest);
+    const deletedFromClubsArray = await deleteFromClubArrayById(
+      dataToDeleteFromClubsArray,
+      session
+    );
 
-    // await session.startTransaction();
+    if (deletedFromClubsArray.success === false) {
+      await session.abortTransaction();
+      await session.endSession();
+      res
+        .status(deletedFromClubsArray.code)
+        .json({ success: false, error: deletedFromClubsArray.error });
+      return;
+    }
 
-    // const deletedFromStudentArray = await deleteFromStudentArrayByRollNo(
-    //   data,
-    //   session
-    // );
+    const addedToStudentArray = await updateStudentArrayByRollNo(
+      dataForUpdatingStudentArray,
+      session
+    );
 
-    // if (deletedFromStudentArray.success === false) {
-    //   session.abortTransaction();
-    //   session.endSession();
-    //   res
-    //     .status(deletedFromStudentArray.code)
-    //     .json({ success: false, error: deletedFromStudentArray.error });
-    // }
+    if (addedToStudentArray.success === false) {
+      await session.abortTransaction();
+      await session.endSession();
+      res
+        .status(addedToStudentArray.code)
+        .json({ success: false, error: addedToStudentArray.error });
+      return;
+    }
 
-    // const deletedFromClubsArray = await deleteFromClubArrayByID(data, session);
+    const addedToClubsArray = await updateClubArrayById(
+      dataForUpdatingClubsArray,
+      session
+    );
 
-    // if (deletedFromClubsArray.success === false) {
-    //   session.abortTransaction();
-    //   session.endSession();
-    //   res
-    //     .status(deletedFromClubsArray.code)
-    //     .json({ success: false, error: deletedFromClubsArray.error });
-    // }
+    if (addedToClubsArray.success === false) {
+      await session.abortTransaction();
+      await session.endSession();
+      res
+        .status(addedToClubsArray.code)
+        .json({ success: false, error: addedToClubsArray.error });
+      return;
+    }
 
-    // data.dataToUpdate = dataToUpdate;
+    const deleteClubJoinRequest = await deleteRequestById(
+      dataForDeletingRequest,
+      session
+    );
 
-    let details = {
-      clubsJoined: data.clubId,
-    };
-    let dataForUpdatingStudent = data;
-    dataForUpdatingStudent.dataToUpdate = details;
+    if (deleteClubJoinRequest.success === false) {
+      await session.abortTransaction();
+      await session.endSession();
+      res
+        .status(deleteClubJoinRequest.code)
+        .json({ success: false, error: deleteClubJoinRequest.error });
+      return;
+    }
 
-    console.log(dataForUpdatingStudent);
-
-    // const addedToStudentArray = await updateStudentArrayByRollNo(
-    //   dataForUpdatingStudent,
-    //   session
-    // );
-
-    // if (addedToStudentArray.success === false) {
-    //   session.abortTransaction();
-    //   session.endSession();
-    //   res
-    //     .status(addedToStudentArray.code)
-    //     .json({ success: false, error: addedToStudentArray.error });
-    // }
-
-    details = {
-      clubMembers: toBeDeletedRequest.studentId,
-    };
-
-    let dataForUpdatingClubMembers = data;
-    dataForUpdatingClubMembers.dataToUpdate = details;
-
-    console.log(dataForUpdatingClubMembers);
-
-    // const addedToClubsArray = await updateClubArrayByID(
-    //   dataForUpdatingClubMembers,
-    //   session
-    // );
-
-    // if (addedToClubsArray.success === false) {
-    //   session.abortTransaction();
-    //   session.endSession();
-    //   res
-    //     .status(addedToClubsArray.code)
-    //     .json({ success: false, error: addedToClubsArray.error });
-    // }
-
-    // const result = await deleteRequest(data, session);
-    // if (result.success === false) {
-    //   res.status(result.code).json({ success: false, error: result.error });
-    // } else {
-    //   res.status(200).json({
-    //     success: true,
-    //     message: result.message,
-    //     requestData: result.requestData,
-    //   });
+    await session.commitTransaction();
+    await session.endSession();
+    res.status(200).json({
+      success: true,
+      message: 'Club Member added Successfully!',
+      requestData: addedToClubsArray,
+    });
+    return;
     // }
   } catch (err) {
-    // session.abortTransaction();
+    await session.abortTransaction();
     await session.endSession();
     res.status(500).json({ success: false, error: err.message });
   }
-  // await session.endSession();
 };
 
-exports.deleteOneRequestById = async (req, res, next) => {
-  const data = req.body;
-  try {
-    const result = await deleteRequestById(data);
-    if (result.success == false) {
-      res.status(result.code).json({ success: false, error: result.error });
-    } else {
-      res.status(result.code).json({
-        success: true,
-        message: result.message,
-        requestData: result.requestData,
-      });
-    }
-  } catch (err) {
-    res.status(500).json({ success: false, error: err.message });
-  }
-};
+// exports.deleteOneRequestById = async (req, res, next) => {
+//   const data = req.body;
+//   try {
+//     const result = await deleteRequestById(data);
+//     if (result.success == false) {
+//       res.status(result.code).json({ success: false, error: result.error });
+//     } else {
+//       res.status(result.code).json({
+//         success: true,
+//         message: result.message,
+//         requestData: result.requestData,
+//       });
+//     }
+//   } catch (err) {
+//     res.status(500).json({ success: false, error: err.message });
+//   }
+// };
