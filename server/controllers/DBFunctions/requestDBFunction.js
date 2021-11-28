@@ -30,7 +30,7 @@ exports.createRequest = async (data, session) => {
         success: true,
         code: 201,
         message: 'Request to the mentioned Club created!',
-        requestData: createdRequest,
+        requestData: createdRequest[0],
       };
     }
   } catch (err) {
@@ -71,7 +71,7 @@ exports.getAllRequests = async () => {
 exports.getRequest = async (data) => {
   const { rollNo, clubId } = data;
   try {
-    const findRequest = await Requests.find({ rollNo, clubId });
+    const findRequest = await Requests.findOne({ rollNo, clubId });
     if (!findRequest) {
       return {
         success: flase,
@@ -80,6 +80,7 @@ exports.getRequest = async (data) => {
           'No request realted to the rollNo and Club of the student found!',
       };
     } else {
+      // console.log(findRequest);
       return {
         success: true,
         code: 200,

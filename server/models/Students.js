@@ -53,11 +53,7 @@ const studentSchema = mongoose.Schema({
   clubsRequested: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Clubs',
-      joined: {
-        type: Boolean,
-        default: false,
-      },
+      ref: 'Requests',
     },
   ],
   certificates: [

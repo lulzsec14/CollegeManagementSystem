@@ -38,7 +38,7 @@ studentRouter.route('/getOneRequestById').get(retrieveRequestById);
 studentRouter.route('/getRequestByClubId').get(retrieveRequestByClubId);
 studentRouter.route('/getAllRequestByRollNo').get(retrieveAllRequestByRollNo);
 studentRouter.route('/deleteOneRequest').delete(deleteOneRequest);
-studentRouter.route('/deleteOneRequestById').delete(deleteOneRequestById);
+// studentRouter.route('/deleteOneRequestById').delete(deleteOneRequestById);
 
 // Student Routes
 studentRouter.route('/registerStudent').post(registerStudent);
