@@ -6,6 +6,7 @@ const clubManagerRouter = require("./Club Managers/clubManagerRoutes");
 const eventsRouter = require("./Events/eventsRoutes");
 const certificateRouter = require("./Certificates/certificateRoutes");
 const studentRouter = require("./Students/studentsRoutes");
+const facultyRouter = require("./Faculty/facultyRoutes");
 
 
 // ------------------------------------
@@ -18,6 +19,7 @@ module.exports = {
   eventsRouter,
   certificateRouter,
   studentRouter,
+  facultyRouter
 };
 
 // ------------------------------------
