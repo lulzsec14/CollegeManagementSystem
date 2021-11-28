@@ -29,6 +29,7 @@ const validateEvent = require("../../Validators/EventValidator");
 
 //--------------------------------------------------------------
 
+//Final OK
 exports.getEventById = async (data) => {
   try {
     const { eventId } = data;
@@ -59,9 +60,10 @@ exports.getEventById = async (data) => {
 
 //--------------------------------------------------------------
 
+//Final OK
 exports.getAllEventsByClubId = async (data) => {
   try {
-    const findClubIdEvents = await Events.find({ data });
+    const findClubIdEvents = await Events.find({ clubId: data });
     if (!findClubIdEvents) {
       return {
         success: false,
@@ -88,6 +90,7 @@ exports.getAllEventsByClubId = async (data) => {
 
 //--------------------------------------------------------------
 
+//Final OK
 exports.getAllEvents = async () => {
   try {
     const findEvents = await Events.find({ isPrivate: false });
@@ -115,6 +118,7 @@ exports.getAllEvents = async () => {
 
 //--------------------------------------------------------------
 
+//Final OK
 exports.createEvent = async (data, session) => {
   const error = validateEvent(data);
   if (error) {
@@ -167,7 +171,7 @@ exports.createEvent = async (data, session) => {
       message: "Event created Succesfuly!",
     };
   } catch (error) {
-    console.log(error.message);
+    console.log(error);
     return {
       success: false,
       error: "Server Error!",
@@ -178,6 +182,7 @@ exports.createEvent = async (data, session) => {
 
 //--------------------------------------------------------------
 
+//Final OK
 exports.updateEventById = async (data) => {
   try {
     const dataToUpdate = {};
@@ -331,6 +336,7 @@ exports.updateEventById = async (data) => {
 
 //--------------------------------------------------------------
 
+//Final OK
 exports.setRegistrationsByEventId = async (data, session) => {
   try {
     const dataToUpdate = {};
@@ -376,6 +382,7 @@ exports.setRegistrationsByEventId = async (data, session) => {
 
 //--------------------------------------------------------------
 
+//Final OK
 exports.setAttendanceByEventId = async (data, session) => {
   try {
     const dataToUpdate = {};
@@ -421,17 +428,18 @@ exports.setAttendanceByEventId = async (data, session) => {
 
 //--------------------------------------------------------------
 
+//Final OK
 exports.setPositionsByEventId = async (data) => {
   try {
     const dataToUpdate = {};
     for (key in data) {
-      if (key !== "eventId") {
+      if (key !== "eventId" && key !== "eventName") {
         dataToUpdate[key] = data[key];
       }
     }
-    const { eventId } = data;
+    const { eventId, eventName } = data;
 
-    const findEvent = await Events.findById(eventId);
+    const findEvent = await Events.findOne({ eventId, eventName });
     if (!findEvent) {
       return {
         success: false,
@@ -441,7 +449,7 @@ exports.setPositionsByEventId = async (data) => {
     }
 
     const newPositions = await Events.findOneAndUpdate(
-      eventId,
+      { eventId, eventName },
       {
         $set: dataToUpdate,
       },
@@ -466,9 +474,20 @@ exports.setPositionsByEventId = async (data) => {
 
 //--------------------------------------------------------------
 
+// Final OK
 exports.deleteEventById = async (data, session) => {
   try {
     const { eventId } = data;
+
+    const findEvent = await Events.findById(eventId).session(session);
+
+    if (!findEvent) {
+      return {
+        success: false,
+        code: 404,
+        error: "Event does not exist.",
+      };
+    }
     const eventDeleted = await Events.findByIdAndDelete(eventId).session(
       session
     );
@@ -490,6 +509,7 @@ exports.deleteEventById = async (data, session) => {
 
 //--------------------------------------------------------------
 
+// Final OK
 exports.deleteEventsByClubId = async (data) => {
   try {
     const { clubId } = data;

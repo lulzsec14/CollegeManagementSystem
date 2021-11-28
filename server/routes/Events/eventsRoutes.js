@@ -20,15 +20,15 @@ const {
 
 // Api Route
 eventsRouter.route("/getEventById").get(getEventById);
-eventsRouter.route("/getEventByClubId").get(getEventByClubId);
-eventsRouter.route("/getAllEvent").get(getAllEvents);
-eventsRouter.route("/create").post(createEvent);
+eventsRouter.route("/getAllEventsByClubId").get(getEventByClubId);
+eventsRouter.route("/getAllEvents").get(getAllEvents);
+eventsRouter.route("/createEvent").post(createEvent);
 eventsRouter.route("/update").put(updateEvent);
-eventsRouter.route("/registration").post(registration);
-eventsRouter.route("/attendance").post(attendance);
-eventsRouter.route("/position").post(position);
-eventsRouter.route("/delete").delete(deleteById);
-eventsRouter.route("/deleteByClubId").delete(deleteByClubId);
+eventsRouter.route("/registerByEventId").post(registration); 
+eventsRouter.route("/attendanceByEventId").post(attendance); 
+eventsRouter.route("/setPositionsByEventIdAndEventName").post(position);
+eventsRouter.route("/deleteEventById").delete(deleteById);
+eventsRouter.route("/deleteAllEventsByClubId").delete(deleteByClubId);
 
 // ------------------------------------
 

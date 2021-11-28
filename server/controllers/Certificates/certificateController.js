@@ -20,17 +20,18 @@ const {
 
 // Imports DB functions of Club
 const {
-  updateClubArrayByClubID,
-  deleteFromClubArrayByID,
+  updateClubArrayById,
+  deleteFromClubArrayById,
 } = require("../DBFunctions/clubsDBFunction");
 
 //----------------------------------------------------------------------------------------------------------------
 
-//OK--Multiple Certificate cannot be created
+//Final OK
 exports.createCertificate = async (req, res, next) => {
   const session = await mongoose.startSession();
   try {
     const data = req.body.data;
+    session.startTransaction();
     const result = await createCertificate(data, session);
     if (result.success == false) {
       await session.abortTransaction();
@@ -52,7 +53,7 @@ exports.createCertificate = async (req, res, next) => {
     };
     const result1 = await updateStudentArray(updateDataForStudent, session);
     if (result1.success == false) {
-      await session.abortTransaction();
+      await session.abofrtTransaction();
       session.endSession();
       res.status(result1.code).json({
         success: result1.success,
@@ -66,7 +67,7 @@ exports.createCertificate = async (req, res, next) => {
       clubId,
       dataToUpdate: { certificates: certificates },
     };
-    const result2 = await updateClubArrayByClubID(updateDataForClub, session);
+    const result2 = await updateClubArrayById(updateDataForClub, session);
     if (result2.success == false) {
       await session.abortTransaction();
       session.endSession();
@@ -98,6 +99,7 @@ exports.createCertificate = async (req, res, next) => {
 
 //----------------------------------------------------------------------------------------------------------------
 
+//Final OK
 exports.getCertificateById = async (req, res, next) => {
   try {
     const data = req.body.data;
@@ -127,6 +129,7 @@ exports.getCertificateById = async (req, res, next) => {
 
 //----------------------------------------------------------------------------------------------------------------
 
+//Final OK
 exports.getCertificateByStudentId = async (req, res, next) => {
   try {
     const data = req.body.data;
@@ -155,6 +158,7 @@ exports.getCertificateByStudentId = async (req, res, next) => {
 
 //----------------------------------------------------------------------------------------------------------------
 
+//Final OK
 exports.getCertificateByEventId = async (req, res, next) => {
   try {
     const data = req.body.data;
@@ -183,6 +187,7 @@ exports.getCertificateByEventId = async (req, res, next) => {
 
 //----------------------------------------------------------------------------------------------------------------
 
+//Final OK
 exports.getCertificateByClubId = async (req, res, next) => {
   try {
     const data = req.body.data;
@@ -211,19 +216,26 @@ exports.getCertificateByClubId = async (req, res, next) => {
 
 //----------------------------------------------------------------------------------------------------------------
 
+//Final OK
 exports.deleteCertificateById = async (req, res, next) => {
   const session = await mongoose.startSession();
   try {
     const data = req.body.data;
-    const result = deleteCertificateById(data, session);
+    session.startTransaction();
+    const result = await deleteCertificateById(data, session);
+    console.log(result);
     if (result.success == false) {
+      await session.abortTransaction();
+      await session.endSession();
       res.status(result.code).json({
         success: result.success,
         error: result.error,
       });
+      return;
     }
 
     const deletedData = result.certificateData;
+    // console.log(result);
     const certificates = deletedData._id;
     const { email, clubId } = deletedData;
 
@@ -232,10 +244,10 @@ exports.deleteCertificateById = async (req, res, next) => {
       email,
       dataToUpdate: { certificates: certificates },
     };
-    const result1 = await deleteFromStudentArray(deleteDataForStudent);
+    const result1 = await deleteFromStudentArray(deleteDataForStudent, session);
     if (result1.success == false) {
       await session.abortTransaction();
-      session.endSession();
+      await session.endSession();
       res.status(result1.code).json({
         success: result1.success,
         error: result1.error,
@@ -248,7 +260,7 @@ exports.deleteCertificateById = async (req, res, next) => {
       clubId,
       dataToUpdate: { certificates: certificates },
     };
-    const result2 = await deleteFromClubArrayByID(deleteDataForClub);
+    const result2 = await deleteFromClubArrayById(deleteDataForClub, session);
     if (result2.success == false) {
       await session.abortTransaction();
       session.endSession();
@@ -267,28 +279,31 @@ exports.deleteCertificateById = async (req, res, next) => {
       message: result.message,
       data: deletedData,
     });
-  } catch {
-    console.log(error.message);
+  } catch (error) {
+    console.log(error);
     await session.abortTransaction();
     res.status(500).json({
       success: true,
       error: error.message,
     });
   }
-  session.endSession();
+  await session.endSession();
 };
 
 //----------------------------------------------------------------------------------------------------------------
 
+//Final OK
 exports.deleteCertificateByEventId = async (req, res, next) => {
   try {
     const data = req.body.data;
-    const result = deleteCertificateByEventId(data);
+    const result = await deleteCertificateByEventId(data);
+
     if (result.success == false) {
       res.status(result.code).json({
         success: result.success,
         error: result.error,
       });
+      return;
     }
 
     const deletedData = result.certificateData;
@@ -309,15 +324,17 @@ exports.deleteCertificateByEventId = async (req, res, next) => {
 
 //----------------------------------------------------------------------------------------------------------------
 
+//Final OK
 exports.deleteCertificateByClubId = async (req, res, next) => {
   try {
     const data = req.body.data;
-    const result = deleteCertificateByClubId(data);
+    const result = await deleteCertificateByClubId(data);
     if (result.success == false) {
       res.status(result.code).json({
         success: result.success,
         error: result.error,
       });
+      return;
     }
     const deletedData = result.certificateData;
     res.status(result.code).json({

@@ -3,7 +3,7 @@ const joi = require("joi");
 //exporting this function for validation call
 module.exports = (data) => {
   const schema = joi.object({
-    clubId: joi.string().required(),
+    clubId: joi.string(),
     isPrivate: joi.boolean(),
     eventName: joi.string(),
     eventDescription: joi.string().min(200),

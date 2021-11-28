@@ -1,6 +1,6 @@
-const moongose = require("mongoose");
+const mongoose = require("mongoose");
 
-const Schema = moongose.Schema;
+const Schema = mongoose.Schema;
 
 //schema for new certificate
 const certificateSchema = new Schema({
@@ -38,7 +38,7 @@ const certificateSchema = new Schema({
 });
 
 //generatig model for new certificate
-const Certificate = moongose.model("Certificate", certificateSchema);
+const Certificate = mongoose.model("Certificate", certificateSchema);
 
 //exporting certificate model
 module.exports = Certificate;

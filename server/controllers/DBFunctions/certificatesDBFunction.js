@@ -1,8 +1,9 @@
 const Certificates = require("../../models/Certificates");
 
+//Final OK
 exports.createCertificate = async (data, session) => {
   try {
-    const { studentId, eventId, clubId, certificateURL } = data;
+    const { studentId, email, eventId, clubId, certificateURL } = data;
 
     const certificate = new Certificates({
       studentId,
@@ -37,7 +38,7 @@ exports.getCertificateById = async (data) => {
       return {
         success: false,
         code: 404,
-        error: "No certificate with givee Id!",
+        error: "No certificate with given Id!",
       };
     }
     return {
@@ -58,6 +59,7 @@ exports.getCertificateById = async (data) => {
 
 //---------------------------------------------------------------------
 
+//Final OK
 exports.getAllCertificatesByStudentId = async (data) => {
   try {
     const { studentId } = data;
@@ -88,6 +90,7 @@ exports.getAllCertificatesByStudentId = async (data) => {
 
 //--------------------------------------------------------------------
 
+//Final OK
 exports.getAllCertificatesByEventId = async (data) => {
   try {
     const { eventId } = data;
@@ -118,6 +121,7 @@ exports.getAllCertificatesByEventId = async (data) => {
 
 //-----------------------------------------------------------------------
 
+//Final OK
 exports.getAllCertificatesByClubId = async (data) => {
   try {
     const { clubId } = data;
@@ -148,6 +152,7 @@ exports.getAllCertificatesByClubId = async (data) => {
 
 //-----------------------------------------------------------------------
 
+//Final OK
 exports.deleteCertificateById = async (data, session) => {
   try {
     const { certificateId } = data;
@@ -166,8 +171,8 @@ exports.deleteCertificateById = async (data, session) => {
     ).session(session);
     return {
       success: true,
-      certificateData: certificateDeleted,
       code: 200,
+      certificateData: certificateDeleted,
       message: "certificate deleted successfully",
     };
   } catch (error) {
@@ -182,10 +187,12 @@ exports.deleteCertificateById = async (data, session) => {
 
 //-----------------------------------------------------------------------
 
+//Final OK
 exports.deleteCertificateByEventId = async (data) => {
   try {
     const { eventId } = data;
-    const findEvent = await Certificates.findOne({ eventId });
+    const findEvent = await Certificates.findOne({ eventId: eventId });
+    console.log(findEvent);
     if (!findEvent) {
       return {
         success: false,
@@ -194,24 +201,26 @@ exports.deleteCertificateByEventId = async (data) => {
       };
     }
     const certificateDeleted = await Certificates.deleteMany({ eventId });
+
     return {
       success: true,
-      certificateData: certificateDeleted,
       code: 200,
+      certificateData: certificateDeleted,
       message: "certificate deleted successfully",
     };
   } catch (error) {
-    console.log(error);
+    console.log(error.message);
     return {
       success: false,
-      error: "Server Error!",
       code: 500,
+      error: "Server Error!",
     };
   }
 };
 
 //-----------------------------------------------------------------------
 
+//Final OK
 exports.deleteCertificateByClubId = async (data) => {
   try {
     const { clubId } = data;
