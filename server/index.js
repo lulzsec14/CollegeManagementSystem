@@ -25,6 +25,7 @@ const {
   eventsRouter,
   certificateRouter,
   studentRouter,
+  facultyRouter
 } = require("./routes/main");
 
 // ------------------------------------
@@ -43,6 +44,7 @@ app.use("/api/clubManager", clubManagerRouter);
 app.use("/api/event", eventsRouter);
 app.use("/api/certificate", certificateRouter);
 app.use("/api/student", studentRouter);
+app.use("/api/faculty", facultyRouter);
 
 // ------------------------------------
 
