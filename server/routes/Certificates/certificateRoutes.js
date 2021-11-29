@@ -1,36 +1,38 @@
-//Imports
-const express = require("express");
-const certificateRouter = express.Router();
-// ------------------------------------
+/**
+ * Tested
+ */
 
-//Constants
-const {
-  createCertificate,
-  getCertificateById,
-  getCertificateByStudentId,
-  getCertificateByEventId,
-  getCertificateByClubId,
-  deleteCertificateById,
-  deleteCertificateByEventId,
-  deleteCertificateByClubId,
-} = require("../../controllers/Certificates/certificateController");
-// ------------------------------------
+// //Imports
+// const express = require("express");
+// const certificateRouter = express.Router();
+// // ------------------------------------
 
-//Api Route
-certificateRouter.route("/create").post(createCertificate);
-certificateRouter.route("/certificate").get(getCertificateById);
-certificateRouter.route("/studentCertificate").get(getCertificateByStudentId);
-certificateRouter.route("/eventCertificate").get(getCertificateByEventId);
-certificateRouter.route("/clubCertificate").get(getCertificateByClubId);
-// certificateRouter.route("/deleteCertificate").delete(deleteCertificateById);
-// certificateRouter
-//   .route("/deleteEventCertificate")
-//   .delete(deleteCertificateByEventId);
-// certificateRouter
-//   .route("/deleteClubCertificate")
-//   .delete(deleteCertificateByClubId);
-// ------------------------------------
+// //Constants
+// const {
+//   createCertificate,
+//   getCertificateById,
+//   getCertificateByStudentId,
+//   getCertificateByEventId,
+//   getCertificateByClubId,
+//   deleteCertificateById,
+//   deleteCertificateByEventId,
+//   deleteCertificateByClubId,
+// } = require("../../controllers/Certificates/certificateController");
 
-// Exports
-module.exports = certificateRouter;
-// ------------------------------------
+// // ------------------------------------
+
+// // Certifiacte Routes
+// certificateRouter.route("/createCertificate").post(createCertificate);
+// certificateRouter.route("/getCertificateById").get(getCertificateById);
+// certificateRouter.route("/getAllCertificatesByStudentId").get(getCertificateByStudentId);
+// certificateRouter.route("/getAllCertificatesByEventId").get(getCertificateByEventId);
+// certificateRouter.route("/getAllCertificatesByClubId").get(getCertificateByClubId);
+// certificateRouter.route("/deleteCertificateById").delete(deleteCertificateById);
+// certificateRouter.route("/deleteAllCertificatesByEventId").delete(deleteCertificateByEventId);
+// certificateRouter.route("/deleteAllCertificatesByClubId").delete(deleteCertificateByClubId);
+
+// // ------------------------------------
+
+// // Exports
+// module.exports = certificateRouter;
+// // ------------------------------------

@@ -10,9 +10,10 @@ module.exports = (data) => {
     posterURL: joi.string(),
     registered: joi.array().items(
       joi.object({
-        name: joi.string().required(),
+        name: joi.string(),
         email: joi.string().required(),
-        strudentId: joi.string(),
+        rollNo: joi.string(),
+        studentId: joi.string(),
       })
     ),
     eventTime: joi.string().required(),
@@ -21,23 +22,15 @@ module.exports = (data) => {
     deadlineTime: joi.string().required(),
     attended: joi.array().items(
       joi.object({
-        studentId: joi.string(),
-        isPresent: joi.boolean().required(),
-        position: joi.string(),
+        rollNo: joi.string(),
+        email: joi.string(),
+        ispresent: joi.boolean().required(),
       })
     ),
     position: joi.array().items(
-      joi
-        .object({
-          first: joi.string(),
-        })
-        .required(),
-      joi
-        .object({
-          second: joi.string(),
-        })
-        .required(),
       joi.object({
+        first: joi.string(),
+        second: joi.string(),
         third: joi.string(),
       })
     ),

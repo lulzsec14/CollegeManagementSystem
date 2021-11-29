@@ -29,6 +29,7 @@ const validateEvent = require("../../Validators/EventValidator");
 
 //--------------------------------------------------------------
 
+
 exports.getEventById = async (data) => {
   try {
     const { eventId } = data;
@@ -59,9 +60,10 @@ exports.getEventById = async (data) => {
 
 //--------------------------------------------------------------
 
+
 exports.getAllEventsByClubId = async (data) => {
   try {
-    const findClubIdEvents = await Events.find({ data });
+    const findClubIdEvents = await Events.find({ clubId: data });
     if (!findClubIdEvents) {
       return {
         success: false,
@@ -87,6 +89,7 @@ exports.getAllEventsByClubId = async (data) => {
 };
 
 //--------------------------------------------------------------
+
 
 exports.getAllEvents = async () => {
   try {
@@ -115,7 +118,8 @@ exports.getAllEvents = async () => {
 
 //--------------------------------------------------------------
 
-exports.createEvent = async (data) => {
+
+exports.createEvent = async (data, session) => {
   const error = validateEvent(data);
   if (error) {
     return {
@@ -138,7 +142,9 @@ exports.createEvent = async (data) => {
       deadlineTime,
     } = data;
 
-    const findEvent = await Events.findOne({ eventName, clubId });
+    const findEvent = await Events.findOne({ eventName, clubId }).session(
+      session
+    );
     if (findEvent) {
       return {
         success: false,
@@ -157,7 +163,7 @@ exports.createEvent = async (data) => {
       eventVenue,
       deadlineTime,
     });
-    const eventCreated = await event.save();
+    const eventCreated = await event.save({ session });
     return {
       success: true,
       eventData: eventCreated,
@@ -165,7 +171,7 @@ exports.createEvent = async (data) => {
       message: "Event created Succesfuly!",
     };
   } catch (error) {
-    console.log(error.message);
+    console.log(error);
     return {
       success: false,
       error: "Server Error!",
@@ -175,6 +181,7 @@ exports.createEvent = async (data) => {
 };
 
 //--------------------------------------------------------------
+
 
 exports.updateEventById = async (data) => {
   try {
@@ -329,7 +336,8 @@ exports.updateEventById = async (data) => {
 
 //--------------------------------------------------------------
 
-exports.setRegistrationsByEventId = async (data) => {
+
+exports.setRegistrationsByEventId = async (data, session) => {
   try {
     const dataToUpdate = {};
     for (key in data) {
@@ -339,7 +347,7 @@ exports.setRegistrationsByEventId = async (data) => {
     }
     const { eventId } = data;
 
-    const findEvent = await Events.findById(eventId);
+    const findEvent = await Events.findById(eventId).session(session);
 
     if (!findEvent) {
       return {
@@ -354,7 +362,8 @@ exports.setRegistrationsByEventId = async (data) => {
         $addToSet: dataToUpdate,
       },
       { new: true }
-    );
+    ).session(session);
+
     return {
       success: true,
       code: 200,
@@ -373,17 +382,18 @@ exports.setRegistrationsByEventId = async (data) => {
 
 //--------------------------------------------------------------
 
-exports.setAttendanceByEventId = async (data) => {
-  try {
-    const dataToUpdate = {};
-    for (key in data) {
-      if (key === "attended") {
-        dataToUpdate[key] = data[key];
-      }
-    }
-    const { eventId } = data;
-    const findEvent = await Events.findById(eventId);
 
+exports.setAttendanceByEventId = async (data, session) => {
+  try {
+    var dataToUpdate = [];
+    dataToUpdate = data.attended;
+    // for (key in data) {
+    //   if (key === "attended") {
+    //     dataToUpdate[key] = data[key];
+    //   }
+    // }
+    const { eventId } = data;
+    const findEvent = await Events.findById(eventId).session(session);
     if (!findEvent) {
       return {
         success: false,
@@ -392,13 +402,11 @@ exports.setAttendanceByEventId = async (data) => {
       };
     }
 
-    const newAttendance = await Events.findOneAndUpdate(
-      eventId,
-      {
-        $addToSet: dataToUpdate,
+    const newAttendance = await Events.findByIdAndUpdate(eventId, {
+      $set: {
+        attended: dataToUpdate,
       },
-      { new: true }
-    );
+    }).session(session);
 
     return {
       success: true,
@@ -407,7 +415,7 @@ exports.setAttendanceByEventId = async (data) => {
       message: "Candidate marked successfully!",
     };
   } catch (error) {
-    console.log(error.message);
+    console.log(error);
     return {
       success: false,
       code: 500,
@@ -418,17 +426,18 @@ exports.setAttendanceByEventId = async (data) => {
 
 //--------------------------------------------------------------
 
+
 exports.setPositionsByEventId = async (data) => {
   try {
     const dataToUpdate = {};
     for (key in data) {
-      if (key !== "eventId") {
+      if (key !== "eventId" && key !== "eventName") {
         dataToUpdate[key] = data[key];
       }
     }
-    const { eventId } = data;
+    const { eventId, eventName } = data;
 
-    const findEvent = await Events.findById(eventId);
+    const findEvent = await Events.findOne({ eventId, eventName });
     if (!findEvent) {
       return {
         success: false,
@@ -438,7 +447,7 @@ exports.setPositionsByEventId = async (data) => {
     }
 
     const newPositions = await Events.findOneAndUpdate(
-      eventId,
+      { eventId, eventName },
       {
         $set: dataToUpdate,
       },
@@ -463,10 +472,23 @@ exports.setPositionsByEventId = async (data) => {
 
 //--------------------------------------------------------------
 
-exports.deleteEventById = async (data) => {
+
+exports.deleteEventById = async (data, session) => {
   try {
     const { eventId } = data;
-    const eventDeleted = await Events.findByIdAndDelete(eventId);
+
+    const findEvent = await Events.findById(eventId).session(session);
+
+    if (!findEvent) {
+      return {
+        success: false,
+        code: 404,
+        error: "Event does not exist.",
+      };
+    }
+    const eventDeleted = await Events.findByIdAndDelete(eventId).session(
+      session
+    );
     return {
       success: true,
       code: 200,
@@ -484,6 +506,7 @@ exports.deleteEventById = async (data) => {
 };
 
 //--------------------------------------------------------------
+
 
 exports.deleteEventsByClubId = async (data) => {
   try {
