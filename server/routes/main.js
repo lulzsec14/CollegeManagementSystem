@@ -15,7 +15,7 @@ module.exports = {
   coreMemberRouter,
 	clubManagerRouter,
   studentRouter,
-  facultyRouter
+  facultyRouter,
 };
 
 // ------------------------------------
