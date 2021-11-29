@@ -1,6 +1,6 @@
-const moongose = require("mongoose");
+const mongoose = require("mongoose");
 
-const Schema = moongose.Schema;
+const Schema = mongoose.Schema;
 
 //schema for new certificate
 const certificateSchema = new Schema({
@@ -10,6 +10,15 @@ const certificateSchema = new Schema({
     sparse: true,
     index: true,
     trim: true,
+  },
+  email: {
+    type: String,
+    trim: true,
+    required: true,
+    match: [
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+      "Please provide a valid email",
+    ],
   },
   eventId: {
     type: Schema.Types.ObjectId,
@@ -29,7 +38,7 @@ const certificateSchema = new Schema({
 });
 
 //generatig model for new certificate
-const Certificate = moongose.model("Certificate", certificateSchema);
+const Certificate = mongoose.model("Certificate", certificateSchema);
 
 //exporting certificate model
 module.exports = Certificate;
