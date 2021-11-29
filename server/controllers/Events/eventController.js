@@ -24,7 +24,6 @@ const {
 
 //----------------------------------------------------------------------------------------------------------------
 
-//Final OK
 exports.createEvent = async (req, res, next) => {
   const session = await mongoose.startSession();
   try {
@@ -79,7 +78,6 @@ exports.createEvent = async (req, res, next) => {
 
 //----------------------------------------------------------------------------------------------------------------
 
-//Final OK
 exports.getEventById = async (req, res, next) => {
   try {
     const data = req.body.data;
@@ -108,7 +106,6 @@ exports.getEventById = async (req, res, next) => {
 
 //----------------------------------------------------------------------------------------------------------------
 
-//Final OK
 exports.getEventByClubId = async (req, res, next) => {
   try {
     const { clubId } = req.body.data;
@@ -136,7 +133,6 @@ exports.getEventByClubId = async (req, res, next) => {
 
 //----------------------------------------------------------------------------------------------------------------
 
-//Final OK
 exports.getAllEvents = async (req, res, next) => {
   try {
     const data = req.body.data;
@@ -164,7 +160,6 @@ exports.getAllEvents = async (req, res, next) => {
 
 //----------------------------------------------------------------------------------------------------------------
 
-//Final OK
 exports.updateEvent = async (req, res, next) => {
   try {
     const data = req.body.data;
@@ -192,7 +187,6 @@ exports.updateEvent = async (req, res, next) => {
 
 //----------------------------------------------------------------------------------------------------------------
 
-//Final OK
 exports.registration = async (req, res, next) => {
   const session = await mongoose.startSession();
   try {
@@ -250,12 +244,11 @@ exports.registration = async (req, res, next) => {
 
 //----------------------------------------------------------------------------------------------------------------
 
-//Final OK
 exports.attendance = async (req, res, next) => {
   const session = await mongoose.startSession();
   try {
     const data = req.body.data;
-    const { email } = data.attended;
+    const emails = [];
     session.startTransaction();
     const result = await setAttendanceByEventId(data, session);
     if (result.success == false) {
@@ -271,8 +264,14 @@ exports.attendance = async (req, res, next) => {
     const attendanceData = result.attendanceData;
     const eventsAttended = attendanceData._id;
 
+    var array = attendanceData.attended;
+
+    for (obj in array) {
+      emails.push(array[obj].email);
+    }
+
     const updateDataForStudent = {
-      email,
+      emails,
       dataToUpdate: { eventsAttended: eventsAttended },
     };
     const result1 = await updateStudentArray(updateDataForStudent, session);
@@ -307,7 +306,6 @@ exports.attendance = async (req, res, next) => {
 
 ///----------------------------------------------------------------------------------------------------------------
 
-//Final OK
 exports.position = async (req, res, next) => {
   try {
     const data = req.body.data;
@@ -331,7 +329,6 @@ exports.position = async (req, res, next) => {
 
 //----------------------------------------------------------------------------------------------------------------
 
-// Final OK
 exports.deleteById = async (req, res, next) => {
   const session = await mongoose.startSession();
   try {
@@ -386,7 +383,6 @@ exports.deleteById = async (req, res, next) => {
 
 //----------------------------------------------------------------------------------------------------------------
 
-//Final OK
 exports.deleteByClubId = async (req, res, next) => {
   try {
     const data = req.body.data;

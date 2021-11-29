@@ -50,12 +50,6 @@ const eventSchema = new Schema({
         trim: true,
         required: [true, "Please provide a Roll number!"],
       },
-      studentId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Students",
-        trim: true,
-        required: [true, "Please provide studentID!"],
-      },
     },
   ],
   eventTime: {
@@ -83,12 +77,6 @@ const eventSchema = new Schema({
   },
   attended: [
     {
-      studentId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Students",
-        trim: true,
-        required: true,
-      },
       rollNo: {
         type: String,
         trim: true,

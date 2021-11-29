@@ -29,7 +29,7 @@ const validateEvent = require("../../Validators/EventValidator");
 
 //--------------------------------------------------------------
 
-//Final OK
+
 exports.getEventById = async (data) => {
   try {
     const { eventId } = data;
@@ -60,7 +60,7 @@ exports.getEventById = async (data) => {
 
 //--------------------------------------------------------------
 
-//Final OK
+
 exports.getAllEventsByClubId = async (data) => {
   try {
     const findClubIdEvents = await Events.find({ clubId: data });
@@ -90,7 +90,7 @@ exports.getAllEventsByClubId = async (data) => {
 
 //--------------------------------------------------------------
 
-//Final OK
+
 exports.getAllEvents = async () => {
   try {
     const findEvents = await Events.find({ isPrivate: false });
@@ -118,7 +118,7 @@ exports.getAllEvents = async () => {
 
 //--------------------------------------------------------------
 
-//Final OK
+
 exports.createEvent = async (data, session) => {
   const error = validateEvent(data);
   if (error) {
@@ -182,7 +182,7 @@ exports.createEvent = async (data, session) => {
 
 //--------------------------------------------------------------
 
-//Final OK
+
 exports.updateEventById = async (data) => {
   try {
     const dataToUpdate = {};
@@ -336,7 +336,7 @@ exports.updateEventById = async (data) => {
 
 //--------------------------------------------------------------
 
-//Final OK
+
 exports.setRegistrationsByEventId = async (data, session) => {
   try {
     const dataToUpdate = {};
@@ -382,18 +382,18 @@ exports.setRegistrationsByEventId = async (data, session) => {
 
 //--------------------------------------------------------------
 
-//Final OK
+
 exports.setAttendanceByEventId = async (data, session) => {
   try {
-    const dataToUpdate = {};
-    for (key in data) {
-      if (key === "attended") {
-        dataToUpdate[key] = data[key];
-      }
-    }
+    var dataToUpdate = [];
+    dataToUpdate = data.attended;
+    // for (key in data) {
+    //   if (key === "attended") {
+    //     dataToUpdate[key] = data[key];
+    //   }
+    // }
     const { eventId } = data;
     const findEvent = await Events.findById(eventId).session(session);
-
     if (!findEvent) {
       return {
         success: false,
@@ -402,13 +402,11 @@ exports.setAttendanceByEventId = async (data, session) => {
       };
     }
 
-    const newAttendance = await Events.findOneAndUpdate(
-      eventId,
-      {
-        $addToSet: dataToUpdate,
+    const newAttendance = await Events.findByIdAndUpdate(eventId, {
+      $set: {
+        attended: dataToUpdate,
       },
-      { new: true }
-    ).session(session);
+    }).session(session);
 
     return {
       success: true,
@@ -417,7 +415,7 @@ exports.setAttendanceByEventId = async (data, session) => {
       message: "Candidate marked successfully!",
     };
   } catch (error) {
-    console.log(error.message);
+    console.log(error);
     return {
       success: false,
       code: 500,
@@ -428,7 +426,7 @@ exports.setAttendanceByEventId = async (data, session) => {
 
 //--------------------------------------------------------------
 
-//Final OK
+
 exports.setPositionsByEventId = async (data) => {
   try {
     const dataToUpdate = {};
@@ -474,7 +472,7 @@ exports.setPositionsByEventId = async (data) => {
 
 //--------------------------------------------------------------
 
-// Final OK
+
 exports.deleteEventById = async (data, session) => {
   try {
     const { eventId } = data;
@@ -509,7 +507,7 @@ exports.deleteEventById = async (data, session) => {
 
 //--------------------------------------------------------------
 
-// Final OK
+
 exports.deleteEventsByClubId = async (data) => {
   try {
     const { clubId } = data;

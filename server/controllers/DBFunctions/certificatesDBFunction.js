@@ -1,6 +1,6 @@
 const Certificates = require("../../models/Certificates");
 
-//Final OK
+
 exports.createCertificate = async (data, session) => {
   try {
     const { studentId, email, eventId, clubId, certificateURL } = data;
@@ -59,7 +59,7 @@ exports.getCertificateById = async (data) => {
 
 //---------------------------------------------------------------------
 
-//Final OK
+
 exports.getAllCertificatesByStudentId = async (data) => {
   try {
     const { studentId } = data;
@@ -90,7 +90,7 @@ exports.getAllCertificatesByStudentId = async (data) => {
 
 //--------------------------------------------------------------------
 
-//Final OK
+
 exports.getAllCertificatesByEventId = async (data) => {
   try {
     const { eventId } = data;
@@ -121,7 +121,7 @@ exports.getAllCertificatesByEventId = async (data) => {
 
 //-----------------------------------------------------------------------
 
-//Final OK
+
 exports.getAllCertificatesByClubId = async (data) => {
   try {
     const { clubId } = data;
@@ -152,7 +152,7 @@ exports.getAllCertificatesByClubId = async (data) => {
 
 //-----------------------------------------------------------------------
 
-//Final OK
+
 exports.deleteCertificateById = async (data, session) => {
   try {
     const { certificateId } = data;
@@ -187,7 +187,7 @@ exports.deleteCertificateById = async (data, session) => {
 
 //-----------------------------------------------------------------------
 
-//Final OK
+
 exports.deleteCertificateByEventId = async (data) => {
   try {
     const { eventId } = data;
@@ -220,7 +220,7 @@ exports.deleteCertificateByEventId = async (data) => {
 
 //-----------------------------------------------------------------------
 
-//Final OK
+
 exports.deleteCertificateByClubId = async (data) => {
   try {
     const { clubId } = data;

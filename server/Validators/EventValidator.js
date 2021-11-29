@@ -22,8 +22,8 @@ module.exports = (data) => {
     deadlineTime: joi.string().required(),
     attended: joi.array().items(
       joi.object({
-        studentId: joi.string(),
         rollNo: joi.string(),
+        email: joi.string(),
         ispresent: joi.boolean().required(),
       })
     ),

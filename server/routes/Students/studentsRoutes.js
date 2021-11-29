@@ -26,6 +26,10 @@ const {
 } = require('../../controllers/Student/studentController');
 
 const { createFeedback, getFeedback, deleteFeedback } = require("../../controllers/Feedback/feedbackController");
+
+const {getCertificateById, getCertificateByStudentId} = require('../../controllers/Certificates/certificateController')
+
+const {getEventById, getEventByClubId, getAllEvents, registration} = require('../../controllers/Events/eventController');
 // ------------------------------------
 
 // Api Route
@@ -48,14 +52,24 @@ studentRouter.route('/getStudentDataById').get(getStudentDataById);
 studentRouter.route('/updateStudentArray').put(updateAnyStudentArray);
 studentRouter.route('/updateStudentArrayById').put(updateAnyStudentArrayById);
 studentRouter.route('/deleteStudentArray').delete(deleteFromAnyStudentArray);
-studentRouter
-  .route('/deleteStudentArrayById')
-  .delete(deleteFromAnyStudentArrayById);
+studentRouter.route('/deleteStudentArrayById').delete(deleteFromAnyStudentArrayById);
 
 // Feedback Router
 studentRouter.route('/addFeedback').post(createFeedback);
 studentRouter.route('/getFeedbackById').get(getFeedback);
 studentRouter.route('/deleteFeedbackById').delete(deleteFeedback);
+
+// Certificate Routes
+
+studentRouter.route("/getCertificateById").get(getCertificateById);
+studentRouter.route("/getAllCertificatesByStudentId").get(getCertificateByStudentId);
+//Event Routes
+
+studentRouter.route("/getEventById").get(getEventById);
+studentRouter.route("/getAllEventsByClubId").get(getEventByClubId);
+studentRouter.route("/getAllEvents").get(getAllEvents);
+studentRouter.route("/registerByEventId").post(registration);
+
 // ------------------------------------
 
 // Exports

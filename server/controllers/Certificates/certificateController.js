@@ -26,7 +26,6 @@ const {
 
 //----------------------------------------------------------------------------------------------------------------
 
-//Final OK
 exports.createCertificate = async (req, res, next) => {
   const session = await mongoose.startSession();
   try {
@@ -99,7 +98,6 @@ exports.createCertificate = async (req, res, next) => {
 
 //----------------------------------------------------------------------------------------------------------------
 
-//Final OK
 exports.getCertificateById = async (req, res, next) => {
   try {
     const data = req.body.data;
@@ -129,7 +127,6 @@ exports.getCertificateById = async (req, res, next) => {
 
 //----------------------------------------------------------------------------------------------------------------
 
-//Final OK
 exports.getCertificateByStudentId = async (req, res, next) => {
   try {
     const data = req.body.data;
@@ -158,7 +155,6 @@ exports.getCertificateByStudentId = async (req, res, next) => {
 
 //----------------------------------------------------------------------------------------------------------------
 
-//Final OK
 exports.getCertificateByEventId = async (req, res, next) => {
   try {
     const data = req.body.data;
@@ -187,7 +183,6 @@ exports.getCertificateByEventId = async (req, res, next) => {
 
 //----------------------------------------------------------------------------------------------------------------
 
-//Final OK
 exports.getCertificateByClubId = async (req, res, next) => {
   try {
     const data = req.body.data;
@@ -216,7 +211,6 @@ exports.getCertificateByClubId = async (req, res, next) => {
 
 //----------------------------------------------------------------------------------------------------------------
 
-//Final OK
 exports.deleteCertificateById = async (req, res, next) => {
   const session = await mongoose.startSession();
   try {
@@ -292,7 +286,6 @@ exports.deleteCertificateById = async (req, res, next) => {
 
 //----------------------------------------------------------------------------------------------------------------
 
-//Final OK
 exports.deleteCertificateByEventId = async (req, res, next) => {
   try {
     const data = req.body.data;
@@ -324,7 +317,6 @@ exports.deleteCertificateByEventId = async (req, res, next) => {
 
 //----------------------------------------------------------------------------------------------------------------
 
-//Final OK
 exports.deleteCertificateByClubId = async (req, res, next) => {
   try {
     const data = req.body.data;
