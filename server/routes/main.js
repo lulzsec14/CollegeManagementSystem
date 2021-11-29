@@ -19,7 +19,7 @@ module.exports = {
   eventsRouter,
   certificateRouter,
   studentRouter,
-  facultyRouter
+  facultyRouter,
 };
 
 // ------------------------------------
