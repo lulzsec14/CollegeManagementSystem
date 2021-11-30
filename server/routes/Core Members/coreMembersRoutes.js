@@ -7,7 +7,7 @@ const coreMemberRouter = express.Router();
 const { getClub } = require('../../controllers/Clubs/clubController');
 const { getCoreMember,getAllCoreMembers,updateCoreMember } = require('../../controllers/Core Members/coreMemberController');
 const { getAllClubManagers } = require('../../controllers/Club Managers/clubManagerController');
-const { getTask,getAllTasksOfClub,getAllTasksOfCoreMember,updateTask } = require('../../controllers/Task List/taskListController');
+const { getTask,getAllTasksByClubId,getAllTasksByCoreMemberId,updateTask } = require('../../controllers/Task List/taskListController');
 const {getEventById, getEventByClubId, getAllEvents, updateEvent, 
        attendance, position} = require("../../controllers/Events/eventController");
 const {createCertificate, getCertificateById, getCertificateByStudentId, getCertificateByEventId, 
@@ -35,8 +35,8 @@ coreMemberRouter.route('/getAllClubManagersById').get(getAllClubManagers);
 
 coreMemberRouter.route('/getTaskById').get(getTask);
 coreMemberRouter.route('/updateTaskById').put(updateTask);
-coreMemberRouter.route('/getAllTasksOfCoreMemberByCoreMemberId').get(getAllTasksOfCoreMember);
-coreMemberRouter.route('/getAllTasksByClubId').get(getAllTasksOfClub);
+coreMemberRouter.route('/getAllTasksByCoreMemberId').get(getAllTasksByCoreMemberId);
+coreMemberRouter.route('/getAllTasksByClubId').get(getAllTasksByClubId);
 
 //core member event routes
 

@@ -21,6 +21,7 @@
     "joi": "^17.4.2",
     "joi-objectid": "^4.0.2",
     "mongoose": "^6.0.13",
+    "mongoose-type-url": "^2.1.0",
     "validator": "^13.7.0"
   },
   "devDependencies": {
