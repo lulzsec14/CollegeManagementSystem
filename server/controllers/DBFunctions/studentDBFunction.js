@@ -381,3 +381,44 @@ exports.deleteFromStudentArrayById = async (data, session) => {
     };
   }
 };
+
+// // Function for updating attendance
+// exports.updateStudentsAttendance = async (data, session) => {
+//   const { emails } = data;
+//   try {
+//     emails.forEach((element) => {
+//       // console.log(element);
+
+//       updateAttendanceData = {
+//         email: element,
+//         dataToUpdate: {
+//           eventsAttended: data.dataToUpdate.eventsAttended,
+//         },
+//       };
+
+//       console.log(updateAttendanceData);
+//       let result = await updateStudentArray(updateAttendanceData, session);
+
+//       if (result.success === false) {
+//         return {
+//           success: false,
+//           code: 404,
+//           error: result.error,
+//         };
+//       }
+//     });
+
+//     return {
+//       success: true,
+//       code: 200,
+//       message: 'Attendance marked successfully!',
+//       studentData: {},
+//     };
+//   } catch (err) {
+//     return {
+//       success: false,
+//       code: 500,
+//       error: err.message,
+//     };
+//   }
+// };
