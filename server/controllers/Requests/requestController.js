@@ -257,7 +257,7 @@ exports.deleteOneRequest = async (req, res, next) => {
 
   const session = await mongoose.startSession();
   try {
-    await session.startTransaction();
+    session.startTransaction();
 
     // console.log(toBeDeletedRequest);
 

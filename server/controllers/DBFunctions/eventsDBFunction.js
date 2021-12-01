@@ -385,14 +385,21 @@ exports.setRegistrationsByEventId = async (data, session) => {
 
 exports.setAttendanceByEventId = async (data, session) => {
   try {
-    var dataToUpdate = [];
+
+    console.log(data);
+
+    let dataToUpdate = [];
     dataToUpdate = data.attended;
-    // for (key in data) {
+
+    console.log(dataToUpdate);
+    
+    
     //   if (key === "attended") {
-    //     dataToUpdate[key] = data[key];
-    //   }
-    // }
-    const { eventId } = data;
+      //     dataToUpdate[key] = data[key];
+      //   }
+      // }
+      const { eventId } = data;
+      console.log(eventId);    // for (key in data) {
     const findEvent = await Events.findById(eventId).session(session);
     if (!findEvent) {
       return {

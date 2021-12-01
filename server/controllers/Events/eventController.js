@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 // Imports DB functions of Events
 const {
   createEvent,
@@ -11,16 +11,19 @@ const {
   setPositionsByEventId,
   deleteEventById,
   deleteEventsByClubId,
-} = require("../DBFunctions/eventsDBFunction");
+} = require('../DBFunctions/eventsDBFunction');
 
 // Imports DB functions of Student
-const { updateStudentArray } = require("../DBFunctions/studentDBFunction");
+const { updateStudentArray } = require('../DBFunctions/studentDBFunction');
 
 // Imports DB functions of Club
 const {
   updateClubArrayById,
   deleteFromClubArrayById,
-} = require("../DBFunctions/clubsDBFunction");
+} = require('../DBFunctions/clubsDBFunction');
+
+// Imports attendance controller from StudentsConrtoller
+const { updateStudentsAttendance } = require('../Student/studentController');
 
 //----------------------------------------------------------------------------------------------------------------
 
@@ -260,6 +263,7 @@ exports.attendance = async (req, res, next) => {
       });
       return;
     }
+    console.log(data);
 
     const attendanceData = result.attendanceData;
     const eventsAttended = attendanceData._id;
@@ -274,7 +278,13 @@ exports.attendance = async (req, res, next) => {
       emails,
       dataToUpdate: { eventsAttended: eventsAttended },
     };
-    const result1 = await updateStudentArray(updateDataForStudent, session);
+
+    console.log(updateDataForStudent);
+
+    const result1 = await updateStudentsAttendance(
+      updateDataForStudent,
+      session
+    );
     if (result1.success == false) {
       await session.abortTransaction();
       session.endSession();
@@ -285,7 +295,7 @@ exports.attendance = async (req, res, next) => {
       return;
     }
 
-    //all transactions are successfull, now commiting transaction and returning data.
+    // all transactions are successfull, now commiting transaction and returning data.
     await session.commitTransaction();
 
     res.status(result.code).json({
@@ -293,6 +303,7 @@ exports.attendance = async (req, res, next) => {
       message: result.message,
       data: attendanceData,
     });
+    return;
   } catch (error) {
     console.log(error.message);
     await session.abortTransaction();
