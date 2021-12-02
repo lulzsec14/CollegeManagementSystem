@@ -31,7 +31,11 @@ const {
   getFeedback,
   deleteFeedback,
 } = require('../../controllers/Feedback/feedbackController');
-const { registration } = require('../../controllers/Events/eventController');
+
+const {
+  registration,
+  testAttendaceDBFunction,
+} = require('../../controllers/Events/eventController');
 // ------------------------------------
 
 // Api Route

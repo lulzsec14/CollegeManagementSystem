@@ -1,5 +1,5 @@
-const Events = require("../../models/Events");
-const validateEvent = require("../../Validators/EventValidator");
+const Events = require('../../models/Events');
+const validateEvent = require('../../Validators/EventValidator');
 
 // exports.getEvent = async (data) => {
 //   try {
@@ -37,7 +37,7 @@ exports.getEventById = async (data) => {
     if (!findEvent) {
       return {
         success: false,
-        error: "Event with given Id does not exist!",
+        error: 'Event with given Id does not exist!',
         code: 404,
       };
     }
@@ -45,14 +45,14 @@ exports.getEventById = async (data) => {
     return {
       success: true,
       code: 200,
-      message: "Event with given Id found successfully!",
+      message: 'Event with given Id found successfully!',
       eventData: findEvent,
     };
   } catch (error) {
     return {
       success: false,
       code: 500,
-      message: "Server Error!",
+      message: 'Server Error!',
     };
   }
 };
@@ -65,7 +65,7 @@ exports.getAllEventsByClubId = async (data) => {
     if (!findClubIdEvents) {
       return {
         success: false,
-        error: "Events with given Club Id does not exist!",
+        error: 'Events with given Club Id does not exist!',
         code: 404,
       };
     }
@@ -73,14 +73,14 @@ exports.getAllEventsByClubId = async (data) => {
     return {
       success: true,
       code: 200,
-      message: "Events with given Club Id found successfully!",
+      message: 'Events with given Club Id found successfully!',
       eventData: findClubIdEvents,
     };
   } catch (error) {
     console.log(error);
     return {
       success: false,
-      message: "Server Error!",
+      message: 'Server Error!',
       code: 500,
     };
   }
@@ -94,7 +94,7 @@ exports.getAllEvents = async () => {
     if (!findEvents) {
       return {
         success: false,
-        error: "There are no events!",
+        error: 'There are no events!',
         code: 404,
       };
     }
@@ -102,12 +102,12 @@ exports.getAllEvents = async () => {
       success: true,
       eventData: findEvents,
       code: 200,
-      message: "All non private events found successfully!",
+      message: 'All non private events found successfully!',
     };
   } catch (error) {
     return {
       success: false,
-      message: "Server Error!",
+      message: 'Server Error!',
       code: 500,
     };
   }
@@ -144,7 +144,7 @@ exports.createEvent = async (data, session) => {
     if (findEvent) {
       return {
         success: false,
-        error: "Event with given name already exists!",
+        error: 'Event with given name already exists!',
         code: 403,
       };
     }
@@ -164,13 +164,13 @@ exports.createEvent = async (data, session) => {
       success: true,
       eventData: eventCreated,
       code: 201,
-      message: "Event created Succesfuly!",
+      message: 'Event created Succesfuly!',
     };
   } catch (error) {
     console.log(error);
     return {
       success: false,
-      error: "Server Error!",
+      error: 'Server Error!',
       code: 500,
     };
   }
@@ -182,7 +182,7 @@ exports.updateEventById = async (data) => {
   try {
     const dataToUpdate = {};
     for (key in data) {
-      if (key !== "eventId" && key !== "clubId") {
+      if (key !== 'eventId' && key !== 'clubId') {
         dataToUpdate[key] = data[key];
       }
     }
@@ -191,7 +191,7 @@ exports.updateEventById = async (data) => {
     if (!findEvent) {
       return {
         success: false,
-        error: "Event does not exist!",
+        error: 'Event does not exist!',
         code: 404,
       };
     }
@@ -208,14 +208,14 @@ exports.updateEventById = async (data) => {
       success: true,
       eventData: eventUpdated,
       code: 201,
-      message: "Event updated successfully",
+      message: 'Event updated successfully',
     };
   } catch (error) {
     console.log(error.message);
     return {
       success: false,
       code: 500,
-      error: "Server Error",
+      error: 'Server Error',
     };
   }
 };
@@ -336,7 +336,7 @@ exports.setRegistrationsByEventId = async (data, session) => {
     const dataToUpdate = {};
     let email = null;
     for (key in data) {
-      if (key === "registered") {
+      if (key === 'registered') {
         email = data[key].email;
         dataToUpdate[key] = data[key];
       }
@@ -349,20 +349,20 @@ exports.setRegistrationsByEventId = async (data, session) => {
       return {
         success: false,
         code: 404,
-        error: "Event does not exist.",
+        error: 'Event does not exist.',
       };
     }
 
     const alreadyRegistered = await Events.find({
       _id: eventId,
-      "registered.email": email,
+      'registered.email': email,
     }).session(session);
 
     if (alreadyRegistered.length) {
       return {
         success: false,
         code: 404,
-        error: "User already registered!",
+        error: 'User already registered!',
       };
     }
 
@@ -378,14 +378,14 @@ exports.setRegistrationsByEventId = async (data, session) => {
       success: true,
       code: 200,
       registrationData: newRegistration,
-      message: "Candidate Registered successfully!",
+      message: 'Candidate Registered successfully!',
     };
   } catch (error) {
     console.log(error.message);
     return {
       success: false,
       code: 500,
-      error: "Server Error!",
+      error: 'Server Error!',
     };
   }
 };
@@ -409,7 +409,7 @@ exports.setAttendanceByEventId = async (data, session) => {
       return {
         success: false,
         code: 404,
-        error: "Event does not exist.",
+        error: 'Event does not exist.',
       };
     }
 
@@ -427,14 +427,14 @@ exports.setAttendanceByEventId = async (data, session) => {
       success: true,
       code: 200,
       attendanceData: newAttendance,
-      message: "Candidate marked successfully!",
+      message: 'Candidate marked successfully!',
     };
   } catch (error) {
     console.log(error);
     return {
       success: false,
       code: 500,
-      error: "Server Error!",
+      error: 'Server Error!',
     };
   }
 };
@@ -445,7 +445,7 @@ exports.setPositionsByEventId = async (data) => {
   try {
     const dataToUpdate = {};
     for (key in data) {
-      if (key !== "eventId" && key !== "eventName") {
+      if (key !== 'eventId' && key !== 'eventName') {
         dataToUpdate[key] = data[key];
       }
     }
@@ -456,7 +456,7 @@ exports.setPositionsByEventId = async (data) => {
       return {
         success: false,
         code: 404,
-        error: "Event does not exist.",
+        error: 'Event does not exist.',
       };
     }
 
@@ -472,14 +472,14 @@ exports.setPositionsByEventId = async (data) => {
       success: true,
       code: 200,
       positionData: newPositions,
-      message: "Top 3 decided successfully!",
+      message: 'Top 3 decided successfully!',
     };
   } catch (error) {
     console.log(error.message);
     return {
       success: false,
       code: 500,
-      error: "Server Error!",
+      error: 'Server Error!',
     };
   }
 };
@@ -496,7 +496,7 @@ exports.deleteEventById = async (data, session) => {
       return {
         success: false,
         code: 404,
-        error: "Event does not exist.",
+        error: 'Event does not exist.',
       };
     }
     const eventDeleted = await Events.findByIdAndDelete(eventId).session(
@@ -506,14 +506,14 @@ exports.deleteEventById = async (data, session) => {
       success: true,
       code: 200,
       eventData: eventDeleted,
-      message: "Event Deleted successfully!",
+      message: 'Event Deleted successfully!',
     };
   } catch (error) {
     console.log(error.message);
     return {
       success: false,
       code: 500,
-      error: "Server Error!",
+      error: 'Server Error!',
     };
   }
 };
@@ -528,14 +528,14 @@ exports.deleteEventsByClubId = async (data) => {
       success: true,
       code: 200,
       eventData: eventDeleted,
-      message: "Event Deleted successfully!",
+      message: 'Event Deleted successfully!',
     };
   } catch (error) {
     console.log(error.message);
     return {
       success: false,
       code: 500,
-      error: "Server Error!",
+      error: 'Server Error!',
     };
   }
 };

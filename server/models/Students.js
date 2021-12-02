@@ -48,6 +48,7 @@ const studentSchema = mongoose.Schema({
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Clubs',
+      // populate: true,
     },
   ],
   clubsRequested: [
