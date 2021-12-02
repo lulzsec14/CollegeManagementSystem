@@ -4,7 +4,7 @@ const clubManagerRouter = express.Router();
 
 // controller imports
 
-const { getClub } = require("../../controllers/Clubs/clubController");
+const { getClub,updateClub } = require("../../controllers/Clubs/clubController");
 const {
 	getClubManager,
 	getAllClubManagersByClubIndex,
@@ -14,6 +14,7 @@ const {
 	addCoreMember,
 	getCoreMember,
 	getAllCoreMembersByClubIndex,
+	updateCoreMember,
 	deleteCoreMember,
 } = require("../../controllers/Core Members/coreMemberController");
 const {
@@ -61,18 +62,20 @@ const {
 
 // club Manager club Routes
 clubManagerRouter.route("/getClubByIndex").get(getClub);
+clubManagerRouter.route("/updateClubById").put(updateClub);
 
 // club manager core member routes
 clubManagerRouter.route("/addCoreMember").post(addCoreMember);
-clubManagerRouter.route("/getCoreMemberByRollNo").get(getCoreMember);
+clubManagerRouter.route("/getCoreMemberByRollNoAndClubIndex").get(getCoreMember);
+clubManagerRouter.route("/updateCoreMemberById").put(updateCoreMember)
 clubManagerRouter.route("/deleteCoreMemberById").delete(deleteCoreMember);
-clubManagerRouter.route("/getAllCoreMembersByClubId").get(getAllCoreMembersByClubIndex);
+clubManagerRouter.route("/getAllCoreMembersByClubIndex").get(getAllCoreMembersByClubIndex);
 
 // club manager Routes
 
 clubManagerRouter.route("/getClubManagerByRollNo").get(getClubManager);
 clubManagerRouter.route("/updateClubManagerById").put(updateClubManager);
-clubManagerRouter.route("/getAllClubManagersById").get(getAllClubManagersByClubIndex);
+clubManagerRouter.route("/getAllClubManagersByClubIndex").get(getAllClubManagersByClubIndex);
 
 // club manager task list routes
 

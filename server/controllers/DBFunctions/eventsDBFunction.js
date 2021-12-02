@@ -334,8 +334,10 @@ exports.updateEventById = async (data) => {
 exports.setRegistrationsByEventId = async (data, session) => {
   try {
     const dataToUpdate = {};
+    let email = null;
     for (key in data) {
       if (key === 'registered') {
+        email = data[key].email;
         dataToUpdate[key] = data[key];
       }
     }
@@ -350,7 +352,21 @@ exports.setRegistrationsByEventId = async (data, session) => {
         error: 'Event does not exist.',
       };
     }
-    const newRegistration = await Events.findOneAndUpdate(
+
+    const alreadyRegistered = await Events.find({
+      _id: eventId,
+      'registered.email': email,
+    }).session(session);
+
+    if (alreadyRegistered.length) {
+      return {
+        success: false,
+        code: 404,
+        error: 'User already registered!',
+      };
+    }
+
+    const newRegistration = await Events.findByIdAndUpdate(
       eventId,
       {
         $addToSet: dataToUpdate,
@@ -380,17 +396,15 @@ exports.setAttendanceByEventId = async (data, session) => {
   try {
     // console.log(data);
 
-    let dataToUpdate = {};
+    let dataToUpdate = [];
+    dataToUpdate = data.attended;
 
-    let dataToUpdateArray = [];
-    dataToUpdateArray = data.attended;
+    // console.log(dataToUpdate);
 
-    dataToUpdate.attended = dataToUpdateArray;
-    
     const { eventId } = data;
-    
-    const findEvent = await Events.findById(eventId).session(session);
+    // console.log(eventId);
 
+    const findEvent = await Events.findById(eventId).session(session);
     if (!findEvent) {
       return {
         success: false,
@@ -401,7 +415,11 @@ exports.setAttendanceByEventId = async (data, session) => {
 
     const newAttendance = await Events.findByIdAndUpdate(
       eventId,
-      { $set: dataToUpdate },
+      {
+        $set: {
+          attended: dataToUpdate,
+        },
+      },
       { new: true }
     ).session(session);
 

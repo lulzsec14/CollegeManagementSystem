@@ -63,18 +63,14 @@ adminRouter.route("/addClubManager").post(addClubManager);
 adminRouter.route("/getClubManagerByRollNo").get(getClubManager);
 adminRouter.route("/updateClubManagerById").put(updateClubManager);
 adminRouter.route("/deleteClubManagerById").delete(deleteClubManager);
-adminRouter
-	.route("/getAllClubManagersByClubIndex")
-	.get(getAllClubManagersByClubIndex);
+adminRouter.route("/getAllClubManagersByClubIndex").get(getAllClubManagersByClubIndex);
 
 // admin core member routes
 adminRouter.route("/addCoreMember").post(addCoreMember);
 adminRouter.route("/getCoreMemberByRollNoAndClubIndex").get(getCoreMember);
 adminRouter.route("/updateCoreMemberById").put(updateCoreMember);
 adminRouter.route("/deleteCoreMemberById").delete(deleteCoreMember);
-adminRouter
-	.route("/getAllCoreMembersByClubIndex")
-	.get(getAllCoreMembersByClubIndex);
+adminRouter.route("/getAllCoreMembersByClubIndex").get(getAllCoreMembersByClubIndex);
 
 // admin admin routes
 adminRouter.route("/register").post(register);

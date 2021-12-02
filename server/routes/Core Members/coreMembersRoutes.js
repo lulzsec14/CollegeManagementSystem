@@ -44,21 +44,19 @@ const {
 coreMemberRouter.route("/getClubByIndex").get(getClub);
 
 // club manager core member routes
-coreMemberRouter.route("/getCoreMemberByRollNo").get(getCoreMember);
+coreMemberRouter.route("/getCoreMemberByRollNoAndClubIndex").get(getCoreMember);
 coreMemberRouter.route("/updateCoreMemberById").put(updateCoreMember);
-coreMemberRouter.route("/getAllCoreMembersByClubId").get(getAllCoreMembersByClubIndex);
+coreMemberRouter.route("/getAllCoreMembersByClubIndex").get(getAllCoreMembersByClubIndex);
 
 // club manager Routes
 
-coreMemberRouter.route("/getAllClubManagersById").get(getAllClubManagersByClubIndex);
+coreMemberRouter.route("/getAllClubManagersByClubIndex").get(getAllClubManagersByClubIndex);
 
 // club manager task list routes
 
 coreMemberRouter.route("/getTaskById").get(getTask);
 coreMemberRouter.route("/updateTaskById").put(updateTask);
-coreMemberRouter
-	.route("/getAllTasksByCoreMemberId")
-	.get(getAllTasksByCoreMemberId);
+coreMemberRouter.route("/getAllTasksByCoreMemberId").get(getAllTasksByCoreMemberId);
 coreMemberRouter.route("/getAllTasksByClubId").get(getAllTasksByClubId);
 
 //core member event routes
@@ -74,22 +72,12 @@ coreMemberRouter.route("/setPositionsByEventIdAndEventName").post(position);
 
 coreMemberRouter.route("/createCertificate").post(createCertificate);
 coreMemberRouter.route("/getCertificateById").get(getCertificateById);
-coreMemberRouter
-	.route("/getAllCertificatesByStudentId")
-	.get(getCertificateByStudentId);
-coreMemberRouter
-	.route("/getAllCertificatesByEventId")
-	.get(getCertificateByEventId);
-coreMemberRouter
-	.route("/getAllCertificatesByClubId")
-	.get(getCertificateByClubId);
+coreMemberRouter.route("/getAllCertificatesByStudentId").get(getCertificateByStudentId);
+coreMemberRouter.route("/getAllCertificatesByEventId").get(getCertificateByEventId);
+coreMemberRouter.route("/getAllCertificatesByClubId").get(getCertificateByClubId);
 coreMemberRouter.route("/deleteCertificateById").delete(deleteCertificateById);
-coreMemberRouter
-	.route("/deleteAllCertificatesByEventId")
-	.delete(deleteCertificateByEventId);
-coreMemberRouter
-	.route("/deleteAllCertificatesByClubId")
-	.delete(deleteCertificateByClubId);
+coreMemberRouter.route("/deleteAllCertificatesByEventId").delete(deleteCertificateByEventId);
+coreMemberRouter.route("/deleteAllCertificatesByClubId").delete(deleteCertificateByClubId);
 
 // Exports
 module.exports = coreMemberRouter;

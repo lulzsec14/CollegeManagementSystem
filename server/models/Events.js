@@ -1,5 +1,5 @@
-const mongoose = require('mongoose');
-require('mongoose-type-url');
+const mongoose = require("mongoose");
+require("mongoose-type-url");
 
 const Schema = mongoose.Schema;
 //schema for new Event
@@ -10,7 +10,7 @@ const eventSchema = new Schema({
   },
   clubId: {
     type: Schema.Types.ObjectId,
-    ref: 'Clubs',
+    ref: "Clubs",
   },
   eventName: {
     type: String,
@@ -34,21 +34,22 @@ const eventSchema = new Schema({
     {
       name: {
         type: String,
-        required: [true, 'Please provide a name!'],
+        required: [true, "Please provide a name!"],
         trim: true,
       },
       email: {
         type: String,
         trim: true,
+        unique: true,
         match: [
           /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-          'Please provide a valid email',
+          "Please provide a valid email",
         ],
       },
       rollNo: {
         type: String,
         trim: true,
-        required: [true, 'Please provide a Roll number!'],
+        required: [true, "Please provide a Roll number!"],
       },
     },
   ],
@@ -71,8 +72,8 @@ const eventSchema = new Schema({
     trim: true,
     default: {
       type: Object,
-      ref: 'Events',
-      field: 'eventTime',
+      ref: "Events",
+      field: "eventTime",
     },
   },
   attended: [
@@ -81,22 +82,19 @@ const eventSchema = new Schema({
         type: String,
         trim: true,
         required: true,
-        unique: false,
       },
       email: {
         type: String,
         trim: true,
         match: [
           /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-          'Please provide a valid email',
+          "Please provide a valid email",
         ],
-        unique: false,
       },
       ispresent: {
         type: Boolean,
         default: false,
         required: true,
-        unique: false,
       },
     },
   ],
@@ -105,8 +103,8 @@ const eventSchema = new Schema({
       first: [
         {
           type: String,
-          ref: 'Students',
-          field: 'rollNo',
+          ref: "Students",
+          field: "rollNo",
           trim: true,
         },
       ],
@@ -114,8 +112,8 @@ const eventSchema = new Schema({
       second: [
         {
           type: String,
-          ref: 'Students',
-          field: 'rollNo',
+          ref: "Students",
+          field: "rollNo",
           trim: true,
         },
       ],
@@ -123,8 +121,8 @@ const eventSchema = new Schema({
       third: [
         {
           type: String,
-          ref: 'Students',
-          field: 'rollNo',
+          ref: "Students",
+          field: "rollNo",
           trim: true,
         },
       ],
@@ -133,7 +131,7 @@ const eventSchema = new Schema({
 });
 
 //generatig model for new Event
-const Events = mongoose.model('Events', eventSchema);
+const Events = mongoose.model("Events", eventSchema);
 
 //exporting Event model
 module.exports = Events;
