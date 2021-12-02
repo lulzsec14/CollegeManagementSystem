@@ -29,7 +29,6 @@ const validateEvent = require("../../Validators/EventValidator");
 
 //--------------------------------------------------------------
 
-
 exports.getEventById = async (data) => {
   try {
     const { eventId } = data;
@@ -60,7 +59,6 @@ exports.getEventById = async (data) => {
 
 //--------------------------------------------------------------
 
-
 exports.getAllEventsByClubId = async (data) => {
   try {
     const findClubIdEvents = await Events.find({ clubId: data });
@@ -90,7 +88,6 @@ exports.getAllEventsByClubId = async (data) => {
 
 //--------------------------------------------------------------
 
-
 exports.getAllEvents = async () => {
   try {
     const findEvents = await Events.find({ isPrivate: false });
@@ -117,7 +114,6 @@ exports.getAllEvents = async () => {
 };
 
 //--------------------------------------------------------------
-
 
 exports.createEvent = async (data, session) => {
   const error = validateEvent(data);
@@ -181,7 +177,6 @@ exports.createEvent = async (data, session) => {
 };
 
 //--------------------------------------------------------------
-
 
 exports.updateEventById = async (data) => {
   try {
@@ -336,12 +331,13 @@ exports.updateEventById = async (data) => {
 
 //--------------------------------------------------------------
 
-
 exports.setRegistrationsByEventId = async (data, session) => {
   try {
     const dataToUpdate = {};
+    let email = null;
     for (key in data) {
       if (key === "registered") {
+        email = data[key].email;
         dataToUpdate[key] = data[key];
       }
     }
@@ -356,7 +352,21 @@ exports.setRegistrationsByEventId = async (data, session) => {
         error: "Event does not exist.",
       };
     }
-    const newRegistration = await Events.findOneAndUpdate(
+
+    const alreadyRegistered = await Events.find({
+      _id: eventId,
+      "registered.email": email,
+    }).session(session);
+
+    if (alreadyRegistered.length) {
+      return {
+        success: false,
+        code: 404,
+        error: "User already registered!",
+      };
+    }
+
+    const newRegistration = await Events.findByIdAndUpdate(
       eventId,
       {
         $addToSet: dataToUpdate,
@@ -382,24 +392,18 @@ exports.setRegistrationsByEventId = async (data, session) => {
 
 //--------------------------------------------------------------
 
-
 exports.setAttendanceByEventId = async (data, session) => {
   try {
-
-    console.log(data);
+    // console.log(data);
 
     let dataToUpdate = [];
     dataToUpdate = data.attended;
 
-    console.log(dataToUpdate);
-    
-    
-    //   if (key === "attended") {
-      //     dataToUpdate[key] = data[key];
-      //   }
-      // }
-      const { eventId } = data;
-      console.log(eventId);    // for (key in data) {
+    // console.log(dataToUpdate);
+
+    const { eventId } = data;
+    // console.log(eventId);
+
     const findEvent = await Events.findById(eventId).session(session);
     if (!findEvent) {
       return {
@@ -409,11 +413,15 @@ exports.setAttendanceByEventId = async (data, session) => {
       };
     }
 
-    const newAttendance = await Events.findByIdAndUpdate(eventId, {
-      $set: {
-        attended: dataToUpdate,
+    const newAttendance = await Events.findByIdAndUpdate(
+      eventId,
+      {
+        $set: {
+          attended: dataToUpdate,
+        },
       },
-    }).session(session);
+      { new: true }
+    ).session(session);
 
     return {
       success: true,
@@ -432,7 +440,6 @@ exports.setAttendanceByEventId = async (data, session) => {
 };
 
 //--------------------------------------------------------------
-
 
 exports.setPositionsByEventId = async (data) => {
   try {
@@ -479,7 +486,6 @@ exports.setPositionsByEventId = async (data) => {
 
 //--------------------------------------------------------------
 
-
 exports.deleteEventById = async (data, session) => {
   try {
     const { eventId } = data;
@@ -513,7 +519,6 @@ exports.deleteEventById = async (data, session) => {
 };
 
 //--------------------------------------------------------------
-
 
 exports.deleteEventsByClubId = async (data) => {
   try {

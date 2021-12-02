@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 // Imports DB functions of Events
 const {
   createEvent,
@@ -11,19 +11,19 @@ const {
   setPositionsByEventId,
   deleteEventById,
   deleteEventsByClubId,
-} = require('../DBFunctions/eventsDBFunction');
+} = require("../DBFunctions/eventsDBFunction");
 
 // Imports DB functions of Student
-const { updateStudentArray } = require('../DBFunctions/studentDBFunction');
+const { updateStudentArray } = require("../DBFunctions/studentDBFunction");
 
 // Imports DB functions of Club
 const {
   updateClubArrayById,
   deleteFromClubArrayById,
-} = require('../DBFunctions/clubsDBFunction');
+} = require("../DBFunctions/clubsDBFunction");
 
 // Imports attendance controller from StudentsConrtoller
-const { updateStudentsAttendance } = require('../Student/studentController');
+const { updateStudentsAttendance } = require("../Student/studentController");
 
 //----------------------------------------------------------------------------------------------------------------
 
@@ -214,7 +214,7 @@ exports.registration = async (req, res, next) => {
       email,
       dataToUpdate: { eventsParticipated: eventsParticipated },
     };
-    console.log(registerData);
+    // console.log(registerData.registered);
     const result1 = await updateStudentArray(updateDataForStudent, session);
     if (result1.success == false) {
       await session.abortTransaction();
@@ -263,7 +263,7 @@ exports.attendance = async (req, res, next) => {
       });
       return;
     }
-    console.log(data);
+    // console.log(data);
 
     const attendanceData = result.attendanceData;
     const eventsAttended = attendanceData._id;
@@ -273,13 +273,13 @@ exports.attendance = async (req, res, next) => {
     for (obj in array) {
       emails.push(array[obj].email);
     }
-
+    // console.log(emails);
     const updateDataForStudent = {
       emails,
       dataToUpdate: { eventsAttended: eventsAttended },
     };
 
-    console.log(updateDataForStudent);
+    // console.log(updateDataForStudent);
 
     const result1 = await updateStudentsAttendance(
       updateDataForStudent,
