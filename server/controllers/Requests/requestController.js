@@ -51,8 +51,10 @@ exports.createNewRequest = async (req, res, next) => {
     updateStudentArrayData.dataToUpdate.clubsRequested =
       createdRequest.requestData._id;
 
-    console.log(updateStudentArrayData);
-    console.log(updateClubArrayData);
+    // console.log(updateStudentArrayData);
+    // console.log(updateClubArrayData);
+
+    // Get student data 
 
     if (createdRequest.success == false) {
       await session.abortTransaction();

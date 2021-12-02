@@ -263,7 +263,7 @@ exports.attendance = async (req, res, next) => {
       });
       return;
     }
-    console.log(data);
+    // console.log(data);
 
     const attendanceData = result.attendanceData;
     const eventsAttended = attendanceData._id;
@@ -279,7 +279,7 @@ exports.attendance = async (req, res, next) => {
       dataToUpdate: { eventsAttended: eventsAttended },
     };
 
-    console.log(updateDataForStudent);
+    // console.log(updateDataForStudent);
 
     const result1 = await updateStudentsAttendance(
       updateDataForStudent,

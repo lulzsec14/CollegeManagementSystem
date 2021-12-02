@@ -81,6 +81,7 @@ const eventSchema = new Schema({
         type: String,
         trim: true,
         required: true,
+        unique: false,
       },
       email: {
         type: String,
@@ -89,11 +90,13 @@ const eventSchema = new Schema({
           /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
           'Please provide a valid email',
         ],
+        unique: false,
       },
       ispresent: {
         type: Boolean,
         default: false,
         required: true,
+        unique: false,
       },
     },
   ],

@@ -46,7 +46,7 @@ app.use("/api/faculty", facultyRouter);
 
 // Server
 const server = app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`.yellow.bold);
+  console.log(`Server running on port ${PORT}`.yellow.bold.underline);
 });
 // ------------------------------------
 
