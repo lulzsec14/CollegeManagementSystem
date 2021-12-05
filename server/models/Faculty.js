@@ -8,7 +8,7 @@ const facultySchema = mongoose.Schema({
         type:String,
         required:[true,"Name can't be empty"],
         minlength:[1,"Name can't be empty"],
-        maxlength:[40,"Character limit exceeded: 40"]
+        maxlength:[50,"Character limit exceeded: 50"]
 
     },
     facultyEmail:{

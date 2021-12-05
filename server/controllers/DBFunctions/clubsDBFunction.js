@@ -127,7 +127,6 @@ exports.insertClub = async (data,session) => {
        
     }
     catch (error) {
-    console.log(error)
     return {
       success: false,
       code:500,
