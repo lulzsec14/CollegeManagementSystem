@@ -1,5 +1,46 @@
 const Faculty = require('../../models/Faculty')
 const textToHash = require('../../utilities/textToHashed')
+const comparePasswords = require("../../utilities/comparePasswords");
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+exports.loginFaculty = async (data) => {
+    const { facultyEmail, password } = data;
+    try {
+      const findFaculty = await Faculty.findOne({ facultyEmail });
+      if (!findFaculty) {
+        return {
+          success: false,
+          code: 404,
+          error: "No Account registered with the mentioned email id!",
+        };
+      } else {
+        if (comparePasswords(password, findFaculty.password)) {
+          return {
+            success: true,
+            code: 200,
+            message: "Faculty logged in successfully!",
+            facultyData: findFaculty,
+          };
+        } else {
+          return {
+            success: false,
+            code: 401,
+            error: "Not Authorized!",
+          };
+        }
+      }
+    } catch (err) {
+      return {
+        success: false,
+        code: 500,
+        error: err.message,
+      };
+    }
+  };
+  
+
 exports.getFacultyByFacultyEmail = async (data,session) => {
     try {
         

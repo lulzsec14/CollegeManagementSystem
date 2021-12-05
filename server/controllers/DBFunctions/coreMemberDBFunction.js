@@ -1,5 +1,46 @@
 const CoreMembers = require('../../models/CoreMembers');
 const textToHash = require('../../utilities/textToHashed')
+const comparePasswords = require("../../utilities/comparePasswords");
+////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+exports.loginCoreMember = async (data) => {
+  try {
+    const { studentRollNo, clubIndex,password } = data
+        const findCoreMember = await CoreMembers.findOne({studentRollNo,clubIndex})
+        if(!findCoreMember)
+        {
+            return {
+                success: false,
+                error: 'Core Member does not exist!',
+                code: 404
+              }
+        } 
+    else {
+      if (comparePasswords(password, findCoreMember.password)) {
+        return {
+          success: true,
+          code: 200,
+          message: "Core Member logged in successfully!",
+          coreMemberData: findCoreMember,
+        };
+      } else {
+        return {
+          success: false,
+          code: 401,
+          error: "Not Authorized!",
+        };
+      }
+    }
+  } catch (err) {
+    return {
+      success: false,
+      code: 500,
+      error: err.message,
+    };
+  }
+};
+
 exports.getCoreMemberById = async (data,session) => {
     try {
         

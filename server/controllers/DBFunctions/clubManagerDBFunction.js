@@ -1,5 +1,48 @@
 const ClubManagers = require('../../models/ClubManagers');
 const textToHash = require('../../utilities/textToHashed')
+const comparePasswords = require("../../utilities/comparePasswords");
+
+
+/////////////////////////////////////////////////////////////
+
+exports.loginClubManager = async (data) => {
+  try {
+    const { studentRollNo, password } = data;
+    const findClubManager = await ClubManagers.findOne({studentRollNo})
+    if(!findClubManager)
+    {
+        return {
+            success: false,
+            error: 'Club Manager does not exist!',
+            code: 404
+          }
+    } 
+    else {
+      if (comparePasswords(password, findClubManager.password)) {
+        return {
+          success: true,
+          code: 200,
+          message: "Club Manager logged in successfully!",
+          clubManagerData: findClubManager,
+        };
+      } else {
+        return {
+          success: false,
+          code: 401,
+          error: "Not Authorized!",
+        };
+      }
+    }
+  } catch (err) {
+    return {
+      success: false,
+      code: 500,
+      error: err.message,
+    };
+  }
+};
+
+
 exports.getClubManagerById = async (data,session) => {
     try {
         
