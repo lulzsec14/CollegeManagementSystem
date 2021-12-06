@@ -1,6 +1,20 @@
 const Task_List = require('../../models/Task_List');
+const { 
+  validateCreateTask,
+  validateGetTaskById,
+  validateTasksByClubId,
+  validateTasksByCoreMemberId,
+  validateUpdateTask,
+  validateDeleteById
+
+
+} = require("../../Validators/TaskListValidator")
 exports.getTask = async (data,session) => {
-  try {
+  try {const validationError = validateGetTaskById(data);
+        if (validationError) {
+           const { details } = validationError;
+           return { success: false, code: 400, error: details[0].message };
+          }
     const { taskId } = data;
     const findTask = await Task_List.findById(taskId).session(session);
     if (!findTask) {
@@ -28,7 +42,11 @@ exports.getTask = async (data,session) => {
   }
 };
 exports.getTasksByClubId = async (data,session) => {
-  try {
+  try {const validationError = validateTasksByClubId(data);
+        if (validationError) {
+           const { details } = validationError;
+           return { success: false, code: 400, error: details[0].message };
+          }
     const { clubId } = data;
     const findTasks = await Task_List.find({ clubId }).session(session);
     if (!findTasks) {
@@ -55,7 +73,11 @@ exports.getTasksByClubId = async (data,session) => {
   }
 };
 exports.getTasksByCoreMemberId = async (data,session) => {
-  try {
+  try {const validationError = validateTasksByCoreMemberId(data);
+        if (validationError) {
+           const { details } = validationError;
+           return { success: false, code: 400, error: details[0].message };
+          }
     const { coreMemberId } = data;
     const assignedTo = coreMemberId
     const findTasks = await Task_List.find({ assignedTo }).session(session);
@@ -83,7 +105,11 @@ exports.getTasksByCoreMemberId = async (data,session) => {
   }
 };
 exports.insertTask = async (data,session) => {
-  try {
+  try {const validationError = validateCreateTask(data);
+        if (validationError) {
+           const { details } = validationError;
+           return { success: false, code: 400, error: details[0].message };
+          }
     const {
       taskTitle,
       taskDescription,
@@ -113,7 +139,11 @@ exports.insertTask = async (data,session) => {
 };
 exports.updateTask = async (data,session) => {
   try {
-    
+    const validationError = validateUpdateTask(data);
+        if (validationError) {
+           const { details } = validationError;
+           return { success: false, code: 400, error: details[0].message };
+          }
     const dataToUpdate = data.dataToUpdate
     const { taskId } = data;
     const findTask = await Task_List.findById(taskId).session(session);
@@ -142,7 +172,11 @@ exports.updateTask = async (data,session) => {
 };
 
 exports.deleteTask = async (data,session) => {
-  try {
+  try {const validationError = validateDeleteById(data);
+        if (validationError) {
+           const { details } = validationError;
+           return { success: false, code: 400, error: details[0].message };
+          }
     const { taskId } = data;
     const findTask = await Task_List.findById(taskId).session(session);
     if (!findTask) {
@@ -165,7 +199,11 @@ exports.deleteTask = async (data,session) => {
   }
 };
 exports.deleteTasksByClubId = async (data,session) => {
-  try {
+  try {const validationError = validateTasksByClubId(data);
+        if (validationError) {
+           const { details } = validationError;
+           return { success: false, code: 400, error: details[0].message };
+          }
     const { clubId } = data;
     const tasksDeleted = await Task_List.deleteMany({ clubId }).session(session);
     return { success: true, taskData: tasksDeleted, code:200, message:"Tasks deleted successfully" };
@@ -180,7 +218,11 @@ exports.deleteTasksByClubId = async (data,session) => {
   }
 };
 exports.deleteTasksByCoreMemberId = async (data,session) => {
-  try {
+  try {const validationError = validateTasksByCoreMemberId(data);
+        if (validationError) {
+           const { details } = validationError;
+           return { success: false, code: 400, error: details[0].message };
+          }
     const { coreMemberId } = data;
     const assignedTo = coreMemberId
     const tasksDeleted = await Task_List.deleteMany({ assignedTo }).session(session)

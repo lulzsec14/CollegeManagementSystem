@@ -30,6 +30,7 @@ exports.addTask = async (req, res, next) => {
       session.startTransaction()
       const op1 = await insertTask(data1,session);
       if(!op1.success) {
+        console.log("task")
         await session.abortTransaction()
         await session.endSession()
         res.status(op1.code).json({error:op1.error})
@@ -37,22 +38,22 @@ exports.addTask = async (req, res, next) => {
       }
       const { taskData } = op1
       const { _id, assignedTo, clubId } = taskData
-      const coreMemberId = assignedTo
-      const taskList = _id
+      const coreMemberId = assignedTo.toString()
+      const taskList = _id.toString()
       const data2 = {coreMemberId,dataToUpdate:{taskList:taskList}}
       const op2 = await updateCoreMemberArrayById(data2,session)
       if(!op2.success){
-        
+        console.log("core")
         await session.abortTransaction()
         await session.endSession()
         res.status(op2.code).json({error:op2.error})
         return
   
       }
-      const data3 = {clubId,dataToUpdate:{taskList:taskList}}
+      const clubId1 = clubId.toString()
+      const data3 = {clubId:clubId1,dataToUpdate:{taskList:taskList}}
       const op3 = await updateClubArrayById(data3,session)
       if(!op3.success){
-        
         await session.abortTransaction()
         await session.endSession()
         res.status(op3.code).json({error:op3.error})

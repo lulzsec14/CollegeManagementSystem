@@ -80,10 +80,19 @@ exports.validateUpdateClubManagerByRollNo = (data) => {
   };
   // ------------------------------------
 
-// Delete Validator function
-exports.validateDeleteClubManager = (data) => {
+// DeleteById Validator function
+exports.validateDeleteClubManagerById = (data) => {
   const schema = joi.object({
     clubManagerId: joi.objectId().required(),
+  });
+  const { error } = schema.validate(data);
+  return error;
+};
+
+// DeleteByRollNo Validator function
+exports.validateDeleteClubManagerByRollNo = (data) => {
+  const schema = joi.object({
+    studentRollNo: joi.string().required().trim(),
   });
   const { error } = schema.validate(data);
   return error;

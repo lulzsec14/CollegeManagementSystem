@@ -1,8 +1,28 @@
 const Clubs = require('../../models/Clubs');
 const Faculty = require('../../models/Faculty');
+const {
+  validateCreateClub,
+  validateGetClubByIndex,
+  validateGetClubById,
+  validateUpdateClubById,
+  validateUpdateClubByIndex,
+  validateUpdateClubArrayById,
+  validateUpdateClubArrayByIndex,
+  validateDeleteById,
+  validateDeleteByIndex
+  
+} = require('../../Validators/ClubValidator');
+
+
+//-----------------------------------------------
+
 exports.getClubByIndex = async (data,session) => {
     try {
-        
+        const validationError = validateGetClubByIndex(data);
+        if (validationError) {
+           const { details } = validationError;
+           return { success: false, code: 400, error: details[0].message };
+          }
         const { clubIndex } = data
         const findClub = await Clubs.findOne({ clubIndex }).session(session)
         if(!findClub)
@@ -33,7 +53,11 @@ exports.getClubByIndex = async (data,session) => {
 }
 exports.getClubById = async (data,session) => {
     try {
-        
+        const validationError = validateGetClubById(data);
+  if (validationError) {
+    const { details } = validationError;
+    return { success: false, code: 400, error: details[0].message };
+  }
         const { clubId } = data
         const findClub = await Clubs.findById(clubId).session(session)
         if(!findClub)
@@ -94,7 +118,11 @@ exports.getAllClubs = async (session) => {
 }
 exports.insertClub = async (data,session) => {
     try
-    {
+    {const validationError = validateCreateClub(data);
+  if (validationError) {
+    const { details } = validationError;
+    return { success: false, code: 400, error: details[0].message };
+  }
         const { clubIndex, clubName, clubDescription, managedBy } = data
         const facultyEmail = managedBy
         const findFaculty = await Faculty.findOne({facultyEmail}).session(session)
@@ -138,7 +166,11 @@ exports.insertClub = async (data,session) => {
 exports.updateClubByIndex = async (data,session) => {
     try
     {
-      
+      const validationError = validateUpdateClubByIndex(data);
+  if (validationError) {
+    const { details } = validationError;
+    return { success: false, code: 400, error: details[0].message };
+  }
         const dataToUpdate = data.dataToUpdate
         if(dataToUpdate.managedBy)
         {
@@ -180,7 +212,11 @@ exports.updateClubByIndex = async (data,session) => {
 }
 exports.updateClubById = async (data,session) => {
     try
-    {
+    {const validationError = validateUpdateClubById(data);
+  if (validationError) {
+    const { details } = validationError;
+    return { success: false, code: 400, error: details[0].message };
+  }
         const dataToUpdate = data.dataToUpdate
         if(dataToUpdate.managedBy)
         {
@@ -224,7 +260,11 @@ exports.updateClubById = async (data,session) => {
 
 exports.updateClubArrayByIndex = async (data,session) => {
     try
-    {
+    {const validationError = validateUpdateClubArrayByIndex(data);
+  if (validationError) {
+    const { details } = validationError;
+    return { success: false, code: 400, error: details[0].message };
+  }
         const dataToUpdate = data.dataToUpdate
         const {clubIndex} = data
         const findClub = await Clubs.findOne({ clubIndex }).session(session)
@@ -253,6 +293,11 @@ exports.updateClubArrayByIndex = async (data,session) => {
 exports.updateClubArrayById = async (data,session) => {
     try
     {
+      const validationError = validateUpdateClubArrayById(data);
+  if (validationError) {
+    const { details } = validationError;
+    return { success: false, code: 400, error: details[0].message };
+  }
       const dataToUpdate = data.dataToUpdate
         
         const {clubId} = data
@@ -282,7 +327,11 @@ exports.updateClubArrayById = async (data,session) => {
 
 exports.deleteFromClubArrayById = async (data,session) => {
     try
-    {
+    {const validationError = validateUpdateClubArrayById(data);
+  if (validationError) {
+    const { details } = validationError;
+    return { success: false, code: 400, error: details[0].message };
+  }
        const dataToUpdate = data.dataToUpdate
         
         const {clubId} = data
@@ -315,7 +364,11 @@ exports.deleteFromClubArrayById = async (data,session) => {
 }
 exports.deleteFromClubArrayByIndex = async (data,session) => {
     try
-    {
+    {const validationError = validateUpdateClubArrayByIndex(data);
+  if (validationError) {
+    const { details } = validationError;
+    return { success: false, code: 400, error: details[0].message };
+  }
         const dataToUpdate = data.dataToUpdate
         const {clubIndex} = data
         const findClub = await Clubs.findOne({ clubIndex }).session(session)
@@ -348,7 +401,11 @@ exports.deleteFromClubArrayByIndex = async (data,session) => {
 
 exports.deleteClubByIndex = async (data,session) => {
     try
-    {
+    {const validationError = validateDeleteByIndex(data);
+  if (validationError) {
+    const { details } = validationError;
+    return { success: false, code: 400, error: details[0].message };
+  }
         const { clubIndex } = data
         const findClub = await Clubs.findOne({ clubIndex }).session(session)
         if(!findClub)
@@ -375,6 +432,11 @@ exports.deleteClubByIndex = async (data,session) => {
 exports.deleteClubById = async (data,session) => {
     try
     {
+      const validationError = validateDeleteById(data);
+      if (validationError) {
+        const { details } = validationError;
+        return { success: false, code: 400, error: details[0].message };
+      }
         const { clubId } = data
         const findClub = await Clubs.findById( clubId ).session(session)
         if(!findClub)

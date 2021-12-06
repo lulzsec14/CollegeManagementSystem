@@ -5,6 +5,7 @@ joi.objectId = require('joi-objectid')(joi)
 
 // insert validator function
 exports.validateCreateTask = (data) => {
+  
   const schema = joi.object({
     taskTitle: joi.string().required().min(1).max(40).trim(),
     taskDescription: joi.string().required().min(1).max(700).trim(),

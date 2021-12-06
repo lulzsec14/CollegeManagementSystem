@@ -1,12 +1,35 @@
 const ClubManagers = require('../../models/ClubManagers');
 const textToHash = require('../../utilities/textToHashed')
 const comparePasswords = require("../../utilities/comparePasswords");
+const { 
+  validateCreateClubManager,
+  validateGetClubManagerByRollNo,
+  validateGetClubManagerById,
+  validateClubManagerLogin,
+  validateUpdateClubManagerById,
+  validateUpdateClubManagerByRollNo,
+  validateDeleteClubManagerById,
+  validateDeleteClubManagerByRollNo,
+  validateClubManagersByClubIndex,
+  validateClubManagerByRollNo
 
+
+
+
+
+
+
+} = require("./../../Validators/ClubManagerValidator")
 
 /////////////////////////////////////////////////////////////
 
 exports.loginClubManager = async (data) => {
   try {
+    const validationError = validateClubManagerLogin(data);
+        if (validationError) {
+           const { details } = validationError;
+           return { success: false, code: 400, error: details[0].message };
+          }
     const { studentRollNo, password } = data;
     const findClubManager = await ClubManagers.findOne({studentRollNo})
     if(!findClubManager)
@@ -45,7 +68,11 @@ exports.loginClubManager = async (data) => {
 
 exports.getClubManagerById = async (data,session) => {
     try {
-        
+        const validationError = validateGetClubManagerById(data);
+        if (validationError) {
+           const { details } = validationError;
+           return { success: false, code: 400, error: details[0].message };
+          }
         const { clubManagerId } = data
         const findClubManager = await ClubManagers.findById( clubManagerId ).session(session)
         if(!findClubManager)
@@ -76,7 +103,11 @@ exports.getClubManagerById = async (data,session) => {
 }
 exports.getClubManagerByRollNo = async (data,session) => {
     try {
-        
+        const validationError = validateGetClubManagerByRollNo(data);
+        if (validationError) {
+           const { details } = validationError;
+           return { success: false, code: 400, error: details[0].message };
+          }
         const { studentRollNo } = data
         const findClubManager = await ClubManagers.findOne({studentRollNo}).session(session)
         if(!findClubManager)
@@ -107,7 +138,11 @@ exports.getClubManagerByRollNo = async (data,session) => {
 }
 exports.getClubManagersByClubIndex = async (data,session) => {
     try {
-        
+        const validationError = validateClubManagersByClubIndex(data);
+        if (validationError) {
+           const { details } = validationError;
+           return { success: false, code: 400, error: details[0].message };
+          }
         const { clubIndex } = data;
         const findClubManagers = await ClubManagers.find({ clubIndex }).session(session)
         if(!findClubManagers)
@@ -138,7 +173,11 @@ exports.getClubManagersByClubIndex = async (data,session) => {
 }
 exports.insertClubManager = async (data,session) => {
     try
-    {
+    {const validationError = validateCreateClubManager(data);
+        if (validationError) {
+           const { details } = validationError;
+           return { success: false, code: 400, error: details[0].message };
+          }
         const { studentRollNo, clubIndex, password, role } = data
         const findClubManager = await ClubManagers.findOne({ studentRollNo }).session(session)
         if(findClubManager)
@@ -172,7 +211,11 @@ exports.insertClubManager = async (data,session) => {
 }
 exports.updateClubManagerByRollNo = async (data,session) => {
     try
-    {
+    {const validationError = validateUpdateClubManagerByRollNo(data);
+        if (validationError) {
+           const { details } = validationError;
+           return { success: false, code: 400, error: details[0].message };
+          }
         const dataToUpdate = data.dataToUpdate
         const {studentRollNo} = data
         if(dataToUpdate.password)
@@ -208,7 +251,11 @@ exports.updateClubManagerByRollNo = async (data,session) => {
 exports.updateClubManagerById = async (data,session) => {
     try
     {
-      
+      const validationError = validateUpdateClubManagerById(data);
+        if (validationError) {
+           const { details } = validationError;
+           return { success: false, code: 400, error: details[0].message };
+          }
         const dataToUpdate = data.dataToUpdate
         const {clubManagerId} = data
         if(dataToUpdate.password)
@@ -244,7 +291,11 @@ exports.updateClubManagerById = async (data,session) => {
 
 exports.deleteClubManagerByRollNo = async (data,session) => {
     try
-    {
+    {const validationError = validateDeleteClubManagerByRollNo(data);
+        if (validationError) {
+           const { details } = validationError;
+           return { success: false, code: 400, error: details[0].message };
+          }
         const { studentRollNo } = data
         const findClubManager = await ClubManagers.findOne({ studentRollNo }).session(session)
         if(!findClubManager)
@@ -271,6 +322,11 @@ exports.deleteClubManagerByRollNo = async (data,session) => {
 exports.deleteClubManagerById = async (data,session) => {
     try
     {
+        const validationError = validateDeleteClubManagerById(data);
+        if (validationError) {
+           const { details } = validationError;
+           return { success: false, code: 400, error: details[0].message };
+          }
         const { clubManagerId } = data
         const findClubManager = await ClubManagers.findById( clubManagerId ).session(session)
         if(!findClubManager)
@@ -295,7 +351,11 @@ exports.deleteClubManagerById = async (data,session) => {
     
 }
 exports.deleteClubManagersByClubIndex = async (data,session) => {
-    try {
+    try {const validationError = validateClubManagersByClubIndex(data);
+        if (validationError) {
+           const { details } = validationError;
+           return { success: false, code: 400, error: details[0].message };
+          }
       const { clubIndex } = data;
       const clubManagersDeleted = await ClubManagers.deleteMany({ clubIndex }).session(session);
       return { success: true, clubManagerData: clubManagersDeleted, code:200, message:"Club Managers deleted successfully" };

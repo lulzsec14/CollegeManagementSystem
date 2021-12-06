@@ -98,7 +98,7 @@ exports.validateUpdateClubArrayById = (data) => {
 
   
 // UpdateByIndex Validator function
-exports.validateUpdateClubByIndex = (data) => {
+exports.validateUpdateClubArrayByIndex = (data) => {
     const schema = joi.object({
       clubIndex: joi.string().required(),
       dataToUpdate: joi

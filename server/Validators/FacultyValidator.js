@@ -57,9 +57,9 @@ exports.validateUpdateFacultyById = (data) => {
         facultyName: joi.string().min(1).max(50).trim(),
         password: joi.string().min(8).trim(),
         phone: joi.string().length(10).trim(),
-        cludId:joi.string().allow(null)  
+        clubId:joi.any()  
       })
-      .or('facultyEmailNew', 'facultyName', 'password','phone','cludId'),
+      .or('facultyEmailNew', 'facultyName', 'password','phone','clubId'),
   });
   const { error } = schema.validate(data);
   return error;
@@ -77,9 +77,9 @@ exports.validateUpdateFacultyByEmail = (data) => {
           facultyName: joi.string().min(1).max(50).trim(),
           password: joi.string().min(8).trim(),
           phone: joi.string().length(10).trim(),
-          cludId:joi.string().allow(null)  
+          clubId:joi.objectId().allow(null) 
         })
-        .or('facultyEmailNew', 'facultyName', 'password','phone','cludId'),
+        .or('facultyEmailNew', 'facultyName', 'password','phone','clubId'),
     });
     const { error } = schema.validate(data);
     return error;
@@ -100,6 +100,16 @@ exports.validateDeleteFacultyById = (data) => {
 exports.validateDeleteFacultyByEmail = (data) => {
   const schema = joi.object({
     facultyEmail: joi.string().email().required().trim(),
+  });
+  const { error } = schema.validate(data);
+  return error;
+};
+// ------------------------------------
+
+// clubId Validator function
+exports.validateFacultyClubId = (data) => {
+  const schema = joi.object({
+    clubId: joi.objectId().required()
   });
   const { error } = schema.validate(data);
   return error;

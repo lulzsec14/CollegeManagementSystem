@@ -1,11 +1,31 @@
 const CoreMembers = require('../../models/CoreMembers');
 const textToHash = require('../../utilities/textToHashed')
 const comparePasswords = require("../../utilities/comparePasswords");
+const { 
+  validateCreateCoreMember,
+  validateGetCoreMemberByRollNoAndClubIndex,
+  validateGetCoreMemberById,
+  validateUpdateCoreMemberById,
+  validateCoreMemberLogin,
+  validateUpdateCoreMemberByRollNoAndClubIndex,
+  validateUpdateCoreMemberArrayById,
+  validateUpdateCoreMemberArrayByRollNoAndClubIndex,
+  validateDeleteCoreMember,
+  validateCoreMembersByClubIndex
+
+
+} = require("../../Validators/CoreMemberValidator")
+
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 exports.loginCoreMember = async (data) => {
   try {
+    const validationError = validateCoreMemberLogin(data);
+        if (validationError) {
+           const { details } = validationError;
+           return { success: false, code: 400, error: details[0].message };
+          }
     const { studentRollNo, clubIndex,password } = data
         const findCoreMember = await CoreMembers.findOne({studentRollNo,clubIndex})
         if(!findCoreMember)
@@ -43,7 +63,11 @@ exports.loginCoreMember = async (data) => {
 
 exports.getCoreMemberById = async (data,session) => {
     try {
-        
+        const validationError = validateGetCoreMemberById(data);
+        if (validationError) {
+           const { details } = validationError;
+           return { success: false, code: 400, error: details[0].message };
+          }
         const { coreMemberId } = data
         const findCoreMember = await CoreMembers.findById( coreMemberId ).session(session)
         if(!findCoreMember)
@@ -74,7 +98,11 @@ exports.getCoreMemberById = async (data,session) => {
 }
 exports.getCoreMemberByRollNoAndClubIndex = async (data,session) => {
     try {
-        
+        const validationError = validateGetCoreMemberByRollNoAndClubIndex(data);
+        if (validationError) {
+           const { details } = validationError;
+           return { success: false, code: 400, error: details[0].message };
+          }
         const { studentRollNo, clubIndex } = data
         const findCoreMember = await CoreMembers.findOne({studentRollNo,clubIndex}).session(session)
         if(!findCoreMember)
@@ -105,7 +133,11 @@ exports.getCoreMemberByRollNoAndClubIndex = async (data,session) => {
 }
 exports.getCoreMembersByClubIndex = async (data,session) => {
     try {
-        
+        const validationError = validateCoreMembersByClubIndex(data);
+        if (validationError) {
+           const { details } = validationError;
+           return { success: false, code: 400, error: details[0].message };
+          }
         const { clubIndex } = data;
         const findCoreMembers = await CoreMembers.find({ clubIndex }).session(session)
         if(!findCoreMembers)
@@ -136,7 +168,11 @@ exports.getCoreMembersByClubIndex = async (data,session) => {
 }
 exports.insertCoreMember = async (data,session) => {
     try
-    {
+    {const validationError = validateCreateCoreMember(data);
+        if (validationError) {
+           const { details } = validationError;
+           return { success: false, code: 400, error: details[0].message };
+          }
         const { studentRollNo, clubIndex, password, role } = data
         const findCoreMember = await CoreMembers.findOne({ studentRollNo, clubIndex}).session(session)
         if(findCoreMember)
@@ -170,7 +206,11 @@ exports.insertCoreMember = async (data,session) => {
 }
 exports.updateCoreMemberByRollNoAndClubIndex = async (data,session) => {
     try
-    {
+    {const validationError = validateUpdateCoreMemberByRollNoAndClubIndex(data);
+        if (validationError) {
+           const { details } = validationError;
+           return { success: false, code: 400, error: details[0].message };
+          }
         const dataToUpdate = data.dataToUpdate
         const {studentRollNo, clubIndex} = data
         if(dataToUpdate.password)
@@ -205,7 +245,11 @@ exports.updateCoreMemberByRollNoAndClubIndex = async (data,session) => {
 }
 exports.updateCoreMemberById = async (data,session) => {
     try
-    {
+    {const validationError = validateUpdateCoreMemberById(data);
+        if (validationError) {
+           const { details } = validationError;
+           return { success: false, code: 400, error: details[0].message };
+          }
          const dataToUpdate = data.dataToUpdate
         const {coreMemberId} = data
         if(dataToUpdate.password)
@@ -241,7 +285,11 @@ exports.updateCoreMemberById = async (data,session) => {
 
 exports.updateCoreMemberArrayByRollNoAndClubIndex = async (data,session) => {
     try
-    {
+    {const validationError = validateUpdateCoreMemberArrayByRollNoAndClubIndex(data);
+        if (validationError) {
+           const { details } = validationError;
+           return { success: false, code: 400, error: details[0].message };
+          }
       const dataToUpdate = data.dataToUpdate
         
         const {studentRollNo, clubIndex} = data
@@ -270,7 +318,11 @@ exports.updateCoreMemberArrayByRollNoAndClubIndex = async (data,session) => {
 }
 exports.updateCoreMemberArrayById = async (data,session) => {
     try
-    {
+    {const validationError = validateUpdateCoreMemberArrayById(data);
+        if (validationError) {
+           const { details } = validationError;
+           return { success: false, code: 400, error: details[0].message };
+          }
       const dataToUpdate = data.dataToUpdate
         
         const {coreMemberId} = data
@@ -300,7 +352,11 @@ exports.updateCoreMemberArrayById = async (data,session) => {
 
 exports.deleteFromCoreMemberArrayById = async (data,session) => {
     try
-    {
+    {const validationError = validateUpdateCoreMemberArrayById(data);
+        if (validationError) {
+           const { details } = validationError;
+           return { success: false, code: 400, error: details[0].message };
+          }
       const dataToUpdate = data.dataToUpdate
         
         const {coreMemberId} = data
@@ -333,7 +389,11 @@ exports.deleteFromCoreMemberArrayById = async (data,session) => {
 }
 exports.deleteFromCoreMemberArrayByRollNoAndClubIndex = async (data,session) => {
     try
-    {
+    {const validationError = validateUpdateCoreMemberArrayByRollNoAndClubIndex(data);
+        if (validationError) {
+           const { details } = validationError;
+           return { success: false, code: 400, error: details[0].message };
+          }
       const dataToUpdate = data.dataToUpdate
         
         const {studentRollNo,clubIndex} = data
@@ -367,7 +427,11 @@ exports.deleteFromCoreMemberArrayByRollNoAndClubIndex = async (data,session) => 
 
 exports.deleteCoreMemberByRollNoAndClubIndex = async (data,session) => {
     try
-    {
+    {const validationError = validateGetCoreMemberByRollNoAndClubIndex(data);
+        if (validationError) {
+           const { details } = validationError;
+           return { success: false, code: 400, error: details[0].message };
+          }
         const { studentRollNo,clubIndex } = data
         const findCoreMember = await CoreMembers.findOne({ studentRollNo,clubIndex }).session(session)
         if(!findCoreMember)
@@ -393,7 +457,11 @@ exports.deleteCoreMemberByRollNoAndClubIndex = async (data,session) => {
 }
 exports.deleteCoreMemberById = async (data,session) => {
     try
-    {
+    {const validationError = validateDeleteCoreMember(data);
+        if (validationError) {
+           const { details } = validationError;
+           return { success: false, code: 400, error: details[0].message };
+          }
         const { coreMemberId } = data
         const findCoreMember = await CoreMembers.findById( coreMemberId ).session(session)
         if(!findCoreMember)
@@ -419,6 +487,11 @@ exports.deleteCoreMemberById = async (data,session) => {
 }
 exports.deleteCoreMembersByClubIndex = async (data,session) => {
     try {
+        const validationError = validateCoreMembersByClubIndex(data);
+        if (validationError) {
+           const { details } = validationError;
+           return { success: false, code: 400, error: details[0].message };
+          }
       const { clubIndex } = data;
       const coreMembersDeleted = await CoreMembers.deleteMany({ clubIndex }).session(session);
       return { success: true, coreMemberData: coreMembersDeleted, code:200, message:"Core Members deleted successfully" };
