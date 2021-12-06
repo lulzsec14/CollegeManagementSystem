@@ -65,7 +65,7 @@ exports.validateUpdateTask = (data) => {
 
 
 // Delete ValidatorById function
-exports.validateDeleteById = (data) => {
+exports.validateDeleteTaskById = (data) => {
   const schema = joi.object({
     taskId: joi.objectId().required(),
   });

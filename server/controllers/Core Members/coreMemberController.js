@@ -51,7 +51,7 @@ const {
         }
         const { coreMemberData } = op1
         const { _id, clubIndex } = coreMemberData
-        const coreMembers = _id
+        const coreMembers = _id.toString()
         const data2 = {clubIndex,dataToUpdate:{coreMembers:coreMembers}}
         const op2 = await updateClubArrayByIndex(data2,session)
         if(!op2.success){
@@ -158,7 +158,7 @@ const {
       }
       const {coreMemberData } = op1
       const { _id, clubIndex } = coreMemberData
-      const coreMembers = _id
+      const coreMembers = _id.toString()
       const data2 = {clubIndex,dataToUpdate:{coreMembers:coreMembers}}
       const op2 = await deleteFromClubArrayByIndex(data2,session)
       if(!op2.success){
@@ -169,7 +169,7 @@ const {
         return
   
       }
-      const coreMemberId = _id
+      const coreMemberId = _id.toString()
       const data3 = {coreMemberId}
       const op3 = await deleteTasksByCoreMemberId(data3,session)
       if(!op3.success){

@@ -108,8 +108,8 @@ exports.validateUpdateCoreMemberArrayByRollNoAndClubIndex = (data) => {
       clubIndex: joi.string().required(),
       dataToUpdate: joi
         .object({
-            taskList: joi.any(),
-        }).or('taskList')
+            taskList: joi.objectId().required(),
+        })
         
     });
     const { error } = schema.validate(data);

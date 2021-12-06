@@ -5,7 +5,7 @@ const {
   validateTasksByClubId,
   validateTasksByCoreMemberId,
   validateUpdateTask,
-  validateDeleteById
+  validateDeleteTaskById
 
 
 } = require("../../Validators/TaskListValidator")
@@ -172,7 +172,7 @@ exports.updateTask = async (data,session) => {
 };
 
 exports.deleteTask = async (data,session) => {
-  try {const validationError = validateDeleteById(data);
+  try {const validationError = validateDeleteTaskById(data);
         if (validationError) {
            const { details } = validationError;
            return { success: false, code: 400, error: details[0].message };

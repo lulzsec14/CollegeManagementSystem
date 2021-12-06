@@ -57,7 +57,7 @@ exports.validateUpdateFacultyById = (data) => {
         facultyName: joi.string().min(1).max(50).trim(),
         password: joi.string().min(8).trim(),
         phone: joi.string().length(10).trim(),
-        clubId:joi.any()  
+        clubId:joi.objectId().allow(null)  
       })
       .or('facultyEmailNew', 'facultyName', 'password','phone','clubId'),
   });
