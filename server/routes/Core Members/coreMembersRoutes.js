@@ -9,6 +9,8 @@ const {
 	getCoreMember,
 	getAllCoreMembersByClubIndex,
 	updateCoreMember,
+	loginCoreMember,
+	logOutCoreMember
 } = require("../../controllers/Core Members/coreMemberController");
 const {
 	getAllClubManagersByClubIndex,
@@ -39,6 +41,13 @@ const {
 } = require("../../controllers/Certificates/certificateController");
 
 // ------------------------------------
+
+
+
+//club manager login and logout Routes
+coreMemberRouter.route("/loginCoreMember").post(loginCoreMember);
+coreMemberRouter.route("/logoutCoreMember").delete(logOutCoreMember);
+
 
 // club Manager club Routes
 coreMemberRouter.route("/getClubByIndex").get(getClub);

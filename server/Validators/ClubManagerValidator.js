@@ -4,12 +4,12 @@ joi.objectId = require('joi-objectid')(joi)
 // ------------------------------------
 
 // create validator function
-exports.validateCreateCoreMember = (data) => {
+exports.validateCreateClubManager = (data) => {
   const schema = joi.object({
     studentRollNo: joi.string().required().trim(),
     clubIndex: joi.string().required().trim(),
     password: joi.string().required().min(8).trim(),
-    role: joi.string().required().max(70).trim(),
+    role: joi.string().required().max(50).trim(),
   });
   const { error } = schema.validate(data);
   return error;
@@ -17,10 +17,9 @@ exports.validateCreateCoreMember = (data) => {
 // ------------------------------------
 
 // getByRollNo validator function
-exports.validateGetCoreMemberByRollNoAndClubIndex = (data) => {
+exports.validateGetClubManagerByRollNo = (data) => {
     const schema = joi.object({
       studentRollNo: joi.string().required().trim(),
-      clubIndex: joi.string().required().trim(),
     });
     const { error } = schema.validate(data);
     return error;
@@ -28,9 +27,9 @@ exports.validateGetCoreMemberByRollNoAndClubIndex = (data) => {
   // ------------------------------------
 
   // getById validator function
-exports.validateGetCoreMemberById = (data) => {
+exports.validateGetClubManagerById = (data) => {
     const schema = joi.object({
-      coreMemberId: joi.objectId().required()
+      clubManagerId: joi.objectId().required()
     });
     const { error } = schema.validate(data);
     return error;
@@ -38,10 +37,9 @@ exports.validateGetCoreMemberById = (data) => {
   // ------------------------------------
 
   // login validator function
-  exports.validateCoreMemberLogin = (data) => {
+  exports.validateClubManagerLogin = (data) => {
     const schema = joi.object({
       studentRollNo: joi.string().required().trim(),
-      clubIndex: joi.string().required().trim(),
       password:joi.string().required()
     });
     const { error } = schema.validate(data);
@@ -50,14 +48,13 @@ exports.validateGetCoreMemberById = (data) => {
   // ------------------------------------
   
 // UpdateById Validator function
-exports.validateUpdateCoreMemberById = (data) => {
-  console.log(data)
+exports.validateUpdateClubManagerById = (data) => {
   const schema = joi.object({
-    coreMemberId: joi.objectId().required(),
+    clubManagerId: joi.objectId().required(),
     dataToUpdate: joi
       .object({    
         password: joi.string().min(8).trim(),
-        role:joi.string().max(70).trim()  
+        role:joi.string().max(50).trim()  
       })
       .or('password', 'role'),
   });
@@ -68,14 +65,13 @@ exports.validateUpdateCoreMemberById = (data) => {
 
 
 // UpdateByRollNo Validator function
-exports.validateUpdateCoreMemberByRollNoAndClubIndex = (data) => {
+exports.validateUpdateClubManagerByRollNo = (data) => {
     const schema = joi.object({
      studentRollNo : joi.string().required().trim(),
-     clubIndex: joi.string().required().trim(),
       dataToUpdate: joi
         .object({      
             password: joi.string().min(8).trim(),
-            role:joi.string().max(70).trim()  
+            role:joi.string().max(50).trim()  
           })
           .or('password', 'role'),
      });
@@ -84,51 +80,25 @@ exports.validateUpdateCoreMemberByRollNoAndClubIndex = (data) => {
   };
   // ------------------------------------
 
-
-// UpdateById Validator function 
-exports.validateUpdateCoreMemberArrayById = (data) => {
-  
+// DeleteById Validator function
+exports.validateDeleteClubManagerById = (data) => {
   const schema = joi.object({
-    coreMemberId:joi.objectId().required(),
-    dataToUpdate: joi
-       .object({
-        taskList: joi.objectId().required()
-      })})
-    const { error } = schema.validate(data);
-    return error;
-  };
-  // ------------------------------------
-
-  
-// UpdateByRollNoAndClubIndex Validator function
-exports.validateUpdateCoreMemberArrayByRollNoAndClubIndex = (data) => {
-  
-    const schema = joi.object({
-      studentRollNo: joi.string().required().trim(),
-      clubIndex: joi.string().required(),
-      dataToUpdate: joi
-        .object({
-            taskList: joi.objectId().required(),
-        })
-        
-    });
-    const { error } = schema.validate(data);
-    return error;
-  };
-  // ------------------------------------
-
-  
-// Delete Validator function
-exports.validateDeleteCoreMember = (data) => {
-  const schema = joi.object({
-    coreMemberId: joi.objectId().required(),
+    clubManagerId: joi.objectId().required(),
   });
   const { error } = schema.validate(data);
   return error;
 };
-// ------------------------------------
+
+// DeleteByRollNo Validator function
+exports.validateDeleteClubManagerByRollNo = (data) => {
+  const schema = joi.object({
+    studentRollNo: joi.string().required().trim(),
+  });
+  const { error } = schema.validate(data);
+  return error;
+};
 // clud id Validator function
-exports.validateCoreMembersByClubIndex = (data) => {
+exports.validateClubManagersByClubIndex = (data) => {
   const schema = joi.object({
     clubIndex: joi.string().required().trim(),
   });
@@ -138,7 +108,7 @@ exports.validateCoreMembersByClubIndex = (data) => {
 // ------------------------------------
 
 // roll no Validator function
-exports.validateCoreMemberByRollNo = (data) => {
+exports.validateClubManagerByRollNo = (data) => {
   const schema = joi.object({
     studentRollNo: joi.string().required().trim(),
   });

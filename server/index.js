@@ -7,6 +7,8 @@ const path = require("path");
 const colors = require("colors");
 const compression = require("compression");
 const { connectDb } = require("./config/db");
+const session = require('express-session');
+const mongoStore = require('connect-mongo');
 
 //require('./config/dbSession')
 // ------------------------------------
@@ -27,11 +29,31 @@ const {
 } = require("./routes/main");
 
 // ------------------------------------
-
+const store = mongoStore.create({
+  mongoUrl: process.env.MONGO_URI,
+  autoRemove: 'native',
+  mongoOptions: {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  },
+});
 // Middlewares
 app.use(compression());
 app.use(cors());
 app.use(express.json());
+app.use(
+  session({
+    secret: 'Super strong string',
+    cookie: {
+      httpOnly: true,
+      maxAge: 86400000,
+      sameSite: 'none',
+    },
+    resave: false,
+    saveUninitialized: false,
+    store: store,
+  })
+);
 // ------------------------------------
 
 // Routes

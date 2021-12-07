@@ -5,7 +5,8 @@ const {
 	updateCoreMemberById,
 	getCoreMemberByRollNoAndClubIndex,
 	getCoreMembersByClubIndex,
-	deleteCoreMemberById
+	deleteCoreMemberById,
+  loginCoreMember
 		
 	} = require('../DBFunctions/coreMemberDBFunction');
 	
@@ -50,7 +51,7 @@ const {
         }
         const { coreMemberData } = op1
         const { _id, clubIndex } = coreMemberData
-        const coreMembers = _id
+        const coreMembers = _id.toString()
         const data2 = {clubIndex,dataToUpdate:{coreMembers:coreMembers}}
         const op2 = await updateClubArrayByIndex(data2,session)
         if(!op2.success){
@@ -122,7 +123,6 @@ const {
   
   // get all Core Members of a club 
   exports.getAllCoreMembersByClubIndex = async (req, res, next) => {
-    
     try {
       const data1 = req.body.data;
       const op1 = await getCoreMembersByClubIndex(data1);
@@ -158,7 +158,7 @@ const {
       }
       const {coreMemberData } = op1
       const { _id, clubIndex } = coreMemberData
-      const coreMembers = _id
+      const coreMembers = _id.toString()
       const data2 = {clubIndex,dataToUpdate:{coreMembers:coreMembers}}
       const op2 = await deleteFromClubArrayByIndex(data2,session)
       if(!op2.success){
@@ -169,7 +169,7 @@ const {
         return
   
       }
-      const coreMemberId = _id
+      const coreMemberId = _id.toString()
       const data3 = {coreMemberId}
       const op3 = await deleteTasksByCoreMemberId(data3,session)
       if(!op3.success){
@@ -194,5 +194,58 @@ const {
     }
   };
   
+
+//login core member
+exports.loginCoreMember = async (req, res, next) => {
+  const data = req.body.data;
+  try {
+    const result = await loginCoreMember(data);
+    if (result.success == false) {
+      res.status(result.code).json({ success: false, error: result.error });
+    } else {
+      req.session.isAuth = true;
+      req.session.bearerToken = 'Core_Member';
+      res.status(200).json({
+        success: true,
+        message: result.message,
+        coreMemeberData: result.coreMemberData,
+      });
+    }
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      error: err.message,
+    });
+  }
+};
+
+/// logout core member
+exports.logOutCoreMember = async (req, res, next) => {
+  try {
+    if(req.session){
+    req.session.destroy((err) => {
+      if (err) {
+        throw err;
+      }
+      res.status(200).json({
+        success: true,
+        message: 'Core Member logged out',
+      });
+    });
+  }
+  else
+  {
+    res.status(400).json({
+      success: true,
+      message: 'Session not found',
+    });
+
+  }
+  } catch (err) {
+    console.log(err.message);
+    res.status(500).json({ success: false, error: err.message });
+  }
+};
+
     // ------------------------------------
     

@@ -32,7 +32,8 @@ exports.addClub = async (req, res, next) => {
     const { clubData } = op1
     const { managedBy, _id } = clubData
     const facultyEmail = managedBy
-    const data2 = {facultyEmail,dataToUpdate:{clubId:_id}}
+    const clubId = _id.toString()
+    const data2 = {facultyEmail,dataToUpdate:{clubId:clubId}}
     const op2 = await updateFacultyByFacultyEmail(data2,session)
     if(!op2.success){
       
@@ -98,7 +99,8 @@ exports.updateClub = async (req, res, next) => {
     const { clubData } = op1
     const { managedBy, _id } = clubData
     const facultyEmail = managedBy
-    const data2 = {facultyEmail,dataToUpdate:{clubId:_id}}
+    const clubId1 = _id.toString()
+    const data2 = {facultyEmail,dataToUpdate:{clubId:clubId1}}
     const op2 = await updateFacultyByFacultyEmail(data2,session)
     if(!op2.success){
       

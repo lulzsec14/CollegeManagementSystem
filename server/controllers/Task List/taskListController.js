@@ -37,22 +37,21 @@ exports.addTask = async (req, res, next) => {
       }
       const { taskData } = op1
       const { _id, assignedTo, clubId } = taskData
-      const coreMemberId = assignedTo
-      const taskList = _id
+      const coreMemberId = assignedTo.toString()
+      const taskList = _id.toString()
       const data2 = {coreMemberId,dataToUpdate:{taskList:taskList}}
       const op2 = await updateCoreMemberArrayById(data2,session)
       if(!op2.success){
-        
         await session.abortTransaction()
         await session.endSession()
         res.status(op2.code).json({error:op2.error})
         return
   
       }
-      const data3 = {clubId,dataToUpdate:{taskList:taskList}}
+      const clubId1 = clubId.toString()
+      const data3 = {clubId:clubId1,dataToUpdate:{taskList:taskList}}
       const op3 = await updateClubArrayById(data3,session)
       if(!op3.success){
-        
         await session.abortTransaction()
         await session.endSession()
         res.status(op3.code).json({error:op3.error})
@@ -175,10 +174,10 @@ exports.deleteTask = async (req, res, next) => {
         res.status(op1.code).json({error:op1.error})
         return
       }
-      const {taskData } = op1
+      const { taskData } = op1
       const { _id,assignedTo, clubId } = taskData
-      const coreMemberId = assignedTo
-      const taskList = _id
+      const coreMemberId = assignedTo.toString()
+      const taskList = _id.toString()
       const data2 = {coreMemberId,dataToUpdate:{taskList:taskList}}
       const op2 = await deleteFromCoreMemberArrayById(data2,session)
       if(!op2.success){
@@ -189,7 +188,8 @@ exports.deleteTask = async (req, res, next) => {
         return
   
       }
-      const data3 = {clubId,dataToUpdate:{taskList:taskList}}
+      const clubId1 = clubId.toString()
+      const data3 = {clubId:clubId1,dataToUpdate:{taskList:taskList}}
       const op3 = await deleteFromClubArrayById(data3,session)
       if(!op3.success){
         
