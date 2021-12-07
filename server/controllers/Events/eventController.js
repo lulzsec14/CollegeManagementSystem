@@ -27,6 +27,10 @@ const { updateStudentsAttendance } = require("../Student/studentController");
 
 //----------------------------------------------------------------------------------------------------------------
 
+/**
+ * Handling post request of creating event with Transactions in:
+ * Club array in club DB functions,
+ */
 exports.createEvent = async (req, res, next) => {
   const session = await mongoose.startSession();
   try {
@@ -44,7 +48,7 @@ exports.createEvent = async (req, res, next) => {
     }
     const eventData = result.eventData;
 
-    const events = eventData._id;
+    const events = eventData._id.toString();
     const { clubId } = eventData;
 
     //updating Club array from club db function
@@ -81,6 +85,9 @@ exports.createEvent = async (req, res, next) => {
 
 //----------------------------------------------------------------------------------------------------------------
 
+/**
+ * Handling get request of fetching event data by event ID
+ */
 exports.getEventById = async (req, res, next) => {
   try {
     const data = req.body.data;
@@ -109,6 +116,9 @@ exports.getEventById = async (req, res, next) => {
 
 //----------------------------------------------------------------------------------------------------------------
 
+/**
+ * Handling get request of fetching event data by club ID
+ */
 exports.getEventByClubId = async (req, res, next) => {
   try {
     const { clubId } = req.body.data;
@@ -136,6 +146,9 @@ exports.getEventByClubId = async (req, res, next) => {
 
 //----------------------------------------------------------------------------------------------------------------
 
+/**
+ * Handling get request of fetching al events data from event model's schema.
+ */
 exports.getAllEvents = async (req, res, next) => {
   try {
     const data = req.body.data;
@@ -163,6 +176,9 @@ exports.getAllEvents = async (req, res, next) => {
 
 //----------------------------------------------------------------------------------------------------------------
 
+/**
+ * Handling put request of updating event data.
+ */
 exports.updateEvent = async (req, res, next) => {
   try {
     const data = req.body.data;
@@ -190,6 +206,10 @@ exports.updateEvent = async (req, res, next) => {
 
 //----------------------------------------------------------------------------------------------------------------
 
+/**
+ * Handling post request of creating registration for an event with Transactions in:
+ * Student array in student DB functions,
+ */
 exports.registration = async (req, res, next) => {
   const session = await mongoose.startSession();
   try {
@@ -208,7 +228,7 @@ exports.registration = async (req, res, next) => {
     }
 
     const registerData = result.registrationData;
-    const eventsParticipated = registerData._id;
+    const eventsParticipated = registerData._id.toString();
 
     const updateDataForStudent = {
       email,
@@ -247,6 +267,10 @@ exports.registration = async (req, res, next) => {
 
 //----------------------------------------------------------------------------------------------------------------
 
+/**
+ * Handling post request of maintaing attendance with Transactions in:
+ * Student array in student DB functions,
+ */
 exports.attendance = async (req, res, next) => {
   const session = await mongoose.startSession();
   try {
@@ -266,7 +290,7 @@ exports.attendance = async (req, res, next) => {
     // console.log(data);
 
     const attendanceData = result.attendanceData;
-    const eventsAttended = attendanceData._id;
+    const eventsAttended = attendanceData._id.toString();
 
     var array = attendanceData.attended;
 
@@ -317,6 +341,9 @@ exports.attendance = async (req, res, next) => {
 
 ///----------------------------------------------------------------------------------------------------------------
 
+/**
+ * Handling post request of setting positions for an event.
+ */
 exports.position = async (req, res, next) => {
   try {
     const data = req.body.data;
@@ -340,6 +367,10 @@ exports.position = async (req, res, next) => {
 
 //----------------------------------------------------------------------------------------------------------------
 
+/**
+ * Handling delete request of deleteing event by event ID with Transactions in:
+ * Club array in club DB functions,
+ */
 exports.deleteById = async (req, res, next) => {
   const session = await mongoose.startSession();
   try {
@@ -357,7 +388,7 @@ exports.deleteById = async (req, res, next) => {
     }
 
     const deletedData = result.eventData;
-    const events = deletedData._id;
+    const events = deletedData._id.toString();
     const { clubId } = deletedData;
 
     //deleteing from Club array by club db function
@@ -394,6 +425,9 @@ exports.deleteById = async (req, res, next) => {
 
 //----------------------------------------------------------------------------------------------------------------
 
+/**
+ * Handling delete request of deleting an event by club ID.
+ */
 exports.deleteByClubId = async (req, res, next) => {
   try {
     const data = req.body.data;
