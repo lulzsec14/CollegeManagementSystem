@@ -98,7 +98,7 @@ exports.updateTask = async (req, res, next) => {
 exports.getTask = async (req, res, next) => {
 
 	try {
-		const data1 = req.body.data;
+		const data1 = req.query;
 		const op1 = await getTask(data1);
 		if(!op1.success) {
 			res.status(op1.code).json({error:op1.error})
@@ -120,7 +120,7 @@ exports.getTask = async (req, res, next) => {
 exports.getAllTasksByClubId = async (req, res, next) => {
 
 	try {
-		const data1 = req.body.data;
+		const data1 = req.query;
 		const op1 = await getTasksByClubId(data1);
 		if(!op1.success) {
 			res.status(op1.code).json({error:op1.error})
@@ -142,7 +142,7 @@ exports.getAllTasksByClubId = async (req, res, next) => {
 exports.getAllTasksByCoreMemberId = async (req, res, next) => {
 
 try {
-	const data1 = req.body.data;
+	const data1 = req.query;
 	const op1 = await getTasksByCoreMemberId(data1);
 	if(!op1.success) {
 		res.status(op1.code).json({error:op1.error})

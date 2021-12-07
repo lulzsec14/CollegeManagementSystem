@@ -102,7 +102,7 @@ const {
   exports.getCoreMember = async (req, res, next) => {
     
     try {
-      const data1 = req.body.data;
+      const data1 = req.query;
       const op1 = await getCoreMemberByRollNoAndClubIndex(data1);
       if(!op1.success) {
         res.status(op1.code).json({error:op1.error})
@@ -124,7 +124,7 @@ const {
   // get all Core Members of a club 
   exports.getAllCoreMembersByClubIndex = async (req, res, next) => {
     try {
-      const data1 = req.body.data;
+      const data1 = req.query;
       const op1 = await getCoreMembersByClubIndex(data1);
       if(!op1.success) {
         res.status(op1.code).json({error:op1.error})

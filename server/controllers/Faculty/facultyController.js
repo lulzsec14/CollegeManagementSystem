@@ -41,7 +41,7 @@ exports.addFaculty = async (req, res, next) => {
 exports.getFaculty = async (req, res, next) => {
   
   try {
-    const data1 = req.body.data;
+    const data1 = req.query;
     const op1 = await getFacultyByFacultyEmail(data1);
     if(!op1.success) {
       res.status(op1.code).json({error:op1.error})
