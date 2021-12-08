@@ -95,7 +95,7 @@ exports.updateClubManager = async (req, res, next) => {
 exports.getClubManager = async (req, res, next) => {
   
   try {
-    const data1 = req.body.data;
+    const data1 = req.query;
     const op1 = await getClubManagerByRollNo(data1);
     if(!op1.success) {
       res.status(op1.code).json({error:op1.error})
@@ -118,7 +118,7 @@ exports.getClubManager = async (req, res, next) => {
 exports.getAllClubManagersByClubIndex = async (req, res, next) => {
   
   try {
-    const data1 = req.body.data;
+    const data1 = req.query;
     const op1 = await getClubManagersByClubIndex(data1);
     if(!op1.success) {
       res.status(op1.code).json({error:op1.error})

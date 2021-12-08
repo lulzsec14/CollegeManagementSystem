@@ -128,7 +128,7 @@ exports.updateClub = async (req, res, next) => {
 // reading one club
 exports.getClub = async (req, res, next) => {
   try {
-    const data = req.body.data;
+    const data = req.query;
     const op1 = await getClubByIndex(data);
     if(!op1.success){
       res.status(op1.code).json({error:op1.error})
