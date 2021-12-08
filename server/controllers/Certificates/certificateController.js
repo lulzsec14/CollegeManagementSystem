@@ -26,6 +26,11 @@ const {
 
 //----------------------------------------------------------------------------------------------------------------
 
+/**
+ * Handling post request of creating certificate with Transactions in:
+ * student array in student DB function,
+ * club array in club DB function
+ */
 exports.createCertificate = async (req, res, next) => {
   const session = await mongoose.startSession();
   try {
@@ -42,7 +47,9 @@ exports.createCertificate = async (req, res, next) => {
       return;
     }
     const certificateData = result.certificateData;
-    const certificates = certificateData._id; //this variable is certificates as the field in student and club table are with the same name.
+
+    //this variable is certificates as the field in student and club table are with the same name.
+    const certificates = certificateData._id.toString();
     const { email, clubId } = certificateData;
 
     //updating Student array from student db function
@@ -98,6 +105,9 @@ exports.createCertificate = async (req, res, next) => {
 
 //----------------------------------------------------------------------------------------------------------------
 
+/**
+ * Handling get request for fetching certificate data by certificate ID.
+ */
 exports.getCertificateById = async (req, res, next) => {
   try {
     const data = req.body.data;
@@ -127,6 +137,9 @@ exports.getCertificateById = async (req, res, next) => {
 
 //----------------------------------------------------------------------------------------------------------------
 
+/**
+ * Handling get request for fetching certificate data by student ID.
+ */
 exports.getCertificateByStudentId = async (req, res, next) => {
   try {
     const data = req.body.data;
@@ -155,6 +168,9 @@ exports.getCertificateByStudentId = async (req, res, next) => {
 
 //----------------------------------------------------------------------------------------------------------------
 
+/**
+ * Handling get request for fetching all certificate data by event ID.
+ */
 exports.getCertificateByEventId = async (req, res, next) => {
   try {
     const data = req.body.data;
@@ -183,6 +199,9 @@ exports.getCertificateByEventId = async (req, res, next) => {
 
 //----------------------------------------------------------------------------------------------------------------
 
+/**
+ * Handling get request for fetching all certificate data by club ID.
+ */
 exports.getCertificateByClubId = async (req, res, next) => {
   try {
     const data = req.body.data;
@@ -211,6 +230,11 @@ exports.getCertificateByClubId = async (req, res, next) => {
 
 //----------------------------------------------------------------------------------------------------------------
 
+/**
+ * Handling delete request of deleting certificate with Transactions in:
+ * student array in student DB function,
+ * club array in club DB function
+ */
 exports.deleteCertificateById = async (req, res, next) => {
   const session = await mongoose.startSession();
   try {
@@ -230,7 +254,7 @@ exports.deleteCertificateById = async (req, res, next) => {
 
     const deletedData = result.certificateData;
     // console.log(result);
-    const certificates = deletedData._id;
+    const certificates = deletedData._id.toString();
     const { email, clubId } = deletedData;
 
     // deleting from Student array by student db function
@@ -286,6 +310,9 @@ exports.deleteCertificateById = async (req, res, next) => {
 
 //----------------------------------------------------------------------------------------------------------------
 
+/**
+ * Handling delete request of deleting all certificate by event ID.
+ */
 exports.deleteCertificateByEventId = async (req, res, next) => {
   try {
     const data = req.body.data;
@@ -317,6 +344,9 @@ exports.deleteCertificateByEventId = async (req, res, next) => {
 
 //----------------------------------------------------------------------------------------------------------------
 
+/**
+ * Handling delete request of deleting all certificate by club ID.
+ */
 exports.deleteCertificateByClubId = async (req, res, next) => {
   try {
     const data = req.body.data;
