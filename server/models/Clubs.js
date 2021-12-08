@@ -52,6 +52,10 @@ const clubsSchema = mongoose.Schema({
         type: Schema.Types.ObjectId, 
         ref: 'Certificates'
     }],
+    photoGallery:[{ 
+        type: Schema.Types.ObjectId, 
+        ref: 'PhotoGallery'
+    }],
     ideabox: [{ 
         type: Schema.Types.ObjectId, 
         ref: 'Ideabox'
@@ -60,6 +64,7 @@ const clubsSchema = mongoose.Schema({
         type: Schema.Types.ObjectId, 
         ref: 'Requests'
     }],
+
     managedBy: { 
         type: String, // faculty email
         required:[true,"Please insert faculty email"],

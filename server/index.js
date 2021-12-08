@@ -24,6 +24,7 @@ const {
   studentRouter,
   facultyRouter,
 } = require('./routes/main');
+const SECRET = process.env.SESSION_SECRET;
 const store = mongoStore.create({
   mongoUrl: process.env.MONGO_URI,
   autoRemove: 'native',
@@ -32,9 +33,7 @@ const store = mongoStore.create({
     useUnifiedTopology: true,
   },
 });
-const SECRET = process.env.SESSION_SECRET;
 // ------------------------------------
-
 // Middlewares
 app.use(compression());
 app.use(cors());

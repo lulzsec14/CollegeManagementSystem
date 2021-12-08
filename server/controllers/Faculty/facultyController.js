@@ -5,7 +5,8 @@ const {
   updateFacultyById,
   deleteFacultyById,
   getFacultyByFacultyEmail,
-  getAllFaculty
+  getAllFaculty,
+  loginFaculty
   
 } = require('../DBFunctions/facultyDBFunction');
 
@@ -40,7 +41,7 @@ exports.addFaculty = async (req, res, next) => {
 exports.getFaculty = async (req, res, next) => {
   
   try {
-    const data1 = req.body.data;
+    const data1 = req.query;
     const op1 = await getFacultyByFacultyEmail(data1);
     if(!op1.success) {
       res.status(op1.code).json({error:op1.error})
@@ -104,7 +105,8 @@ exports.updateFaculty = async (req, res, next) => {
     }
     const { clubId, facultyEmail } = facultyData
     const  managedBy = facultyEmail
-    const data2 = {clubId,dataToUpdate:{managedBy:managedBy}}
+    const clubId1 = clubId.toString()
+    const data2 = {clubId:clubId1,dataToUpdate:{managedBy:managedBy}}
     const op2 = await updateClubById(data2,session)
     if(!op2.success){
       
@@ -147,5 +149,57 @@ exports.deleteFaculty = async (req, res, next) => {
   } catch (err) {
     console.log(err);
     res.status(500).json({ error: 'Server Error' });
+  }
+};
+
+//login faculty 
+exports.loginFaculty = async (req, res, next) => {
+  const data = req.body.data;
+  try {
+    const result = await loginFaculty(data);
+    if (result.success == false) {
+      res.status(result.code).json({ success: false, error: result.error });
+    } else {
+      req.session.isAuth = true;
+      req.session.bearerToken = 'Faculty';
+      res.status(200).json({
+        success: true,
+        message: result.message,
+        facultyData: result.facultyData,
+      });
+    }
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      error: err.message,
+    });
+  }
+};
+
+/// logout faculty 
+exports.logOutFaculty = async (req, res, next) => {
+  try {
+    if(req.session){
+    req.session.destroy((err) => {
+      if (err) {
+        throw err;
+      }
+      res.status(200).json({
+        success: true,
+        message: 'Faculty logged out',
+      });
+    });
+  }
+  else
+  {
+    res.status(400).json({
+      success: true,
+      message: 'Session not found',
+    });
+
+  }
+  } catch (err) {
+    console.log(err.message);
+    res.status(500).json({ success: false, error: err.message });
   }
 };

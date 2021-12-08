@@ -1,6 +1,12 @@
+//Imports Certificate model for storing certificate data.
 const Certificates = require("../../models/Certificates");
 
+//--------------------------------------------------------------
 
+/**
+ * Accepts all details of certificates and create certificate,
+ * and certificateData will be returned.
+ */
 exports.createCertificate = async (data, session) => {
   try {
     const { studentId, email, eventId, clubId, certificateURL } = data;
@@ -29,6 +35,12 @@ exports.createCertificate = async (data, session) => {
   }
 };
 
+//--------------------------------------------------------------
+
+/**
+ * Search for the certificate by given certificateID, if not found return error
+ * else return certificatetData.
+ */
 exports.getCertificateById = async (data) => {
   try {
     const { certificateId } = data;
@@ -59,7 +71,10 @@ exports.getCertificateById = async (data) => {
 
 //---------------------------------------------------------------------
 
-
+/**
+ * Search for the certificate by given studentID, if not found return error
+ * else return all certificates of that student.
+ */
 exports.getAllCertificatesByStudentId = async (data) => {
   try {
     const { studentId } = data;
@@ -90,7 +105,10 @@ exports.getAllCertificatesByStudentId = async (data) => {
 
 //--------------------------------------------------------------------
 
-
+/**
+ * Search for the certificate by given eventID, if not found return error
+ * else return all certificates of that event.
+ */
 exports.getAllCertificatesByEventId = async (data) => {
   try {
     const { eventId } = data;
@@ -121,7 +139,10 @@ exports.getAllCertificatesByEventId = async (data) => {
 
 //-----------------------------------------------------------------------
 
-
+/**
+ * Search for the certificate by given clubID, if not found return error
+ * else return all certificates of that club.
+ */
 exports.getAllCertificatesByClubId = async (data) => {
   try {
     const { clubId } = data;
@@ -152,7 +173,10 @@ exports.getAllCertificatesByClubId = async (data) => {
 
 //-----------------------------------------------------------------------
 
-
+/**
+ * Search for the certificate by given certificateID, if not found return error
+ * else delete that certificate.
+ */
 exports.deleteCertificateById = async (data, session) => {
   try {
     const { certificateId } = data;
@@ -187,7 +211,10 @@ exports.deleteCertificateById = async (data, session) => {
 
 //-----------------------------------------------------------------------
 
-
+/**
+ * Search for all the certificates by given eventID, if not found return error
+ * else delete all of the certificates by that eventID.
+ */
 exports.deleteCertificateByEventId = async (data) => {
   try {
     const { eventId } = data;
@@ -220,7 +247,10 @@ exports.deleteCertificateByEventId = async (data) => {
 
 //-----------------------------------------------------------------------
 
-
+/**
+ * Search for al of the certificates by given clubID, if not found return error
+ * else delete all of the certificates of that clubID.
+ */
 exports.deleteCertificateByClubId = async (data) => {
   try {
     const { clubId } = data;

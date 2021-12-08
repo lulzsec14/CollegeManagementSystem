@@ -1,8 +1,71 @@
 const Faculty = require('../../models/Faculty')
 const textToHash = require('../../utilities/textToHashed')
+const comparePasswords = require("../../utilities/comparePasswords");
+const { 
+  validateCreateFaculty,
+  validateGetFacultyByEmail,
+  validateGetFacultyById,
+  validateFacultyLogin,
+  validateUpdateFacultyById,
+  validateUpdateFacultyByEmail,
+  validateDeleteFacultyById,
+  validateDeleteFacultyByEmail,
+  validateFacultyClubId
+
+} = require("../../Validators/FacultyValidator")
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+exports.loginFaculty = async (data) => {
+    try {
+
+      const validationError = validateFacultyLogin(data);
+        if (validationError) {
+           const { details } = validationError;
+           return { success: false, code: 400, error: details[0].message };
+          }
+      const { facultyEmail, password } = data;
+      const findFaculty = await Faculty.findOne({ facultyEmail });
+      if (!findFaculty) {
+        return {
+          success: false,
+          code: 404,
+          error: "No Account registered with the mentioned email id!",
+        };
+      } else {
+        if (comparePasswords(password, findFaculty.password)) {
+          return {
+            success: true,
+            code: 200,
+            message: "Faculty logged in successfully!",
+            facultyData: findFaculty,
+          };
+        } else {
+          return {
+            success: false,
+            code: 401,
+            error: "Not Authorized!",
+          };
+        }
+      }
+    } catch (err) {
+      return {
+        success: false,
+        code: 500,
+        error: err.message,
+      };
+    }
+  };
+  
+
 exports.getFacultyByFacultyEmail = async (data,session) => {
     try {
-        
+        const validationError = validateGetFacultyByEmail(data);
+        if (validationError) {
+           const { details } = validationError;
+           return { success: false, code: 400, error: details[0].message };
+          }
         const { facultyEmail } = data
         const findFaculty = await Faculty.findOne({ facultyEmail }).session(session)
         if(!findFaculty)
@@ -34,7 +97,11 @@ exports.getFacultyByFacultyEmail = async (data,session) => {
 }
 exports.getFacultyById = async (data,session) => {
     try {
-        
+        const validationError = validateGetFacultyById(data);
+        if (validationError) {
+           const { details } = validationError;
+           return { success: false, code: 400, error: details[0].message };
+          }
         const { facultyId } = data
         const findFaculty = await Faculty.findById(facultyId).session(session)
         if(!findFaculty)
@@ -87,7 +154,11 @@ exports.getAllFaculty = async (session) => {
 }
 exports.getFacultyByClubId = async (data,session) => {
     try {
-        
+        const validationError = validateFacultyClubId(data);
+        if (validationError) {
+           const { details } = validationError;
+           return { success: false, code: 400, error: details[0].message };
+          }
         const { clubId } = data
         const findFaculty = await Faculty.findOne({clubId}).session(session)
         if(!findFaculty)
@@ -118,7 +189,11 @@ exports.getFacultyByClubId = async (data,session) => {
 }
 exports.insertFaculty = async (data,session) => {
     try
-    {
+    {const validationError = validateCreateFaculty(data);
+        if (validationError) {
+           const { details } = validationError;
+           return { success: false, code: 400, error: details[0].message };
+          }
         const { facultyName, facultyEmail, password, phone } = data
         const findFaculty = await Faculty.findOne({ facultyEmail }).session(session)
         if(findFaculty)
@@ -154,7 +229,11 @@ exports.insertFaculty = async (data,session) => {
 }
 exports.updateFacultyByFacultyEmail = async (data,session) => {
     try
-    {
+    {const validationError = validateUpdateFacultyByEmail(data);
+        if (validationError) {
+           const { details } = validationError;
+           return { success: false, code: 400, error: details[0].message };
+          }
         const dataToUpdate = data.dataToUpdate
         
         console.log(dataToUpdate)
@@ -173,6 +252,15 @@ exports.updateFacultyByFacultyEmail = async (data,session) => {
                 error: 'Faculty with this email does not exist!',
                 code:400
               }
+        }
+        if(findFaculty.clubId!==null&&dataToUpdate.clubId!==null)
+        {
+          return {
+            success: false,
+            error: 'Faculty already manages another club!',
+            code:400
+          }
+
         }
         if(dataToUpdate.facultyEmailNew)
         {
@@ -205,7 +293,11 @@ exports.updateFacultyByFacultyEmail = async (data,session) => {
 }
 exports.updateFacultyById = async (data,session) => {
     try
-    {
+    {const validationError = validateUpdateFacultyById(data);
+        if (validationError) {
+           const { details } = validationError;
+           return { success: false, code: 400, error: details[0].message };
+          }
         const dataToUpdate = data.dataToUpdate
         
         if(dataToUpdate.password)
@@ -259,7 +351,11 @@ exports.updateFacultyById = async (data,session) => {
 
 exports.deleteFacultyByFacultyEmail = async (data,session) => {
     try
-    {
+    {const validationError = validateDeleteFacultyByEmail(data);
+        if (validationError) {
+           const { details } = validationError;
+           return { success: false, code: 400, error: details[0].message };
+          }
         const { facultyEmail } = data
         const findFaculty = await Faculty.findOne({ facultyEmail }).session(session)
         if(!findFaculty)
@@ -295,7 +391,11 @@ exports.deleteFacultyByFacultyEmail = async (data,session) => {
 
 exports.deleteFacultyById = async (data,session) => {
     try
-    {
+    {const validationError = validateDeleteFacultyById(data);
+        if (validationError) {
+           const { details } = validationError;
+           return { success: false, code: 400, error: details[0].message };
+          }
         const { facultyId } = data
         const findFaculty = await Faculty.findById( facultyId ).session(session)
         if(!findFaculty)
