@@ -9,6 +9,8 @@ const {
 	getClubManager,
 	getAllClubManagersByClubIndex,
 	updateClubManager,
+	loginClubManager,
+	logOutClubManager
 } = require("../../controllers/Club Managers/clubManagerController");
 const {
 	addCoreMember,
@@ -59,6 +61,11 @@ const {
 } = require("../../controllers/Events/eventController");
 
 // ------------------------------------
+
+//club manager login and logout Routes
+clubManagerRouter.route("/loginClubManager").post(loginClubManager);
+clubManagerRouter.route("/logoutClubManager").delete(logOutClubManager);
+
 
 // club Manager club Routes
 clubManagerRouter.route("/getClubByIndex").get(getClub);

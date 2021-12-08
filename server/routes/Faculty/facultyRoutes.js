@@ -3,7 +3,6 @@ const express = require("express");
 const facultyRouter = express.Router();
 
 // controller imports
-
 const {
   getClub,
   updateClub,
@@ -53,6 +52,18 @@ const {
 } = require("../../controllers/Events/eventController");
 
 // ------------------------------------
+const { getClub,updateClub } = require('../../controllers/Clubs/clubController');
+const { addCoreMember,getCoreMember,getAllCoreMembersByClubIndex,updateCoreMember,deleteCoreMember } = require('../../controllers/Core Members/coreMemberController');
+const { getAllClubManagersByClubIndex } = require('../../controllers/Club Managers/clubManagerController');
+const { addTask,getTask,getAllTasksByClubId,updateTask,deleteTask } = require('../../controllers/Task List/taskListController');
+const { getFaculty,updateFaculty,loginFaculty,logOutFaculty  } = require('../../controllers/Faculty/facultyController');
+
+// ------------------------------------
+
+
+//faculty login and logout Routes
+facultyRouter.route("/loginFaculty").post(loginFaculty);
+facultyRouter.route("/logoutFaculty").delete(logOutFaculty);
 
 // faculty club Routes
 facultyRouter.route("/getClubByIndex").get(getClub);
