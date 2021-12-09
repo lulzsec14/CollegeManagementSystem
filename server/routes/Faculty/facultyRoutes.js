@@ -96,47 +96,45 @@ facultyRouter.route('/updateFacultyById').put(checkFaculty, updateFaculty);
 
 //faculty certifiacte routes
 
-clubManagerRouter
-  .route('/createCertificate')
-  .post(checkFaculty, createCertificate);
-clubManagerRouter
+facultyRouter.route('/createCertificate').post(checkFaculty, createCertificate);
+facultyRouter
   .route('/getCertificateById')
   .get(checkFaculty, getCertificateById);
-clubManagerRouter
+facultyRouter
   .route('/getAllCertificatesByStudentId')
   .get(checkFaculty, getCertificateByStudentId);
-clubManagerRouter
+facultyRouter
   .route('/getAllCertificatesByEventId')
   .get(checkFaculty, getCertificateByEventId);
-clubManagerRouter
+facultyRouter
   .route('/getAllCertificatesByClubId')
   .get(checkFaculty, getCertificateByClubId);
-clubManagerRouter
+facultyRouter
   .route('/deleteCertificateById')
   .delete(checkFaculty, deleteCertificateById);
-clubManagerRouter
+facultyRouter
   .route('/deleteAllCertificatesByEventId')
   .delete(checkFaculty, deleteCertificateByEventId);
-clubManagerRouter
+facultyRouter
   .route('/deleteAllCertificatesByClubId')
   .delete(checkFaculty, deleteCertificateByClubId);
 
 //faculty Events Routes
 
-clubManagerRouter.route('/getEventById').get(checkFaculty, getEventById);
-clubManagerRouter
+facultyRouter.route('/getEventById').get(checkFaculty, getEventById);
+facultyRouter
   .route('/getAllEventsByClubId')
   .get(checkFaculty, getEventByClubId);
-clubManagerRouter.route('/getAllEvents').get(checkFaculty, getAllEvents);
-clubManagerRouter.route('/createEvent').post(checkFaculty, createEvent);
-clubManagerRouter.route('/update').put(checkFaculty, updateEvent);
-clubManagerRouter.route('/registerByEventId').post(checkFaculty, registration);
-clubManagerRouter.route('/attendanceByEventId').post(checkFaculty, attendance);
-clubManagerRouter
+facultyRouter.route('/getAllEvents').get(checkFaculty, getAllEvents);
+facultyRouter.route('/createEvent').post(checkFaculty, createEvent);
+facultyRouter.route('/update').put(checkFaculty, updateEvent);
+facultyRouter.route('/registerByEventId').post(checkFaculty, registration);
+facultyRouter.route('/attendanceByEventId').post(checkFaculty, attendance);
+facultyRouter
   .route('/setPositionsByEventIdAndEventName')
   .post(checkFaculty, position);
-clubManagerRouter.route('/deleteEventById').delete(dcheckFaculty, eleteById);
-clubManagerRouter
+facultyRouter.route('/deleteEventById').delete(checkFaculty, deleteById);
+facultyRouter
   .route('/deleteAllEventsByClubId')
   .delete(checkFaculty, deleteByClubId);
 
