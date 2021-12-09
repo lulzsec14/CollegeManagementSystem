@@ -3,20 +3,18 @@ const express = require('express');
 const clubManagerRouter = express.Router();
 
 // controller imports
-
 const {
-	getClubManager,
-	getAllClubManagersByClubIndex,
-	updateClubManager,
-	loginClubManager,
-	logOutClubManager
-} = require("../../controllers/Club Managers/clubManagerController");
-
+  getClub,
+  updateClub,
+} = require('../../controllers/Clubs/clubController');
 const {
   getClubManager,
   getAllClubManagersByClubIndex,
   updateClubManager,
+  loginClubManager,
+  logOutClubManager,
 } = require('../../controllers/Club Managers/clubManagerController');
+
 const {
   addCoreMember,
   getCoreMember,
@@ -71,9 +69,10 @@ const {
 // ------------------------------------
 
 //club manager login and logout Routes
-clubManagerRouter.route("/loginClubManager").post(loginClubManager);
-clubManagerRouter.route("/logoutClubManager").delete(logOutClubManager);
-
+clubManagerRouter.route('/loginClubManager').post(loginClubManager);
+clubManagerRouter
+  .route('/logoutClubManager')
+  .delete(checkClubManager, logOutClubManager);
 
 // club Manager club Routes
 clubManagerRouter.route('/getClubByIndex').get(checkClubManager, getClub);

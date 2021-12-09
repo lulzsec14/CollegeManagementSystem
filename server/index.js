@@ -34,6 +34,7 @@ const store = mongoStore.create({
   },
 });
 // ------------------------------------
+
 // Middlewares
 app.use(compression());
 app.use(cors());

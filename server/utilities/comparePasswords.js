@@ -2,7 +2,7 @@
 const bcrypt = require('bcryptjs');
 // ------------------------------------
 
-// Hashin function
+// Compare function
 const comparePasswords = (text, password) => {
   return bcrypt.compareSync(text, password);
 };

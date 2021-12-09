@@ -1,5 +1,6 @@
 // Imports
 const Admin = require('../../models/Admin');
+const comparePasswords = require('../../utilities/comparePasswords');
 const {
   registerAdmin,
   retrieveAllAdmins,
@@ -12,7 +13,7 @@ const {
 // Register Admin
 exports.register = async (req, res, next) => {
   try {
-    const data = req.body;
+    const data = req.body.data;
     const result = await registerAdmin(data);
     if (result.success == false) {
       res
@@ -25,8 +26,6 @@ exports.register = async (req, res, next) => {
         adminData: result.adminData,
       });
     }
-    // const resReturn = {success: result.success, resresult.}
-    // res.status(201).json(data);
   } catch (err) {
     console.log(err.message);
     res.status(500).json({
@@ -37,10 +36,72 @@ exports.register = async (req, res, next) => {
 };
 // ------------------------------------
 
+// Login Admin
+exports.login = async (req, res, next) => {
+  const data = req.body.data;
+
+  try {
+    const { email, password } = data;
+
+    const findAdmin = await Admin.findOne({ email });
+
+    if (!findAdmin) {
+      res.status(404).json({
+        success: false,
+        error: 'No admin with given email exists!',
+      });
+      return;
+    }
+
+    const matchPass = comparePasswords(password, findAdmin.password);
+
+    if (!matchPass) {
+      res.status(401).json({
+        succes: false,
+        eroor: 'Invlalid credentials',
+      });
+      return;
+    }
+
+    req.session.isAuth = true;
+    req.session.bearerToken = process.env.ADMIN_TOKEN;
+
+    res.status(200).json({
+      succes: true,
+      message: 'Admin logged in successfully!',
+    });
+  } catch (err) {
+    res.status(500).json({
+      success: true,
+      error: err.message,
+    });
+  }
+};
+// ------------------------------------
+
+exports.logOut = async (req, res, next) => {
+  try {
+    req.session.destroy((err) => {
+      if (err) {
+        throw err;
+      }
+      res.status(200).json({
+        succes: true,
+        message: 'Admin logged out successfully!',
+      });
+    });
+  } catch (err) {
+    res.status(500).json({
+      success: true,
+      error: err.message,
+    });
+  }
+};
+
 // Getting all admins
 exports.getAllAdmins = async (req, res, next) => {
   try {
-    const data = req.body;
+    const data = req.body.data;
     const result = await retrieveAllAdmins(data);
     if (result.success == false) {
       res.status(result.code).json({ success: false, error: result.error });
@@ -62,7 +123,7 @@ exports.getAllAdmins = async (req, res, next) => {
 
 // Delete an Admin
 exports.deleteAdmin = async (req, res, next) => {
-  const data = req.body;
+  const data = req.body.data;
   try {
     const result = await deleteSingleAdmin(data);
     if (result.success == false) {
@@ -87,7 +148,7 @@ exports.deleteAdmin = async (req, res, next) => {
 
 // Update Admin's Phone number
 exports.updateAdminDetails = async (req, res, next) => {
-  const data = req.body;
+  const data = req.body.data;
   try {
     const result = await updateAdminDetails(data);
     if (result.success == false) {
@@ -110,7 +171,7 @@ exports.updateAdminDetails = async (req, res, next) => {
 
 // Update Admin's password
 exports.updatePassword = async (req, res, next) => {
-  const data = req.body;
+  const data = req.body.data;
   try {
     const result = await updateAdminPassword(data);
     if (result.success == false) {

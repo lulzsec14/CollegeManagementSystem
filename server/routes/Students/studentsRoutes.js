@@ -23,7 +23,7 @@ const {
   updateAnyStudentArrayById,
   deleteFromAnyStudentArray,
   deleteFromAnyStudentArrayById,
-  testingAttendance,
+  logoutSingleStudent,
 } = require('../../controllers/Student/studentController');
 
 const {
@@ -32,10 +32,7 @@ const {
   deleteFeedback,
 } = require('../../controllers/Feedback/feedbackController');
 
-const {
-  registration,
-  testAttendaceDBFunction,
-} = require('../../controllers/Events/eventController');
+const { registration } = require('../../controllers/Events/eventController');
 
 const { checkStudent } = require('../../middlewares/Auth/studentMiddleware');
 // ------------------------------------
@@ -61,6 +58,7 @@ studentRouter.route('/deleteOneRequest').delete(checkStudent, deleteOneRequest);
 // Student Routes
 studentRouter.route('/registerStudent').post(registerStudent);
 studentRouter.route('/loginStudent').post(loginSingleStudent);
+studentRouter.route('/logoutStudent').delete(checkStudent, logoutSingleStudent);
 studentRouter.route('/getStudentData').get(checkStudent, getStudentData);
 studentRouter
   .route('/getStudentDataById')

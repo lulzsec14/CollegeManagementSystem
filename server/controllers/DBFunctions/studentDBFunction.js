@@ -1,6 +1,6 @@
-const Student = require("../../models/Students");
-const textToHash = require("../../utilities/textToHashed");
-const comparePasswords = require("../../utilities/comparePasswords");
+const Student = require('../../models/Students');
+const textToHash = require('../../utilities/textToHashed');
+const comparePasswords = require('../../utilities/comparePasswords');
 
 exports.registerStudents = async (data) => {
   const { rollNo, name, email, password, semester, phoneNo } = data;
@@ -10,7 +10,7 @@ exports.registerStudents = async (data) => {
       return {
         success: false,
         code: 405,
-        error: "Student with specified email alreadt exists!",
+        error: 'Student with specified email alreadt exists!',
       };
     } else {
       const hashedPassword = textToHash(password);
@@ -26,44 +26,9 @@ exports.registerStudents = async (data) => {
       return {
         success: true,
         code: 201,
-        message: "Student account registered successfully!",
+        message: 'Student account registered successfully!',
         studentData: createdStudent,
       };
-    }
-  } catch (err) {
-    return {
-      success: false,
-      code: 500,
-      error: err.message,
-    };
-  }
-};
-
-exports.loginStudent = async (data) => {
-  const { email, password } = data;
-  try {
-    const findStudent = await Student.findOne({ email });
-    if (!findStudent) {
-      return {
-        success: false,
-        code: 404,
-        error: "No Account registered with the mentioned email id!",
-      };
-    } else {
-      if (comparePasswords(password, findStudent.password)) {
-        return {
-          success: true,
-          code: 200,
-          message: "Student logged in successfully!",
-          studentData: findStudent,
-        };
-      } else {
-        return {
-          success: false,
-          code: 401,
-          error: "Not Authorized!",
-        };
-      }
     }
   } catch (err) {
     return {
@@ -82,13 +47,13 @@ exports.getStudent = async (data) => {
       return {
         success: false,
         code: 404,
-        error: "No student with specified email found!",
+        error: 'No student with specified email found!',
       };
     } else {
       return {
         success: true,
         code: 200,
-        message: "Student with given email found!",
+        message: 'Student with given email found!',
         studentData: findStudent,
       };
     }
@@ -109,13 +74,13 @@ exports.getStudentByRollNo = async (data) => {
       return {
         success: false,
         code: 404,
-        error: "No student with specified Roll no. found!",
+        error: 'No student with specified Roll no. found!',
       };
     } else {
       return {
         success: true,
         code: 200,
-        message: "Student with given Roll no found!",
+        message: 'Student with given Roll no found!',
         studentData: findStudent,
       };
     }
@@ -136,13 +101,13 @@ exports.getStudentById = async (data) => {
       return {
         success: false,
         code: 404,
-        error: "No student with specified student Id found!",
+        error: 'No student with specified student Id found!',
       };
     } else {
       return {
         success: true,
         code: 200,
-        message: "Student with given student id found!",
+        message: 'Student with given student id found!',
         studentData: findStudent,
       };
     }
@@ -163,13 +128,13 @@ exports.getStudentByRollNo = async (data) => {
       return {
         success: false,
         code: 404,
-        error: "No student with specified roll no found!",
+        error: 'No student with specified roll no found!',
       };
     } else {
       return {
         success: true,
         code: 200,
-        message: "Student with given roll no found!",
+        message: 'Student with given roll no found!',
         studentData: findStudent,
       };
     }
@@ -190,7 +155,7 @@ exports.updateStudentArray = async (data, session) => {
       return {
         success: false,
         code: 404,
-        error: "No student with specified email found!",
+        error: 'No student with specified email found!',
       };
     } else {
       const dataToUpdate = data.dataToUpdate;
@@ -203,7 +168,7 @@ exports.updateStudentArray = async (data, session) => {
       return {
         success: true,
         code: 200,
-        message: "Student Data updated successfully!",
+        message: 'Student Data updated successfully!',
         studentData: updatedStudent,
       };
     }
@@ -224,7 +189,7 @@ exports.updateStudentArrayByRollNo = async (data, session) => {
       return {
         success: false,
         code: 404,
-        error: "No student with specified rollNo found!",
+        error: 'No student with specified rollNo found!',
       };
     } else {
       const dataToUpdate = data.dataToUpdate;
@@ -237,7 +202,7 @@ exports.updateStudentArrayByRollNo = async (data, session) => {
       return {
         success: true,
         code: 200,
-        message: "Student Data updated successfully!",
+        message: 'Student Data updated successfully!',
         studentData: updatedStudent,
       };
     }
@@ -258,7 +223,7 @@ exports.updateStudentArrayById = async (data, session) => {
       return {
         success: false,
         code: 404,
-        error: "No student with specified email found!",
+        error: 'No student with specified email found!',
       };
     } else {
       const dataToUpdate = data.dataToUpdate;
@@ -270,7 +235,7 @@ exports.updateStudentArrayById = async (data, session) => {
       return {
         success: true,
         code: 200,
-        message: "Student Data updated successfully!",
+        message: 'Student Data updated successfully!',
         studentData: updatedStudent,
       };
     }
@@ -291,7 +256,7 @@ exports.deleteFromStudentArray = async (data, session) => {
       return {
         success: false,
         code: 404,
-        error: "No student with specified email found!",
+        error: 'No student with specified email found!',
       };
     } else {
       const dataToUpdate = data.dataToUpdate;
@@ -303,7 +268,7 @@ exports.deleteFromStudentArray = async (data, session) => {
       return {
         success: true,
         code: 200,
-        message: "Student Data updated successfully!",
+        message: 'Student Data updated successfully!',
         studentData: updatedStudent,
       };
     }
@@ -324,7 +289,7 @@ exports.deleteFromStudentArrayByRollNo = async (data, session) => {
       return {
         success: false,
         code: 404,
-        error: "No student with specified rollNo found!",
+        error: 'No student with specified rollNo found!',
       };
     } else {
       const dataToUpdate = data.dataToUpdate;
@@ -336,7 +301,7 @@ exports.deleteFromStudentArrayByRollNo = async (data, session) => {
       return {
         success: true,
         code: 200,
-        message: "Student Data updated successfully!",
+        message: 'Student Data updated successfully!',
         studentData: updatedStudent,
       };
     }
@@ -357,7 +322,7 @@ exports.deleteFromStudentArrayById = async (data, session) => {
       return {
         success: false,
         code: 404,
-        error: "No student with specified email found!",
+        error: 'No student with specified email found!',
       };
     } else {
       const dataToUpdate = data.dataToUpdate;
@@ -369,7 +334,7 @@ exports.deleteFromStudentArrayById = async (data, session) => {
       return {
         success: true,
         code: 200,
-        message: "Student Data updated successfully!",
+        message: 'Student Data updated successfully!',
         studentData: updatedStudent,
       };
     }

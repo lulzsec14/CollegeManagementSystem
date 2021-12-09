@@ -9,6 +9,8 @@ const {
   register,
   getAllAdmins,
   deleteAdmin,
+  login,
+  logOut,
 } = require('../../controllers/Admin/adminController');
 const {
   addClub,
@@ -82,6 +84,8 @@ adminRouter
 
 // admin admin routes
 adminRouter.route('/register').post(register);
+adminRouter.route('/loginAdmin').post(login);
+adminRouter.route('/logoutAdmin').delete(checkAdmin, logOut);
 adminRouter.route('/getAllAdmins').get(checkAdmin, getAllAdmins);
 adminRouter.route('/updateAdminDetails').put(checkAdmin, updateAdminDetails);
 adminRouter.route('/deleteAdmin').delete(checkAdmin, deleteAdmin);

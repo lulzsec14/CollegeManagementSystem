@@ -23,7 +23,7 @@ const {
 // ------------------------------------
 
 exports.createNewRequest = async (req, res, next) => {
-  const data = req.body;
+  const data = req.body.data;
 
   let updateStudentArrayData = {
     rollNo: data.rollNo,
@@ -50,11 +50,6 @@ exports.createNewRequest = async (req, res, next) => {
     updateClubArrayData.dataToUpdate.requests = createdRequest.requestData._id;
     updateStudentArrayData.dataToUpdate.clubsRequested =
       createdRequest.requestData._id;
-
-    // console.log(updateStudentArrayData);
-    // console.log(updateClubArrayData);
-
-    // Get student data 
 
     if (createdRequest.success == false) {
       await session.abortTransaction();
@@ -112,7 +107,7 @@ exports.createNewRequest = async (req, res, next) => {
 };
 
 exports.retrieveAllRequests = async (req, res, next) => {
-  const data = req.body;
+  const data = req.body.data;
   try {
     const result = await getAllRequests();
     if (result.success == false) {
@@ -130,7 +125,7 @@ exports.retrieveAllRequests = async (req, res, next) => {
 };
 
 exports.retrieveRequest = async (req, res, next) => {
-  const data = req.body;
+  const data = req.body.data;
   try {
     const result = await getRequest(data);
     if (result.success == false) {
@@ -148,7 +143,7 @@ exports.retrieveRequest = async (req, res, next) => {
 };
 
 exports.retrieveRequestById = async (req, res, next) => {
-  const data = req.body;
+  const data = req.body.data;
   try {
     const result = await getRequestById(data);
     if (result.success == false) {
@@ -166,7 +161,7 @@ exports.retrieveRequestById = async (req, res, next) => {
 };
 
 exports.retrieveRequestByClubId = async (req, res, next) => {
-  const data = req.body;
+  const data = req.body.data;
   try {
     const result = await getRequestByClubId(data);
     if (result.success == false) {
@@ -184,7 +179,7 @@ exports.retrieveRequestByClubId = async (req, res, next) => {
 };
 
 exports.retrieveAllRequestByRollNo = async (req, res, next) => {
-  const data = req.body;
+  const data = req.body.data;
   try {
     const result = await getAllRequestByRoll(data);
     if (result.success == false) {
@@ -202,7 +197,7 @@ exports.retrieveAllRequestByRollNo = async (req, res, next) => {
 };
 
 exports.deleteOneRequest = async (req, res, next) => {
-  const data = req.body;
+  const data = req.body.data;
   let toBeDeletedRequest = {};
   let dataToDeleteFromStudentArray = {};
   let dataToDeleteFromClubsArray = {};
@@ -260,18 +255,6 @@ exports.deleteOneRequest = async (req, res, next) => {
   const session = await mongoose.startSession();
   try {
     session.startTransaction();
-
-    // console.log(toBeDeletedRequest);
-
-    // console.log(dataToDeleteFromStudentArray);
-
-    // console.log(dataToDeleteFromClubsArray);
-
-    // console.log(dataForUpdatingStudentArray);
-
-    // console.log(dataForUpdatingClubsArray);
-
-    // console.log(dataForDeletingRequest);
 
     const deletedFromStudentArray = await deleteFromStudentArrayByRollNo(
       dataToDeleteFromStudentArray,
@@ -358,21 +341,3 @@ exports.deleteOneRequest = async (req, res, next) => {
     res.status(500).json({ success: false, error: err.message });
   }
 };
-
-// exports.deleteOneRequestById = async (req, res, next) => {
-//   const data = req.body;
-//   try {
-//     const result = await deleteRequestById(data);
-//     if (result.success == false) {
-//       res.status(result.code).json({ success: false, error: result.error });
-//     } else {
-//       res.status(result.code).json({
-//         success: true,
-//         message: result.message,
-//         requestData: result.requestData,
-//       });
-//     }
-//   } catch (err) {
-//     res.status(500).json({ success: false, error: err.message });
-//   }
-// };
