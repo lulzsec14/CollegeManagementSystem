@@ -1,3 +1,4 @@
+// Imports
 const mongoose = require('mongoose');
 const Student = require('../../models/Students');
 const comparePasswords = require('../../utilities/comparePasswords');
@@ -11,7 +12,9 @@ const {
   deleteFromStudentArray,
   deleteFromStudentArrayById,
 } = require('../DBFunctions/studentDBFunction');
+// ------------------------------------
 
+// Function to register a Student
 exports.registerStudent = async (req, res, next) => {
   const data = req.body.data;
   try {
@@ -32,7 +35,9 @@ exports.registerStudent = async (req, res, next) => {
     });
   }
 };
+// ------------------------------------
 
+// Function to login Student
 exports.loginSingleStudent = async (req, res, next) => {
   const data = req.body.data;
   try {
@@ -72,7 +77,9 @@ exports.loginSingleStudent = async (req, res, next) => {
     });
   }
 };
+// ------------------------------------
 
+// Function to logout a Student
 exports.logoutSingleStudent = async (req, res, next) => {
   try {
     req.session.destroy((err) => {
@@ -91,7 +98,9 @@ exports.logoutSingleStudent = async (req, res, next) => {
     });
   }
 };
+// ------------------------------------
 
+// Function to get student info using email
 exports.getStudentData = async (req, res, next) => {
   const data = req.body.data;
   try {
@@ -112,7 +121,9 @@ exports.getStudentData = async (req, res, next) => {
     });
   }
 };
+// ------------------------------------
 
+// Function to get student info using student Id
 exports.getStudentDataById = async (req, res, next) => {
   const data = req.body.data;
   try {
@@ -133,7 +144,9 @@ exports.getStudentDataById = async (req, res, next) => {
     });
   }
 };
+// ------------------------------------
 
+// Function to update any field in student of Array type
 exports.updateAnyStudentArray = async (req, res, next) => {
   const data = req.body.data;
   try {
@@ -154,7 +167,9 @@ exports.updateAnyStudentArray = async (req, res, next) => {
     });
   }
 };
+// ------------------------------------
 
+// Function to update any field in student of Array type
 exports.updateAnyStudentArrayById = async (req, res, next) => {
   const data = req.body.data;
   try {
@@ -175,7 +190,9 @@ exports.updateAnyStudentArrayById = async (req, res, next) => {
     });
   }
 };
+// ------------------------------------
 
+// Function to delete any field in Student of Array type
 exports.deleteFromAnyStudentArray = async (req, res, next) => {
   const data = req.body.data;
   try {
@@ -196,7 +213,9 @@ exports.deleteFromAnyStudentArray = async (req, res, next) => {
     });
   }
 };
+// ------------------------------------
 
+// Function for deleting any field from Student of Array type
 exports.deleteFromAnyStudentArrayById = async (req, res, next) => {
   const data = req.body.data;
   try {
@@ -217,6 +236,7 @@ exports.deleteFromAnyStudentArrayById = async (req, res, next) => {
     });
   }
 };
+// ------------------------------------
 
 // Function for updating attendance
 exports.updateStudentsAttendance = async (data, session) => {
@@ -258,3 +278,4 @@ exports.updateStudentsAttendance = async (data, session) => {
     };
   }
 };
+// ------------------------------------

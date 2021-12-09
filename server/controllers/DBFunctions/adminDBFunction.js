@@ -89,6 +89,7 @@ exports.retrieveAllAdmins = async (data) => {
 };
 // ------------------------------------
 
+// Function to update admin details
 exports.updateAdminDetails = async (data) => {
   data.email = data.email.toLowerCase();
 
@@ -133,6 +134,7 @@ exports.updateAdminDetails = async (data) => {
 };
 // ------------------------------------
 
+// Function to update Admin Password
 exports.updateAdminPassword = async (data) => {
   try {
     const { oldPassword, newPassword, email } = data;
@@ -174,6 +176,7 @@ exports.updateAdminPassword = async (data) => {
     };
   }
 };
+// ------------------------------------
 
 // Function to delete an Admin
 exports.deleteSingleAdmin = async (data) => {

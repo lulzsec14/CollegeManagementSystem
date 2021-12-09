@@ -1,5 +1,8 @@
+// Constants
 const FACULTY_TOKEN = process.env.FACULTY_TOKEN;
+// ------------------------------------
 
+// Middleware to authorize Faculty
 exports.checkFaculty = (req, res, next) => {
   try {
     if (req.session.isAuth && req.session.bearerToken === FACULTY_TOKEN) {
@@ -15,3 +18,4 @@ exports.checkFaculty = (req, res, next) => {
     res.status(500).json({ success: false, error: err.message });
   }
 };
+// ------------------------------------

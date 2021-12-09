@@ -44,8 +44,6 @@ const { checkAdmin } = require('../../middlewares/Auth/adminMiddleware');
 // ------------------------------------
 
 // Api Route
-// Admin Routes
-
 // admin club Routes
 adminRouter.route('/addClub').post(checkAdmin, addClub);
 adminRouter.route('/getClubByIndex').get(checkAdmin, getClub);

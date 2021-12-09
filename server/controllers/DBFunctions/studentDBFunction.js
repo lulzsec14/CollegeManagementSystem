@@ -1,7 +1,10 @@
+// Imports
 const Student = require('../../models/Students');
 const textToHash = require('../../utilities/textToHashed');
 const comparePasswords = require('../../utilities/comparePasswords');
+// ------------------------------------
 
+// Function to register students
 exports.registerStudents = async (data) => {
   const { rollNo, name, email, password, semester, phoneNo } = data;
   try {
@@ -38,7 +41,9 @@ exports.registerStudents = async (data) => {
     };
   }
 };
+// ------------------------------------
 
+// Function to get info about a student
 exports.getStudent = async (data) => {
   const { email } = data;
   try {
@@ -65,7 +70,9 @@ exports.getStudent = async (data) => {
     };
   }
 };
+// ------------------------------------
 
+// Function to get student info by roll No
 exports.getStudentByRollNo = async (data) => {
   const { rollNo } = data;
   try {
@@ -92,7 +99,9 @@ exports.getStudentByRollNo = async (data) => {
     };
   }
 };
+// ------------------------------------
 
+// Function to get student info by studentId
 exports.getStudentById = async (data) => {
   const { studentId } = data;
   try {
@@ -119,34 +128,9 @@ exports.getStudentById = async (data) => {
     };
   }
 };
+// ------------------------------------
 
-exports.getStudentByRollNo = async (data) => {
-  const { rollNo } = data;
-  try {
-    const findStudent = await Student.findOne({ rollNo });
-    if (!findStudent) {
-      return {
-        success: false,
-        code: 404,
-        error: 'No student with specified roll no found!',
-      };
-    } else {
-      return {
-        success: true,
-        code: 200,
-        message: 'Student with given roll no found!',
-        studentData: findStudent,
-      };
-    }
-  } catch (err) {
-    return {
-      success: false,
-      code: 500,
-      error: err.message,
-    };
-  }
-};
-
+// Function to update any Student field of Array type
 exports.updateStudentArray = async (data, session) => {
   const { email } = data;
   try {
@@ -180,7 +164,9 @@ exports.updateStudentArray = async (data, session) => {
     };
   }
 };
+// ------------------------------------
 
+// Function to update any Student field of Array type using rollNo
 exports.updateStudentArrayByRollNo = async (data, session) => {
   const { rollNo } = data;
   try {
@@ -214,7 +200,9 @@ exports.updateStudentArrayByRollNo = async (data, session) => {
     };
   }
 };
+// ------------------------------------
 
+// Function to update any student field of Array type using StudentId
 exports.updateStudentArrayById = async (data, session) => {
   const { studentId } = data;
   try {
@@ -247,7 +235,9 @@ exports.updateStudentArrayById = async (data, session) => {
     };
   }
 };
+// ------------------------------------
 
+// Function to delete from any field in student of Array type
 exports.deleteFromStudentArray = async (data, session) => {
   const { email } = data;
   try {
@@ -280,7 +270,9 @@ exports.deleteFromStudentArray = async (data, session) => {
     };
   }
 };
+// ------------------------------------
 
+// Function to delete from any field in student of Array type using RollNo
 exports.deleteFromStudentArrayByRollNo = async (data, session) => {
   const { rollNo } = data;
   try {
@@ -313,7 +305,9 @@ exports.deleteFromStudentArrayByRollNo = async (data, session) => {
     };
   }
 };
+// ------------------------------------
 
+// Function to delete any field in Student of Array type using StudentId
 exports.deleteFromStudentArrayById = async (data, session) => {
   const { studentId } = data;
   try {
@@ -346,44 +340,4 @@ exports.deleteFromStudentArrayById = async (data, session) => {
     };
   }
 };
-
-// // Function for updating attendance
-// exports.updateStudentsAttendance = async (data, session) => {
-//   const { emails } = data;
-//   try {
-//     emails.forEach(async (element) => {
-//       // console.log(element);
-
-//       updateAttendanceData = {
-//         email: element,
-//         dataToUpdate: {
-//           eventsAttended: data.dataToUpdate.eventsAttended,
-//         },
-//       };
-
-//       // console.log(updateAttendanceData);
-//       let result = await updateStudentArray(updateAttendanceData, session);
-
-//       if (result.success === false) {
-//         return {
-//           success: false,
-//           code: 404,
-//           error: result.error,
-//         };
-//       }
-//     });
-
-//     return {
-//       success: true,
-//       code: 200,
-//       message: "Attendance marked successfully!",
-//       studentData: {},
-//     };
-//   } catch (err) {
-//     return {
-//       success: false,
-//       code: 500,
-//       error: err.message,
-//     };
-//   }
-// };
+// ------------------------------------

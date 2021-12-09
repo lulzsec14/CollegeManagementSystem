@@ -2,6 +2,7 @@
 const Requests = require('../../models/Requests');
 // ------------------------------------
 
+// Function to create a new Request
 exports.createRequest = async (data, session) => {
   const { rollNo, studentId, clubId } = data;
   try {
@@ -25,7 +26,6 @@ exports.createRequest = async (data, session) => {
         ],
         { session }
       );
-      // await createdRequest.save();
       return {
         success: true,
         code: 201,
@@ -41,7 +41,9 @@ exports.createRequest = async (data, session) => {
     };
   }
 };
+// ------------------------------------
 
+// Function to get all Requests
 exports.getAllRequests = async () => {
   try {
     const findRequest = await Requests.find();
@@ -67,7 +69,9 @@ exports.getAllRequests = async () => {
     };
   }
 };
+// ------------------------------------
 
+// Function to get a request using rollNo and clubId
 exports.getRequest = async (data) => {
   const { rollNo, clubId } = data;
   try {
@@ -96,7 +100,9 @@ exports.getRequest = async (data) => {
     };
   }
 };
+// ------------------------------------
 
+// Function to get a request using requestId
 exports.getRequestById = async (data) => {
   const { requestId } = data;
   try {
@@ -124,7 +130,9 @@ exports.getRequestById = async (data) => {
     };
   }
 };
+// ------------------------------------
 
+// Function to get All request using a rollNo
 exports.getAllRequestByRoll = async (data) => {
   const { rollNo } = data;
   try {
@@ -160,7 +168,9 @@ exports.getAllRequestByRoll = async (data) => {
     };
   }
 };
+// ------------------------------------
 
+// Function to get Request using clubId
 exports.getRequestByClubId = async (data) => {
   const { clubId } = data;
   try {
@@ -197,14 +207,16 @@ exports.getRequestByClubId = async (data) => {
     };
   }
 };
+// ------------------------------------
 
+// Function to delete a request using rollNo and clubId
 exports.deleteRequest = async (data, session) => {
   const { rollNo, studentId, clubId } = data;
   try {
     const findRequest = await Requests.find({ rollNo, clubId }).session(
       session
     );
-    // console.log(findRequest);
+
     if (!findRequest) {
       return {
         success: flase,
@@ -232,7 +244,9 @@ exports.deleteRequest = async (data, session) => {
     };
   }
 };
+// ------------------------------------
 
+// Function to delete a request using requestId
 exports.deleteRequestById = async (data, session) => {
   const { requestId } = data;
   try {
@@ -263,3 +277,4 @@ exports.deleteRequestById = async (data, session) => {
     };
   }
 };
+// ------------------------------------
