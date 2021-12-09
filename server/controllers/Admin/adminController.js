@@ -79,6 +79,7 @@ exports.login = async (req, res, next) => {
 };
 // ------------------------------------
 
+// Logout Admin
 exports.logOut = async (req, res, next) => {
   try {
     req.session.destroy((err) => {
@@ -97,6 +98,7 @@ exports.logOut = async (req, res, next) => {
     });
   }
 };
+// ------------------------------------
 
 // Getting all admins
 exports.getAllAdmins = async (req, res, next) => {

@@ -1,5 +1,8 @@
+// Constants
 const CLUB_MANAGER_TOKEN = process.env.CLUB_MANAGER_TOKEN;
+// ------------------------------------
 
+// Middleware to authorize ClubManager
 exports.checkClubManager = (req, res, next) => {
   try {
     if (req.session.isAuth && req.session.bearerToken === CLUB_MANAGER_TOKEN) {
@@ -15,3 +18,4 @@ exports.checkClubManager = (req, res, next) => {
     res.status(500).json({ success: false, error: err.message });
   }
 };
+// ------------------------------------

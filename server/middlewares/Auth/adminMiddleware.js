@@ -1,5 +1,8 @@
+// Constants 
 const ADMIN_TOKEN = process.env.ADMIN_TOKEN;
+// ------------------------------------
 
+// Middleware to authorize admin 
 exports.checkAdmin = (req, res, next) => {
   try {
     if (req.session.isAuth && req.session.bearerToken === ADMIN_TOKEN) {
@@ -15,3 +18,4 @@ exports.checkAdmin = (req, res, next) => {
     res.status(500).json({ success: false, error: err.message });
   }
 };
+// ------------------------------------
