@@ -79,7 +79,12 @@ exports.addClubManager = async (req, res, next) => {
     await session.commitTransaction();
     await session.endSession();
     const message = op1.message;
-    const filteredData=filterData(clubManagerData,{studentRollNo:1,clubIndex:1,role:1,password:0})
+    const filteredData = filterData(clubManagerData, {
+      studentRollNo: 1,
+      clubIndex: 1,
+      role: 1,
+      password: 0
+    })
     const response = {
       clubManagerData: filteredData,
       message: message
@@ -112,7 +117,12 @@ exports.updateClubManager = async (req, res, next) => {
       clubManagerData
     } = op1;
     const message = op1.message;
-    const filteredData=filterData(clubManagerData,{studentRollNo:1,clubIndex:1,role:1,password:0})
+    const filteredData = filterData(clubManagerData, {
+      studentRollNo: 1,
+      clubIndex: 1,
+      role: 1,
+      password: 0
+    })
     const response = {
       clubManagerData: filteredData,
       message: message
@@ -144,7 +154,12 @@ exports.getClubManager = async (req, res, next) => {
       clubManagerData
     } = op1;
     const message = op1.message;
-    const filteredData=filterData(clubManagerData,{studentRollNo:1,clubIndex:1,role:1,password:0})
+    const filteredData = filterData(clubManagerData, {
+      studentRollNo: 1,
+      clubIndex: 1,
+      role: 1,
+      password: 0
+    })
     const response = {
       clubManagerData: filteredData,
       message: message
@@ -176,7 +191,12 @@ exports.getAllClubManagersByClubIndex = async (req, res, next) => {
       clubManagerData
     } = op1;
     const message = op1.message;
-    const filteredData=filterData2D(clubManagerData,{studentRollNo:1,clubIndex:1,role:1,password:0})
+    const filteredData = filterData2D(clubManagerData, {
+      studentRollNo: 1,
+      clubIndex: 1,
+      role: 1,
+      password: 0
+    })
     const response = {
       clubManagerData: filteredData,
       message: message
@@ -234,7 +254,12 @@ exports.deleteClubManager = async (req, res, next) => {
     await session.commitTransaction();
     await session.endSession();
     const message = op1.message;
-    const filteredData=filterData(clubManagerData,{studentRollNo:1,clubIndex:1,role:1,password:0})
+    const filteredData = filterData(clubManagerData, {
+      studentRollNo: 1,
+      clubIndex: 1,
+      role: 1,
+      password: 0
+    })
     const response = {
       clubManagerData: filteredData,
       message: message

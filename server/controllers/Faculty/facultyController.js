@@ -14,7 +14,10 @@ const {
   updateClubById
 } = require('../DBFunctions/clubsDBFunction');
 // ------------------------------------
-
+const {
+  filterData,
+  filterData2D
+} = require('../../utilities/filterData')
 // Adding faculty
 exports.addFaculty = async (req, res, next) => {
   
@@ -27,7 +30,17 @@ exports.addFaculty = async (req, res, next) => {
     }
     const { facultyData } = op1
     const message = op1.message
-    const response = {facultyData: facultyData, message: message}
+    const filteredData = filterData(facultyData, {
+      facultyName: 1,
+      clubId: 1,
+      phone: 1,
+      password: 0,
+      facultyEmail: 0
+    })
+    const response = {
+      facultyData: filteredData,
+      message: message
+    };
     res.status(op1.code).json({data:response})
     return
 
@@ -49,7 +62,17 @@ exports.getFaculty = async (req, res, next) => {
     }
     const { facultyData } = op1
     const message = op1.message
-    const response = {facultyData: facultyData, message: message}
+    const filteredData = filterData(facultyData, {
+      facultyName: 1,
+      clubId: 1,
+      phone: 1,
+      password: 0,
+      facultyEmail: 0
+    })
+    const response = {
+      facultyData: filteredData,
+      message: message
+    };
     res.status(op1.code).json({data:response})
     return
 
@@ -69,7 +92,17 @@ exports.getAllFaculty = async (req, res, next) => {
     }
     const { facultyData } = op1
     const message = op1.message
-    const response = {facultyData: facultyData, message: message}
+    const filteredData = filterData2D(facultyData, {
+      facultyName: 1,
+      clubId: 1,
+      phone: 1,
+      password: 0,
+      facultyEmail: 0
+    })
+    const response = {
+      facultyData: filteredData,
+      message: message
+    };
     res.status(op1.code).json({data:response})
     return
 
@@ -119,7 +152,17 @@ exports.updateFaculty = async (req, res, next) => {
     await session.commitTransaction()
     await session.endSession() 
     const message = op1.message
-    const response = {facultyData: facultyData, message: message}
+    const filteredData = filterData(facultyData, {
+      facultyName: 1,
+      clubId: 1,
+      phone: 1,
+      password: 0,
+      facultyEmail: 0
+    })
+    const response = {
+      facultyData: filteredData,
+      message: message
+    };
     res.status(op1.code).json({data:response})
     return
 
@@ -142,7 +185,17 @@ exports.deleteFaculty = async (req, res, next) => {
     }
     const { facultyData } = op1
     const message = op1.message
-    const response = {facultyData: facultyData, message: message}
+    const filteredData = filterData(facultyData, {
+      facultyName: 1,
+      clubId: 1,
+      phone: 1,
+      password: 0,
+      facultyEmail: 0
+    })
+    const response = {
+      facultyData: filteredData,
+      message: message
+    };
     res.status(op1.code).json({data:response})
     return
 
@@ -161,11 +214,10 @@ exports.loginFaculty = async (req, res, next) => {
       res.status(result.code).json({ success: false, error: result.error });
     } else {
       req.session.isAuth = true;
-      req.session.bearerToken = 'Faculty';
+      req.session.bearerToken = process.env.FACULTY_TOKEN;
       res.status(200).json({
         success: true,
-        message: result.message,
-        facultyData: result.facultyData,
+        message: result.message
       });
     }
   } catch (err) {

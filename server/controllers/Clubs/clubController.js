@@ -13,6 +13,11 @@ const {
 const {
   updateFacultyByFacultyEmail
 } = require('../DBFunctions/facultyDBFunction');
+
+const {
+  filterData,
+  filterData2D
+} = require('../../utilities/filterData')
 // ------------------------------------
 
 // Adding Club
@@ -46,7 +51,26 @@ exports.addClub = async (req, res, next) => {
     await session.commitTransaction()
     await session.endSession() 
     const message = op1.message
-    const response = {clubData: clubData, message: message}
+    const filteredData = filterData(clubData, {
+      clubName: 1,
+      clubIndex: 1,
+      clubDescription: 1,
+      clubManagers: 0,
+      coreMembers: 0,
+      clubMembers:0,
+      events:0,
+      taskList:0,
+      feedback:0,
+      certificates:0,
+      photoGallery:0,
+      ideabox:0,
+      requests:0,
+      managedBy:0
+    })
+    const response = {
+      clubData: filteredData,
+      message: message
+    }
     res.status(op1.code).json({data:response})
     return
 
@@ -113,7 +137,26 @@ exports.updateClub = async (req, res, next) => {
     await session.commitTransaction()
     await session.endSession() 
     const message = op1.message
-    const response = {clubData: clubData, message: message}
+    const filteredData = filterData(clubData, {
+      clubName: 1,
+      clubIndex: 1,
+      clubDescription: 1,
+      clubManagers: 0,
+      coreMembers: 0,
+      clubMembers:0,
+      events:0,
+      taskList:0,
+      feedback:0,
+      certificates:0,
+      photoGallery:0,
+      ideabox:0,
+      requests:0,
+      managedBy:0
+    })
+    const response = {
+      clubData: filteredData,
+      message: message
+    }
     res.status(op1.code).json({data:response})
     return
 
@@ -136,7 +179,26 @@ exports.getClub = async (req, res, next) => {
     }
     const clubData = op1.clubData
     const message = op1.message
-    const response = {clubData: clubData, message: message}
+    const filteredData = filterData(clubData, {
+      clubName: 1,
+      clubIndex: 1,
+      clubDescription: 1,
+      clubManagers: 0,
+      coreMembers: 0,
+      clubMembers:0,
+      events:0,
+      taskList:0,
+      feedback:0,
+      certificates:0,
+      photoGallery:0,
+      ideabox:0,
+      requests:0,
+      managedBy:0
+    })
+    const response = {
+      clubData: filteredData,
+      message: message
+    }
     res.status(op1.code).json({data:response})
   } catch (err) {
     console.log(err);
@@ -153,7 +215,26 @@ exports.getAllClubs = async (req, res, next) => {
     }
     const clubData = op1.clubData
     const message = op1.message
-    const response = {clubData: clubData, message: message}
+    const filteredData = filterData2D(clubData, {
+      clubName: 1,
+      clubIndex: 1,
+      clubDescription: 1,
+      clubManagers: 0,
+      coreMembers: 0,
+      clubMembers:0,
+      events:0,
+      taskList:0,
+      feedback:0,
+      certificates:0,
+      photoGallery:0,
+      ideabox:0,
+      requests:0,
+      managedBy:0
+    })
+    const response = {
+      clubData: filteredData,
+      message: message
+    }
     res.status(op1.code).json({data:response})
   } catch (err) {
     console.log(err);
