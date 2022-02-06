@@ -14,7 +14,15 @@ const {
   deleteFromClubArrayByIndex,
 } = require('../DBFunctions/clubsDBFunction');
 
-const { getStudentByRollNo } = require('../DBFunctions/studentDBFunction');
+const {
+  getStudentByRollNo
+} = require('../DBFunctions/studentDBFunction');
+
+const {
+  filterData,
+  filterData2D
+} = require('../../utilities/filterData')
+
 // ------------------------------------
 
 // Adding Club manager
@@ -22,11 +30,17 @@ exports.addClubManager = async (req, res, next) => {
   const session = await mongoose.startSession();
   try {
     const data1 = req.body.data;
-    const { studentRollNo } = data1;
-    const op = await getStudentByRollNo({ rollNo: studentRollNo });
+    const {
+      studentRollNo
+    } = data1;
+    const op = await getStudentByRollNo({
+      rollNo: studentRollNo
+    });
     if (!op.success) {
       await session.endSession();
-      res.status(op.code).json({ error: op.error });
+      res.status(op.code).json({
+        error: op.error
+      });
       return;
     }
     session.startTransaction();
@@ -34,30 +48,52 @@ exports.addClubManager = async (req, res, next) => {
     if (!op1.success) {
       await session.abortTransaction();
       await session.endSession();
-      res.status(op1.code).json({ error: op1.error });
+      res.status(op1.code).json({
+        error: op1.error
+      });
       return;
     }
-    const { clubManagerData } = op1;
-    const { _id, clubIndex } = clubManagerData;
+    const {
+      clubManagerData
+    } = op1;
+    const {
+      _id,
+      clubIndex
+    } = clubManagerData;
     const clubManagers = _id.toString();
-    const data2 = { clubIndex, dataToUpdate: { clubManagers: clubManagers } };
+    const data2 = {
+      clubIndex,
+      dataToUpdate: {
+        clubManagers: clubManagers
+      }
+    };
     const op2 = await updateClubArrayByIndex(data2, session);
     if (!op2.success) {
       await session.abortTransaction();
       await session.endSession();
-      res.status(op2.code).json({ error: op2.error });
+      res.status(op2.code).json({
+        error: op2.error
+      });
       return;
     }
     await session.commitTransaction();
     await session.endSession();
     const message = op1.message;
-    const response = { clubManagerData: clubManagerData, message: message };
-    res.status(op1.code).json({ data: response });
+    const filteredData=filterData(clubManagerData,{studentRollNo:1,clubIndex:1,role:1,password:0})
+    const response = {
+      clubManagerData: filteredData,
+      message: message
+    };
+    res.status(op1.code).json({
+      data: response
+    });
     return;
   } catch (err) {
     console.log(err);
     await session.endSession();
-    res.status(500).json({ error: 'Server Error' });
+    res.status(500).json({
+      error: 'Server Error'
+    });
   }
 };
 
@@ -67,17 +103,29 @@ exports.updateClubManager = async (req, res, next) => {
     const data1 = req.body.data;
     const op1 = await updateClubManagerById(data1);
     if (!op1.success) {
-      res.status(op1.code).json({ error: op1.error });
+      res.status(op1.code).json({
+        error: op1.error
+      });
       return;
     }
-    const { clubManagerData } = op1;
+    const {
+      clubManagerData
+    } = op1;
     const message = op1.message;
-    const response = { clubManagerData: clubManagerData, message: message };
-    res.status(op1.code).json({ data: response });
+    const filteredData=filterData(clubManagerData,{studentRollNo:1,clubIndex:1,role:1,password:0})
+    const response = {
+      clubManagerData: filteredData,
+      message: message
+    };
+    res.status(op1.code).json({
+      data: response
+    });
     return;
   } catch (err) {
     console.log(err);
-    res.status(500).json({ error: 'Server Error' });
+    res.status(500).json({
+      error: 'Server Error'
+    });
   }
 };
 
@@ -87,17 +135,29 @@ exports.getClubManager = async (req, res, next) => {
     const data1 = req.query;
     const op1 = await getClubManagetClubManagergerByRollNo(data1);
     if (!op1.success) {
-      res.status(op1.code).json({ error: op1.error });
+      res.status(op1.code).json({
+        error: op1.error
+      });
       return;
     }
-    const { clubManagerData } = op1;
+    const {
+      clubManagerData
+    } = op1;
     const message = op1.message;
-    const response = { clubManagerData: clubManagerData, message: message };
-    res.status(op1.code).json({ data: response });
+    const filteredData=filterData(clubManagerData,{studentRollNo:1,clubIndex:1,role:1,password:0})
+    const response = {
+      clubManagerData: filteredData,
+      message: message
+    };
+    res.status(op1.code).json({
+      data: response
+    });
     return;
   } catch (err) {
     console.log(err);
-    res.status(500).json({ error: 'Server Error' });
+    res.status(500).json({
+      error: 'Server Error'
+    });
   }
 };
 
@@ -107,17 +167,29 @@ exports.getAllClubManagersByClubIndex = async (req, res, next) => {
     const data1 = req.query;
     const op1 = await getClubManagersByClubIndex(data1);
     if (!op1.success) {
-      res.status(op1.code).json({ error: op1.error });
+      res.status(op1.code).json({
+        error: op1.error
+      });
       return;
     }
-    const { clubManagerData } = op1;
+    const {
+      clubManagerData
+    } = op1;
     const message = op1.message;
-    const response = { clubManagerData: clubManagerData, message: message };
-    res.status(op1.code).json({ data: response });
+    const filteredData=filterData2D(clubManagerData,{studentRollNo:1,clubIndex:1,role:1,password:0})
+    const response = {
+      clubManagerData: filteredData,
+      message: message
+    };
+    res.status(op1.code).json({
+      data: response
+    });
     return;
   } catch (err) {
     console.log(err);
-    res.status(500).json({ error: 'Server Error' });
+    res.status(500).json({
+      error: 'Server Error'
+    });
   }
 };
 
@@ -131,30 +203,52 @@ exports.deleteClubManager = async (req, res, next) => {
     if (!op1.success) {
       await session.abortTransaction();
       await session.endSession();
-      res.status(op1.code).json({ error: op1.error });
+      res.status(op1.code).json({
+        error: op1.error
+      });
       return;
     }
-    const { clubManagerData } = op1;
-    const { _id, clubIndex } = clubManagerData;
+    const {
+      clubManagerData
+    } = op1;
+    const {
+      _id,
+      clubIndex
+    } = clubManagerData;
     const clubManagers = _id.toString();
-    const data2 = { clubIndex, dataToUpdate: { clubManagers: clubManagers } };
+    const data2 = {
+      clubIndex,
+      dataToUpdate: {
+        clubManagers: clubManagers
+      }
+    };
     const op2 = await deleteFromClubArrayByIndex(data2, session);
     if (!op2.success) {
       await session.abortTransaction();
       await session.endSession();
-      res.status(op2.code).json({ error: op2.error });
+      res.status(op2.code).json({
+        error: op2.error
+      });
       return;
     }
     await session.commitTransaction();
     await session.endSession();
     const message = op1.message;
-    const response = { clubManagerData: clubManagerData, message: message };
-    res.status(op1.code).json({ data: response });
+    const filteredData=filterData(clubManagerData,{studentRollNo:1,clubIndex:1,role:1,password:0})
+    const response = {
+      clubManagerData: filteredData,
+      message: message
+    };
+    res.status(op1.code).json({
+      data: response
+    });
     return;
   } catch (err) {
     console.log(err);
     await session.endSession();
-    res.status(500).json({ error: 'Server Error' });
+    res.status(500).json({
+      error: 'Server Error'
+    });
   }
 };
 
@@ -164,14 +258,16 @@ exports.loginClubManager = async (req, res, next) => {
   try {
     const result = await loginClubManager(data);
     if (result.success == false) {
-      res.status(result.code).json({ success: false, error: result.error });
+      res.status(result.code).json({
+        success: false,
+        error: result.error
+      });
     } else {
       req.session.isAuth = true;
-      req.session.bearerToken = 'Club_Manager';
+      req.session.bearerToken = process.env.CLUB_MANAGER_TOKEN;
       res.status(200).json({
         success: true,
-        message: result.message,
-        clubManagerData: result.clubManagerData,
+        message: result.message
       });
     }
   } catch (err) {
@@ -202,7 +298,10 @@ exports.logOutClubManager = async (req, res, next) => {
     }
   } catch (err) {
     console.log(err.message);
-    res.status(500).json({ success: false, error: err.message });
+    res.status(500).json({
+      success: false,
+      error: err.message
+    });
   }
 };
 
