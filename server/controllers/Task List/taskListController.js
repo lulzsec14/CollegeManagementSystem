@@ -18,6 +18,10 @@ const {
 	deleteFromCoreMemberArrayById
 
 } = require('../DBFunctions/coreMemberDBFunction')
+const {
+  filterData,
+  filterData2D
+} = require('../../utilities/filterData')
 const mongoose = require('mongoose')
 
 
@@ -61,7 +65,17 @@ exports.addTask = async (req, res, next) => {
       await session.commitTransaction()
       await session.endSession() 
       const message = op1.message
-      const response = {taskData: taskData, message: message}
+      const filteredData = filterData(taskData, {
+        taskTitle: 1,
+        taskDescription: 1,
+        taskStatus: 1,
+        assignedTo:1,
+        clubId: 0
+      })
+      const response = {
+        taskData: filteredData,
+        message: message
+      };
       res.status(op1.code).json({data:response})
       return
   
@@ -84,8 +98,18 @@ exports.updateTask = async (req, res, next) => {
 		}
 		const {taskData} = op1
 		const message = op1.message
-		const response = {taskData: taskData, message: message}
-		res.status(op1.code).json({data:response})
+    const filteredData = filterData(taskData, {
+      taskTitle: 1,
+      taskDescription: 1,
+      taskStatus: 1,
+      assignedTo:1,
+      clubId: 0
+    })
+    const response = {
+      taskData: filteredData,
+      message: message
+    };
+    res.status(op1.code).json({data:response})
 		return
 
 	} catch (err) {
@@ -106,8 +130,18 @@ exports.getTask = async (req, res, next) => {
 		}
 		const {taskData} = op1
 		const message = op1.message
-		const response = {taskData: taskData, message: message}
-		res.status(op1.code).json({data:response})
+    const filteredData = filterData(taskData, {
+      taskTitle: 1,
+      taskDescription: 1,
+      taskStatus: 1,
+      assignedTo:1,
+      clubId: 0
+    })
+    const response = {
+      taskData: filteredData,
+      message: message
+    };
+    res.status(op1.code).json({data:response})
 		return
 
 	} catch (err) {
@@ -128,8 +162,18 @@ exports.getAllTasksByClubId = async (req, res, next) => {
 		}
 		const {taskData} = op1
 		const message = op1.message
-		const response = {taskData: taskData, message: message}
-		res.status(op1.code).json({data:response})
+    const filteredData = filterData2D(taskData, {
+      taskTitle: 1,
+      taskDescription: 1,
+      taskStatus: 1,
+      assignedTo:1,
+      clubId: 0
+    })
+    const response = {
+      taskData: filteredData,
+      message: message
+    };
+    res.status(op1.code).json({data:response})
 		return
 
 	} catch (err) {
@@ -150,8 +194,18 @@ try {
 	}
 	const {taskData} = op1
 	const message = op1.message
-	const response = {taskData: taskData, message: message}
-	res.status(op1.code).json({data:response})
+  const filteredData = filterData2D(taskData, {
+    taskTitle: 1,
+    taskDescription: 1,
+    taskStatus: 1,
+    assignedTo:1,
+    clubId: 0
+  })
+  const response = {
+    taskData: filteredData,
+    message: message
+  };
+  res.status(op1.code).json({data:response})
 	return
 
 } catch (err) {
@@ -202,7 +256,17 @@ exports.deleteTask = async (req, res, next) => {
       await session.commitTransaction()
       await session.endSession() 
       const message = op1.message
-      const response = {taskData: taskData, message: message}
+      const filteredData = filterData(taskData, {
+        taskTitle: 1,
+        taskDescription: 1,
+        taskStatus: 1,
+        assignedTo:1,
+        clubId: 0
+      })
+      const response = {
+        taskData: filteredData,
+        message: message
+      };
       res.status(op1.code).json({data:response})
       return
   
