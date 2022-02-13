@@ -24,6 +24,8 @@ const {
   deleteFromAnyStudentArray,
   deleteFromAnyStudentArrayById,
   logoutSingleStudent,
+  verifySingleStudent,
+  sendEmailVerificationLink,
 } = require('../../controllers/Student/studentController');
 
 const {
@@ -57,6 +59,7 @@ studentRouter.route('/deleteOneRequest').delete(checkStudent, deleteOneRequest);
 
 // Student Routes
 studentRouter.route('/registerStudent').post(registerStudent);
+studentRouter.route('/verify-email/:emailToken').get(verifySingleStudent);
 studentRouter.route('/loginStudent').post(loginSingleStudent);
 studentRouter.route('/logoutStudent').delete(checkStudent, logoutSingleStudent);
 studentRouter.route('/getStudentData').get(checkStudent, getStudentData);
@@ -82,6 +85,7 @@ studentRouter
 studentRouter.route('/addFeedback').post(checkStudent, createFeedback);
 studentRouter.route('/getFeedbackById').get(checkStudent, getFeedback);
 studentRouter.route('/deleteFeedbackById').delete(checkStudent, deleteFeedback);
+studentRouter.route('/emailVerification').post(sendEmailVerificationLink);
 // ------------------------------------
 
 // Event Routes

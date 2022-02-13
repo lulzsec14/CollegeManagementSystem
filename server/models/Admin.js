@@ -30,6 +30,16 @@ const adminSchema = new mongoose.Schema({
     required: [true, 'Please provide a phone number!'],
     unique: true,
   },
+  emailToken: {
+    type: String,
+  },
+  emailTokenExpire: {
+    type: Date,
+  },
+  isVerified: {
+    type: Boolean,
+    default: false,
+  },
 });
 // ------------------------------------
 

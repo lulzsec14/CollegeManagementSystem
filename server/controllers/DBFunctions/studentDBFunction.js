@@ -2,10 +2,12 @@
 const Student = require('../../models/Students');
 const textToHash = require('../../utilities/textToHashed');
 const comparePasswords = require('../../utilities/comparePasswords');
+const crypto = require('crypto');
+const sendEmail = require('../../utilities/sendEmail');
 // ------------------------------------
 
 // Function to register students
-exports.registerStudents = async (data) => {
+exports.registerStudents = async (data, emailDomain) => {
   const { rollNo, name, email, password, semester, phoneNo } = data;
   try {
     const findStudent = await Student.findOne({ email });
@@ -13,10 +15,13 @@ exports.registerStudents = async (data) => {
       return {
         success: false,
         code: 405,
-        error: 'Student with specified email alreadt exists!',
+        error: 'Student with specified email already exists!',
       };
     } else {
       const hashedPassword = textToHash(password);
+      const emailVerificationToken = crypto.randomBytes(65).toString('hex');
+      const isVerified = false;
+
       const createdStudent = await Student.create({
         rollNo,
         email,
@@ -24,8 +29,34 @@ exports.registerStudents = async (data) => {
         name,
         semester,
         phoneNo,
+        emailToken: crypto
+          .createHash('sha256')
+          .update(emailVerificationToken)
+          .digest('hex'),
+        emailTokenExpire: Date.now() + 5 * (60 * 1000),
+        isVerified,
       });
-      await createdStudent.save();
+
+      const verificationUrl = `http://${emailDomain}/api/student/verify-email/${emailVerificationToken}`;
+
+      const message = `
+        <h1>Email Verification</h1>
+        <p>Please go to the link or copy the link to verify your email!</p>
+        <a href=${verificationUrl} clicktracking=off>Verify Email</a>
+      `;
+
+      try {
+        await sendEmail({
+          to: createdStudent.email,
+          subject: 'Email Verification',
+          text: message,
+        });
+      } catch (e) {
+        createdStudent.emailToken = null;
+        createdStudent.isVerified = false;
+        throw e;
+      }
+
       return {
         success: true,
         code: 201,
@@ -33,6 +64,60 @@ exports.registerStudents = async (data) => {
         studentData: createdStudent,
       };
     }
+  } catch (err) {
+    return {
+      success: false,
+      code: 500,
+      error: err.message,
+    };
+  }
+};
+// ------------------------------------
+
+// Function to verify Student email id
+exports.verifyStudent = async (req, res) => {
+  const verifyEmailToken = crypto
+    .createHash('sha256')
+    .update(req.params.emailToken)
+    .digest('hex');
+
+  try {
+    const res = await Student.findOne({
+      emailToken: verifyEmailToken,
+    });
+
+    if (!res) {
+      return {
+        success: false,
+        code: 400,
+        error: 'No such student exists!',
+      };
+    }
+
+    const findStudent = await Student.findOne({
+      emailToken: verifyEmailToken,
+      emailTokenExpire: { $gt: Date.now() },
+    });
+
+    if (!findStudent) {
+      return {
+        success: false,
+        code: 400,
+        error: 'Token Expired!',
+      };
+    }
+
+    findStudent.emailToken = null;
+    findStudent.emailTokenExpire = undefined;
+    findStudent.isVerified = true;
+
+    findStudent.save();
+
+    return {
+      success: true,
+      code: 200,
+      message: "Student's email verified successfully!",
+    };
   } catch (err) {
     return {
       success: false,
