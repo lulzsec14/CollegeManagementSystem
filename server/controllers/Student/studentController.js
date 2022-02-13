@@ -11,14 +11,100 @@ const {
   updateStudentArrayById,
   deleteFromStudentArray,
   deleteFromStudentArrayById,
+  verifyStudent,
 } = require('../DBFunctions/studentDBFunction');
+const crypto = require('crypto');
+const sendEmail = require('../../utilities/sendEmail');
 // ------------------------------------
 
 // Function to register a Student
 exports.registerStudent = async (req, res, next) => {
   const data = req.body.data;
+  const emailDomain = req.headers.host;
   try {
-    const result = await registerStudents(data);
+    const result = await registerStudents(data, emailDomain);
+    if (result.success == false) {
+      res.status(result.code).json({ success: false, error: result.error });
+    } else {
+      res.status(201).json({
+        success: true,
+        message: result.message,
+        studentData: result.studentData,
+      });
+    }
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      error: err.message,
+    });
+  }
+};
+// ------------------------------------
+
+// Function to send the email verification link to admin
+exports.sendEmailVerificationLink = async (req, res, next) => {
+  const data = req.body.data;
+  try {
+    const { email } = data;
+    const getStudent = await Student.findOne({ email });
+    // Student.findById()
+    if (getStudent.isVerified === true) {
+      res
+        .status(200)
+        .json({ success: true, message: 'Account already verified!' });
+      return;
+    }
+
+    const emailDomain = req.headers.host;
+    const emailVerificationToken = crypto.randomBytes(65).toString('hex');
+    const verificationUrl = `http://${emailDomain}/api/student/verify-email/${emailVerificationToken}`;
+
+    const updatedStudent = await Student.findOneAndUpdate(
+      { email },
+      {
+        $set: {
+          emailToken: crypto
+            .createHash('sha256')
+            .update(emailVerificationToken)
+            .digest('hex'),
+          emailTokenExpire: Date.now() + 5 * (60 * 1000),
+        },
+      },
+      { new: true }
+    );
+    const message = `
+      <h1>Email Verification</h1>
+      <p>Please go to the link or copy the link to verify your email!</p>
+      <a href=${verificationUrl} clicktracking=off>Verify Email</a>
+      `;
+
+    try {
+      await sendEmail({
+        to: updatedStudent.email,
+        subject: 'Email Verification',
+        text: message,
+      });
+    } catch (e) {
+      updatedStudent.emailToken = null;
+      updatedStudent.isVerified = false;
+      throw e;
+    }
+    res
+      .status(200)
+      .json({ succes: true, message: 'Verification Link sent to email!' });
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      error: err.message,
+    });
+  }
+};
+// ------------------------------------
+
+// Function to verify a Students email id
+exports.verifySingleStudent = async (req, res, next) => {
+  try {
+    const result = await verifyStudent(req, res);
     if (result.success == false) {
       res.status(result.code).json({ success: false, error: result.error });
     } else {

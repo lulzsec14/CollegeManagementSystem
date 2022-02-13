@@ -11,6 +11,8 @@ const {
   deleteAdmin,
   login,
   logOut,
+  verifyAdmin,
+  sendEmailVerificationLink,
 } = require('../../controllers/Admin/adminController');
 const {
   addClub,
@@ -83,6 +85,8 @@ adminRouter
 // admin admin routes
 adminRouter.route('/register').post(register);
 adminRouter.route('/loginAdmin').post(login);
+adminRouter.route('/emailVerification').post(sendEmailVerificationLink);
+adminRouter.route('/verify-email/:emailToken').get(verifyAdmin);
 adminRouter.route('/logoutAdmin').delete(checkAdmin, logOut);
 adminRouter.route('/getAllAdmins').get(checkAdmin, getAllAdmins);
 adminRouter.route('/updateAdminDetails').put(checkAdmin, updateAdminDetails);

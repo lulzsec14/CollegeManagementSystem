@@ -2,6 +2,8 @@
 const Admin = require('../../models/Admin');
 const textToHash = require('../../utilities/textToHashed');
 const comparePasswords = require('../../utilities/comparePasswords');
+const crypto = require('crypto');
+const sendEmail = require('../../utilities/sendEmail');
 // const validateCreateAdmin = require('../../Validators/AdminValidators');
 const {
   validateCreateAdmin,
@@ -10,8 +12,10 @@ const {
 } = require('../../Validators/AdminValidators');
 // ------------------------------------
 
+// Request object to be passed from controller
+
 // Function for registering an Admin
-exports.registerAdmin = async (data) => {
+exports.registerAdmin = async (data, emailDomain) => {
   data.email = data.email.toLowerCase();
   const { email, name, password, phoneNo } = data;
   const validationError = validateCreateAdmin(data);
@@ -36,13 +40,42 @@ exports.registerAdmin = async (data) => {
       };
     } else {
       const hashedPassword = textToHash(password);
+      const emailVerificationToken = crypto.randomBytes(65).toString('hex');
+      const isVerified = false;
+
       const admin = await Admin.create({
         email,
         name,
         password: hashedPassword,
         phoneNo,
+        emailToken: crypto
+          .createHash('sha256')
+          .update(emailVerificationToken)
+          .digest('hex'),
+        emailTokenExpire: Date.now() + 5 * (60 * 1000),
+        isVerified,
       });
-      await admin.save();
+
+      const verificationUrl = `http://${emailDomain}/api/admin/verify-email/${emailVerificationToken}`;
+
+      const message = `
+        <h1>Email Verification</h1>
+        <p>Please go to the link or copy the link to verify your email!</p>
+        <a href=${verificationUrl} clicktracking=off>Verify Email</a>
+      `;
+
+      try {
+        await sendEmail({
+          to: admin.email,
+          subject: 'Email Verification',
+          text: message,
+        });
+      } catch (e) {
+        admin.emailToken = null;
+        admin.isVerified = false;
+        throw e;
+      }
+
       return {
         success: true,
         code: 201,
@@ -56,6 +89,60 @@ exports.registerAdmin = async (data) => {
       success: false,
       code: 500,
       error: 'An error occured while creating an admin',
+    };
+  }
+};
+// ------------------------------------
+
+// Function to verify Admin email id
+exports.verifyAdmin = async (req, res) => {
+  const verifyEmailToken = crypto
+    .createHash('sha256')
+    .update(req.params.emailToken)
+    .digest('hex');
+
+  try {
+    const res = await Admin.findOne({
+      emailToken: verifyEmailToken,
+    });
+
+    if (!res) {
+      return {
+        success: false,
+        code: 400,
+        error: 'No such Admin exists!',
+      };
+    }
+
+    const findAdmin = await Admin.findOne({
+      emailToken: verifyEmailToken,
+      emailTokenExpire: { $gt: Date.now() },
+    });
+
+    if (!findAdmin) {
+      return {
+        success: false,
+        code: 400,
+        error: 'Token Expired!',
+      };
+    }
+
+    findAdmin.emailToken = null;
+    findAdmin.emailTokenExpire = undefined;
+    findAdmin.isVerified = true;
+
+    findAdmin.save();
+
+    return {
+      success: true,
+      code: 200,
+      message: "Admin's email verified successfully!",
+    };
+  } catch (err) {
+    return {
+      success: false,
+      code: 500,
+      error: err.message,
     };
   }
 };
