@@ -39,17 +39,22 @@ exports.createNewRequest = async (req, res, next) => {
     },
   };
 
+  // console.log(req.body.data);
+
   const session = await mongoose.startSession();
   try {
     session.startTransaction();
 
     const createdRequest = await createRequest(data, session);
 
-    console.log(createdRequest.requestData._id);
+    // console.log(typeof createdRequest.requestData._id);
 
-    updateClubArrayData.dataToUpdate.requests = createdRequest.requestData._id;
+    updateClubArrayData.dataToUpdate.requests =
+      createdRequest.requestData._id.toString();
     updateStudentArrayData.dataToUpdate.clubsRequested =
-      createdRequest.requestData._id;
+      createdRequest.requestData._id.toString();
+    // console.log(updateClubArrayData);
+    // console.log(updateStudentArrayData);
 
     if (createdRequest.success == false) {
       await session.abortTransaction();
@@ -125,7 +130,7 @@ exports.retrieveAllRequests = async (req, res, next) => {
 };
 
 exports.retrieveRequest = async (req, res, next) => {
-  const data = req.body.data;
+  const data = req.query;
   try {
     const result = await getRequest(data);
     if (result.success == false) {
@@ -143,7 +148,7 @@ exports.retrieveRequest = async (req, res, next) => {
 };
 
 exports.retrieveRequestById = async (req, res, next) => {
-  const data = req.body.data;
+  const data = req.query;
   try {
     const result = await getRequestById(data);
     if (result.success == false) {
@@ -161,7 +166,7 @@ exports.retrieveRequestById = async (req, res, next) => {
 };
 
 exports.retrieveRequestByClubId = async (req, res, next) => {
-  const data = req.body.data;
+  const data = req.query;
   try {
     const result = await getRequestByClubId(data);
     if (result.success == false) {
@@ -179,7 +184,7 @@ exports.retrieveRequestByClubId = async (req, res, next) => {
 };
 
 exports.retrieveAllRequestByRollNo = async (req, res, next) => {
-  const data = req.body.data;
+  const data = req.query;
   try {
     const result = await getAllRequestByRoll(data);
     if (result.success == false) {

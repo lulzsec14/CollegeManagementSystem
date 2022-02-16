@@ -43,7 +43,7 @@ const { checkStudent } = require('../../middlewares/Auth/studentMiddleware');
 
 // Request Routes
 studentRouter.route('/createRequest').post(checkStudent, createNewRequest);
-studentRouter.route('/getAllRequests').get(checkStudent, retrieveAllRequests);
+// studentRouter.route('/getAllRequests').get(checkStudent, retrieveAllRequests);
 studentRouter.route('/getOneRequest').get(checkStudent, retrieveRequest);
 studentRouter
   .route('/getOneRequestById')

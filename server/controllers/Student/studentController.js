@@ -188,7 +188,8 @@ exports.logoutSingleStudent = async (req, res, next) => {
 
 // Function to get student info using email
 exports.getStudentData = async (req, res, next) => {
-  const data = req.body.data;
+  // const data = req.body.data;
+  const data = req.query;
   try {
     const result = await getStudent(data);
     if (result.success == false) {
@@ -211,7 +212,8 @@ exports.getStudentData = async (req, res, next) => {
 
 // Function to get student info using student Id
 exports.getStudentDataById = async (req, res, next) => {
-  const data = req.body.data;
+  // const data = req.body.data;
+  const data = req.query;
   try {
     const result = await getStudentById(data);
     if (result.success == false) {
@@ -336,10 +338,10 @@ exports.updateStudentsAttendance = async (data, session) => {
         },
       };
 
-      console.log(updateAttendanceData);
+      // console.log(updateAttendanceData);
       let result = await updateStudentArray(updateAttendanceData, session);
 
-      console.log(result);
+      // console.log(result);
 
       if (result.success === false) {
         return {
