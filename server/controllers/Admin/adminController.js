@@ -31,7 +31,7 @@ exports.register = async (req, res, next) => {
       });
     }
   } catch (err) {
-    console.log(err.message);
+    // console.log(err.message);
     res.status(500).json({
       success: false,
       error: 'A server error occured while registering an Admin!',
@@ -188,8 +188,7 @@ exports.logOut = async (req, res, next) => {
 // Getting all admins
 exports.getAllAdmins = async (req, res, next) => {
   try {
-    const data = req.body.data;
-    const result = await retrieveAllAdmins(data);
+    const result = await retrieveAllAdmins();
     if (result.success == false) {
       res.status(result.code).json({ success: false, error: result.error });
     } else {

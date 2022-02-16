@@ -84,7 +84,7 @@ exports.registerAdmin = async (data, emailDomain) => {
       };
     }
   } catch (err) {
-    console.log(err.message);
+    // console.log(err.message);
     return {
       success: false,
       code: 500,
@@ -187,7 +187,7 @@ exports.updateAdminDetails = async (data) => {
   }
 
   try {
-    console.log(data);
+    //console.log(data);
     const { email } = data;
     const findAdmin = await Admin.findOne({ email });
     if (!findAdmin) {
